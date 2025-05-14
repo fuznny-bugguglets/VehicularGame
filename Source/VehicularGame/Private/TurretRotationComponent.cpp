@@ -1,34 +1,23 @@
 #include "TurretRotationComponent.h"
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
-#include "Kismet/KismetMathLibrary.h" // UKismetMathLibrary contains MakeRotFromXZ if FRotationMatrix is too much
-#include "Math/RotationMatrix.h"     // For FRotationMatrix
-#include "DrawDebugHelpers.h"        // Optional: For visualizing the raycast
+#include "Kismet/KismetMathLibrary.h"
+#include "Math/RotationMatrix.h" // For FRotationMatrix.
+#include "DrawDebugHelpers.h"
 
-// Sets default values for this component's properties
+// Constructor.
 UTurretRotationComponent::UTurretRotationComponent()
 {
-    // Set this component to be initialized when the game starts, and to be ticked every frame.
-    // You can turn on ticking here if you want the component to manage its own update loop,
-    // but for now, we'll keep it so RotateTurretHead is called explicitly from Blueprint.
-    PrimaryComponentTick.bCanEverTick = false;
-
-    // bWantsBeginPlay is true by default for USceneComponent, so BeginPlay() will be called.
-    // No need to explicitly set bWantsBeginPlay = true; here.
-    // REMOVED: bWantsBeginPlay = true; // This was line 17 and causing the error
-
-    // If you specifically wanted to PREVENT BeginPlay from running, you would set:
-    // bWantsBeginPlay = false;
+    PrimaryComponentTick.bCanEverTick = false; // Component does not tick by itself.
+    // BeginPlay is called by default for USceneComponent.
 }
 
-// Called when the game starts
+// Called when the game starts.
 void UTurretRotationComponent::BeginPlay()
 {
     Super::BeginPlay();
-    // Your BeginPlay logic here, if any
 }
 
-// Helper function (less critical now but can be useful)
 AActor* UTurretRotationComponent::GetOwningActor() const
 {
     return GetOwner();
@@ -53,7 +42,7 @@ void UTurretRotationComponent::RotateTurretHead(const FTransform& CameraTransfor
     FVector TurretWorldLocation = GetComponentLocation();
     FRotator TargetWorldRotationCalculated;
 
-    // Determine the world space location to aim at
+    // Determine target aim location in world space.
     FVector TargetAimLocationWorld;
 
     FVector TraceStart = CameraTransform.GetLocation();
@@ -61,7 +50,7 @@ void UTurretRotationComponent::RotateTurretHead(const FTransform& CameraTransfor
 
     FHitResult HitResult;
     FCollisionQueryParams CollisionParams;
-    CollisionParams.AddIgnoredActor(OwningActor);
+    CollisionParams.AddIgnoredActor(OwningActor); // Ignore the owning actor in raycast.
 
     bool bHit = World->LineTraceSingleByChannel(
         HitResult,
@@ -73,26 +62,23 @@ void UTurretRotationComponent::RotateTurretHead(const FTransform& CameraTransfor
 
     if (bHit)
     {
-        TargetAimLocationWorld = HitResult.ImpactPoint;
+        TargetAimLocationWorld = HitResult.ImpactPoint; // Aim at the raycast hit point.
     }
     else
     {
-        // If no hit, aim towards a point far along the camera's forward vector
-        TargetAimLocationWorld = TraceEnd; // Or CameraTransform.GetLocation() + CameraTransform.GetRotation().GetForwardVector() * SomeLargeDistance;
+        // If no raycast hit, aim along camera's forward vector.
+        TargetAimLocationWorld = TraceEnd;
     }
 
-    // Calculate the direction the turret should look
+    // Calculate look direction.
     FVector LookAtDirection = TargetAimLocationWorld - TurretWorldLocation;
 
-    if (LookAtDirection.IsNearlyZero()) // Avoid issues if target is at component's location
+    if (LookAtDirection.IsNearlyZero()) // Handle case where target is at component's location.
     {
-        // Fallback: Use the owning actor's forward orientation but maintain its roll.
-        // Or, try to match camera's general orientation with owner's roll.
-        // For now, let's make it aim along camera's XZ plane projection, with owner's roll.
         FVector CameraForwardXZ = CameraTransform.GetRotation().GetForwardVector();
-        CameraForwardXZ.Z = 0; // Project onto XY plane of camera, then use Owner's up.
-        if (CameraForwardXZ.IsNearlyZero()) { // If camera looks straight up/down
-            CameraForwardXZ = OwningActor->GetActorForwardVector(); // Fallback to owner's forward
+        CameraForwardXZ.Z = 0; // Project camera forward vector onto XY plane.
+        if (CameraForwardXZ.IsNearlyZero()) { // Handle camera looking straight up/down.
+            CameraForwardXZ = OwningActor->GetActorForwardVector(); // Fallback to owner's forward vector.
         }
         LookAtDirection = CameraForwardXZ;
     }
@@ -100,28 +86,25 @@ void UTurretRotationComponent::RotateTurretHead(const FTransform& CameraTransfor
     LookAtDirection.Normalize();
 
 
-    // Get the owning actor's (vehicle's) up vector to constrain the turret's roll
+    // Get owner's up vector to constrain turret roll.
     FVector VehicleUpVector = OwningActor->GetActorUpVector();
-    if (VehicleUpVector.IsNearlyZero()) // Should not happen for a valid actor
+    if (VehicleUpVector.IsNearlyZero()) // Handle invalid owner up vector.
     {
-        VehicleUpVector = FVector::UpVector; // Absolute fallback
+        VehicleUpVector = FVector::UpVector; // Use world up vector as fallback.
     }
     VehicleUpVector.Normalize();
 
 
-    // Create the target rotation using MakeFromXZ.
-    // This makes the turret's X-axis (Forward) point along LookAtDirection,
-    // and its Z-axis (Up) align with VehicleUpVector.
-    // This inherently keeps the turret "level" with the vehicle's definition of "up".
+    // Create target rotation, aligning X to LookAtDirection and Z to VehicleUpVector.
     TargetWorldRotationCalculated = FRotationMatrix::MakeFromXZ(LookAtDirection, VehicleUpVector).Rotator();
 
 
     FRotator CurrentWorldRotation = GetComponentRotation();
 
-    // Smoothly interpolate the component's current world rotation to the desired target world rotation
+    // Interpolate to target rotation.
     FRotator NewWorldRotation = FMath::RInterpTo(
         CurrentWorldRotation,
-        TargetWorldRotationCalculated, // This rotator now has its roll constrained correctly
+        TargetWorldRotationCalculated,
         DeltaTime,
         InterpolationSpeed
     );
