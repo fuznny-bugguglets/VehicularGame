@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -8,29 +6,43 @@
 
 class USphereComponent;
 class UProjectileMovementComponent;
+class UNiagaraComponent; // For Niagara
+class UNiagaraSystem;    // For Niagara System Asset
 
 UCLASS(config=Game)
 class AProjectile : public AActor
 {
 	GENERATED_BODY()
 
-	/** Sphere collision component */
 	UPROPERTY(VisibleDefaultsOnly, Category=Projectile)
 	USphereComponent* CollisionComp;
 
-	/** Projectile movement component */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* ProjectileMovement;
+
+	// Niagara System Component that will play the trail
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Effects, meta = (AllowPrivateAccess = "true"))
+	UNiagaraComponent* TrailNSC; // NSC for Niagara System Component
 
 public:
 	AProjectile();
 
-	/** called when projectile hits something */
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
-	/** Returns CollisionComp subobject **/
 	USphereComponent* GetCollisionComp() const { return CollisionComp; }
-	/** Returns ProjectileMovement subobject **/
 	UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	// Niagara system asset to use for the trail - assignable in Blueprint
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Effects)
+	UNiagaraSystem* TrailNiagaraSystemAsset;
+
+private:
+	int32 CurrentBounces;
+	UPROPERTY(EditAnywhere, Category = "Projectile")
+	int32 MaxBounces;
 };
