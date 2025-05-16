@@ -37,8 +37,7 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Effects)
     UNiagaraSystem* TrailNiagaraSystemAsset;
-
-    // New variable for impact force
+    
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ClampMin = "0.0"))
     float ImpactForceMagnitude;
 
