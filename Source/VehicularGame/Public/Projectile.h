@@ -6,8 +6,8 @@
 
 class USphereComponent;
 class UProjectileMovementComponent;
-class UNiagaraComponent; // For Niagara
-class UNiagaraSystem;    // For Niagara System Asset
+class UNiagaraComponent;
+class UNiagaraSystem;
 
 UCLASS(config = Game)
 class AProjectile : public AActor
@@ -38,9 +38,13 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Effects)
     UNiagaraSystem* TrailNiagaraSystemAsset;
 
+    // New variable for impact force
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ClampMin = "0.0"))
+    float ImpactForceMagnitude;
+
 private:
-    UPROPERTY(EditAnywhere, Category = "Projectile", meta = (ClampMin = "0")) // Ensure MaxBounces can be 0 for destroy on first hit
-        int32 MaxBounces;
+    UPROPERTY(EditAnywhere, Category = "Projectile", meta = (ClampMin = "0"))
+    int32 MaxBounces;
 
     int32 CurrentBounces;
 };
