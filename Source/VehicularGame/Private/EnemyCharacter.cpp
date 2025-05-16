@@ -39,6 +39,7 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const&
     if (ActualDamage > 0.f && !IsDead())
     {
         CurrentHealth -= ActualDamage;
+
         if (CurrentHealth <= 0.f)
         {
             Die();
@@ -47,34 +48,37 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const&
     return ActualDamage;
 }
 
+
 void AEnemyCharacter::Die()
 {
-    if (IsDead()) return; // Already dead
-
-    CurrentHealth = 0.f; // Ensure health is zero
-
-    // Disable further movement and collision
+    // --- Essential cleanup before destruction ---
     GetCharacterMovement()->StopMovementImmediately();
     GetCharacterMovement()->DisableMovement();
-    GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+    // Disable all collision on the capsule
+    UCapsuleComponent* CapsuleComp = GetCapsuleComponent();
+    if (CapsuleComp)
+    {
+        CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+        CapsuleComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+    }
 
     // Stop AI Controller
     AAIController* AIController = Cast<AAIController>(GetController());
     if (AIController)
     {
         AIController->StopMovement();
-        // If using Behavior Tree, stop it
-        // AIController->BrainComponent->StopLogic("Died");
+        // If using a Behavior Tree, you might want to stop it:
+        // if (AIController->BrainComponent)
+        // {
+        //    AIController->BrainComponent->StopLogic("Died");
+        // }
+        // You might also want to unpossess the pawn if the controller could be reused.
+        // AIController->UnPossess();
     }
 
-    // Example: Play death animation (montage)
-    // UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-    // if (AnimInstance && DeathMontage) { AnimInstance->Montage_Play(DeathMontage); }
-
-    // Destroy actor after a delay
-    SetLifeSpan(5.0f); // Actor will be destroyed after 5 seconds
-
-    // You could also broadcast an event here for other systems to react to death
+    // --- INSTANTLY DESTROY THE ACTOR ---
+    Destroy();
 }
 
 bool AEnemyCharacter::IsDead() const

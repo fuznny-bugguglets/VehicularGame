@@ -5,6 +5,10 @@
 #include "NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "Engine/DamageEvents.h"
+// It's good practice to include any actor types you specifically want to damage for casting,
+// for example, your enemy base class. Let's assume you have an "EnemyCharacter.h"
+// #include "EnemyCharacter.h" // Example: If your enemy class is AEnemyCharacter
 
 AProjectile::AProjectile()
 {
@@ -12,6 +16,8 @@ AProjectile::AProjectile()
 
     CurrentBounces = 0;
     MaxBounces = 1;
+    Damage = 10.0f; // Default damage value
+    ImpactForceMagnitude = 100.0f;
 
     CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
     CollisionComp->InitSphereRadius(5.0f);
@@ -27,15 +33,12 @@ AProjectile::AProjectile()
     ProjectileMovement->MaxSpeed = 3000.f;
     ProjectileMovement->bRotationFollowsVelocity = true;
     ProjectileMovement->bShouldBounce = true;
-    // ProjectileMovement->ImpactForce = 0.0f; // << REMOVE THIS LINE
     ProjectileMovement->Bounciness = 0.6f;
 
     TrailNSC = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TrailNSC"));
     TrailNSC->SetupAttachment(RootComponent);
 
     InitialLifeSpan = 3.0f;
-
-    ImpactForceMagnitude = 100.0f; // Default value for the force applied to other objects
 }
 
 void AProjectile::BeginPlay()
@@ -60,11 +63,35 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
         return;
     }
 
+    // Apply physics impulse if the other component simulates physics
     if (OtherComp->IsSimulatingPhysics())
     {
-        // Use the ImpactForceMagnitude variable here
         OtherComp->AddImpulseAtLocation(ProjectileMovement->Velocity.GetSafeNormal() * ImpactForceMagnitude, Hit.ImpactPoint);
     }
+
+    // --- DAMAGE APPLICATION LOGIC ---
+    if (Damage > 0.f && OtherActor)
+    {
+        // The projectile's Instigator is the one who fired it.
+        AController* EventInstigator = GetInstigatorController();
+        AActor* DamageCauser = this;
+
+        // Create a damage event
+        FDamageEvent DamageEvent; // You can use FPointDamageEvent for more detail if needed
+        // FPointDamageEvent PointDamageEvent;
+        // PointDamageEvent.HitInfo = Hit; // If you want to pass the full hit result
+
+        // Apply the damage
+        OtherActor->TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+        // Example: If you wanted to only damage AEnemyCharacter and have specific logic:
+        // AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(OtherActor);
+        // if (Enemy)
+        // {
+        //     Enemy->TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+        // }
+    }
+    // --- END DAMAGE APPLICATION LOGIC ---
 
     CurrentBounces++;
     bool bShouldBeDestroyed = false;
@@ -87,8 +114,5 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
         }
         Destroy();
     }
-    else
-    {
-        // Bounce logic handled by ProjectileMovementComponent
-    }
+    // else: Bounce logic is inherently handled by ProjectileMovementComponent if bShouldBounce is true
 }

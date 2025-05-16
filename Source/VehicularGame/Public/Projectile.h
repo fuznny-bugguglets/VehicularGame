@@ -41,6 +41,10 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ClampMin = "0.0"))
     float ImpactForceMagnitude;
 
+    // DAMAGE VARIABLE ADDED HERE
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ClampMin = "0.0"))
+    float Damage; // Damage this projectile will deal
+
 private:
     UPROPERTY(EditAnywhere, Category = "Projectile", meta = (ClampMin = "0"))
     int32 MaxBounces;
