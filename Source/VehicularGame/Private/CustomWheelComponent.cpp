@@ -104,7 +104,7 @@ void UCustomWheelComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
     CalculateSlips(DeltaTime);          // Calculate tire slips.
     UpdateWheelPhysics(DeltaTime);      // Update wheel rotational physics.
 
-    WheelRotationAngle -= WheelAngularVelocity * DeltaTime; // Update visual rotation angle.
+    WheelRotationAngle += WheelAngularVelocity * DeltaTime; // Update visual rotation angle.
 
     CalculateAndApplyForces(DeltaTime); // Calculate and apply forces.
     UpdateWheelVisuals(DeltaTime);      // Update visual mesh.
