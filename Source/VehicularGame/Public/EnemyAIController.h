@@ -1,4 +1,3 @@
-// EnemyAIController.h
 #pragma once
 
 #include "CoreMinimal.h"
@@ -20,12 +19,19 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override; // Called every frame
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
+	FVector TargetLocation;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
+	
+
 private:
 	UPROPERTY()
 	class UBehaviorTreeComponent* BehaviorTreeComponent; // Component to run a behavior tree
 
 	UPROPERTY()
 	class UBlackboardComponent* BlackboardComponent; // Component to store AI data
+
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	FName TargetPlayerKeyName; // Blackboard key name for the target player

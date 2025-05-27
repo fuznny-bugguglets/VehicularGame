@@ -6,9 +6,6 @@
 #include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/DamageEvents.h"
-// It's good practice to include any actor types you specifically want to damage for casting,
-// for example, your enemy base class. Let's assume you have an "EnemyCharacter.h"
-// #include "EnemyCharacter.h" // Example: If your enemy class is AEnemyCharacter
 
 AProjectile::AProjectile()
 {
@@ -77,23 +74,15 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
         AActor* DamageCauser = this;
 
         // Create a damage event
-        FDamageEvent DamageEvent; // You can use FPointDamageEvent for more detail if needed
-        // FPointDamageEvent PointDamageEvent;
-        // PointDamageEvent.HitInfo = Hit; // If you want to pass the full hit result
+        FDamageEvent DamageEvent;
 
         // Apply the damage
         OtherActor->TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
-
-        // Example: If you wanted to only damage AEnemyCharacter and have specific logic:
-        // AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(OtherActor);
-        // if (Enemy)
-        // {
-        //     Enemy->TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
-        // }
     }
-    // --- END DAMAGE APPLICATION LOGIC ---
 
+    // --- BOUNCING AND HIT LOGIC ---
     CurrentBounces++;
+
     bool bShouldBeDestroyed = false;
 
     if (!ProjectileMovement->bShouldBounce || (CurrentBounces >= MaxBounces))
@@ -114,5 +103,4 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
         }
         Destroy();
     }
-    // else: Bounce logic is inherently handled by ProjectileMovementComponent if bShouldBounce is true
 }

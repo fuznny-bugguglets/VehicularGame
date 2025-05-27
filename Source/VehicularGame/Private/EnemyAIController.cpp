@@ -1,4 +1,3 @@
-// EnemyAIController.cpp
 #include "EnemyAIController.h"
 #include "NavigationPath.h"       // Required for FNavigationPath
 #include "NavigationData.h"    // Required for FPathFindingResult
@@ -19,6 +18,7 @@ AEnemyAIController::AEnemyAIController()
     BlackboardComponent = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponent"));
 
     TargetPlayerKeyName = "TargetActor";
+    TargetLocation = FVector::ZeroVector;
 }
 
 void AEnemyAIController::BeginPlay()
@@ -39,13 +39,14 @@ void AEnemyAIController::OnPossess(APawn* InPawn)
     AEnemyCharacter* EnemyChar = Cast<AEnemyCharacter>(InPawn);
     if (EnemyChar && EnemyChar->BehaviorTree)
     {
-        BlackboardComponent->InitializeBlackboard(*(EnemyChar->BehaviorTree->BlackboardAsset));
-        BehaviorTreeComponent->StartTree(*(EnemyChar->BehaviorTree));
+        //BlackboardComponent->InitializeBlackboard(*(EnemyChar->BehaviorTree->BlackboardAsset));
+        //BehaviorTreeComponent->StartTree(*(EnemyChar->BehaviorTree));
     }
 }
 
 void AEnemyAIController::Tick(float DeltaTime)
 {
+
     Super::Tick(DeltaTime);
     // If not using a behavior tree for movement, chase logic would go here
 }
@@ -54,10 +55,10 @@ void AEnemyAIController::SetTargetPlayer(APawn* PlayerPawn)
 {
     if (BlackboardComponent && PlayerPawn)
     {
-        BlackboardComponent->SetValueAsObject(TargetPlayerKeyName, PlayerPawn);
+        //BlackboardComponent->SetValueAsObject(TargetPlayerKeyName, PlayerPawn);
     }
     else if (BlackboardComponent)
     {
-        BlackboardComponent->ClearValue(TargetPlayerKeyName); // Clear if no player
+        //BlackboardComponent->ClearValue(TargetPlayerKeyName); // Clear if no player
     }
 }
