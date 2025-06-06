@@ -5,9 +5,6 @@
 #include "Kismet/GameplayStatics.h" // Required for getting player character
 #include "Components/CapsuleComponent.h" // Include for UCapsuleComponent
 
-// Potentially include "BehaviorTree/BlackboardComponent.h" if using Blackboard for AI
-// Potentially include "Perception/PawnSensingComponent.h" for more advanced detection
-
 AEnemyCharacter::AEnemyCharacter()
 {
     PrimaryActorTick.bCanEverTick = true; // Allows this actor to tick
@@ -15,7 +12,7 @@ AEnemyCharacter::AEnemyCharacter()
     CurrentHealth = MaxHealth;
 
     // Configure character movement
-    GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input
+    GetCharacterMovement()->bOrientRotationToMovement = true; // Character rotates in the direction of input
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f); // Rotation speed
     GetCharacterMovement()->MaxWalkSpeed = 300.f; // Walking speed
 }
@@ -29,7 +26,6 @@ void AEnemyCharacter::BeginPlay()
 void AEnemyCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    // AI movement logic is typically handled by the AIController and Behavior Tree
 }
 
 float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
@@ -39,6 +35,7 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const&
     if (ActualDamage > 0.f && !IsDead())
     {
         CurrentHealth -= ActualDamage;
+
         if (CurrentHealth <= 0.f)
         {
             Die();
@@ -47,34 +44,30 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const&
     return ActualDamage;
 }
 
+
 void AEnemyCharacter::Die()
 {
-    if (IsDead()) return; // Already dead
-
-    CurrentHealth = 0.f; // Ensure health is zero
-
-    // Disable further movement and collision
+    // --- Essential cleanup before destruction ---
     GetCharacterMovement()->StopMovementImmediately();
     GetCharacterMovement()->DisableMovement();
-    GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+    // Disable all collision on the capsule
+    UCapsuleComponent* CapsuleComp = GetCapsuleComponent();
+    if (CapsuleComp)
+    {
+        CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+        CapsuleComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+    }
 
     // Stop AI Controller
     AAIController* AIController = Cast<AAIController>(GetController());
     if (AIController)
     {
         AIController->StopMovement();
-        // If using Behavior Tree, stop it
-        // AIController->BrainComponent->StopLogic("Died");
     }
 
-    // Example: Play death animation (montage)
-    // UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-    // if (AnimInstance && DeathMontage) { AnimInstance->Montage_Play(DeathMontage); }
-
-    // Destroy actor after a delay
-    SetLifeSpan(5.0f); // Actor will be destroyed after 5 seconds
-
-    // You could also broadcast an event here for other systems to react to death
+    // --- INSTANTLY DESTROY THE ACTOR ---
+    Destroy();
 }
 
 bool AEnemyCharacter::IsDead() const

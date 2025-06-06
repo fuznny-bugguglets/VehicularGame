@@ -5,6 +5,7 @@
 #include "NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "Engine/DamageEvents.h"
 
 AProjectile::AProjectile()
 {
@@ -12,6 +13,8 @@ AProjectile::AProjectile()
 
     CurrentBounces = 0;
     MaxBounces = 1;
+    Damage = 10.0f; // Default damage value
+    ImpactForceMagnitude = 100.0f;
 
     CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
     CollisionComp->InitSphereRadius(5.0f);
@@ -27,15 +30,12 @@ AProjectile::AProjectile()
     ProjectileMovement->MaxSpeed = 3000.f;
     ProjectileMovement->bRotationFollowsVelocity = true;
     ProjectileMovement->bShouldBounce = true;
-    // ProjectileMovement->ImpactForce = 0.0f; // << REMOVE THIS LINE
     ProjectileMovement->Bounciness = 0.6f;
 
     TrailNSC = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TrailNSC"));
     TrailNSC->SetupAttachment(RootComponent);
 
     InitialLifeSpan = 3.0f;
-
-    ImpactForceMagnitude = 100.0f; // Default value for the force applied to other objects
 }
 
 void AProjectile::BeginPlay()
@@ -60,13 +60,29 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
         return;
     }
 
+    // Apply physics impulse if the other component simulates physics
     if (OtherComp->IsSimulatingPhysics())
     {
-        // Use the ImpactForceMagnitude variable here
         OtherComp->AddImpulseAtLocation(ProjectileMovement->Velocity.GetSafeNormal() * ImpactForceMagnitude, Hit.ImpactPoint);
     }
 
+    // --- DAMAGE APPLICATION LOGIC ---
+    if (Damage > 0.f && OtherActor)
+    {
+        // The projectile's Instigator is the one who fired it.
+        AController* EventInstigator = GetInstigatorController();
+        AActor* DamageCauser = this;
+
+        // Create a damage event
+        FDamageEvent DamageEvent;
+
+        // Apply the damage
+        OtherActor->TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+    }
+
+    // --- BOUNCING AND HIT LOGIC ---
     CurrentBounces++;
+
     bool bShouldBeDestroyed = false;
 
     if (!ProjectileMovement->bShouldBounce || (CurrentBounces >= MaxBounces))
@@ -86,9 +102,5 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
             TrailNSC->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
         }
         Destroy();
-    }
-    else
-    {
-        // Bounce logic handled by ProjectileMovementComponent
     }
 }
