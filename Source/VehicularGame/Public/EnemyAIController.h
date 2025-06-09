@@ -12,29 +12,32 @@ class VEHICULARGAME_API AEnemyAIController : public AAIController
 public:
 	AEnemyAIController();
 
+	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintPure, Category = "AI|Targeting")
+	FVector GetMovingTargetLocation() const;
+
 protected:
-	virtual void BeginPlay() override;
-	virtual void OnPossess(APawn* InPawn) override; // Called when the controller possesses a pawn
+	// --- TARGETING PARAMETERS ---
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Targeting", meta = (ClampMin = "0.0"))
+	float TargetLineForwardOffset;
 
-public:
-	virtual void Tick(float DeltaTime) override; // Called every frame
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
-	FVector TargetLocation;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Targeting", meta = (ClampMin = "0.0"))
+	float TargetLineHalfWidth;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Targeting", meta = (ClampMin = "0.0"))
+	float TargetPointNoiseSpeed;
+
+	// --- GROUND PROJECTION PARAMETERS (NEW) ---
+	// How high above the calculated point to start the ground trace.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Targeting", meta = (ClampMin = "0.0"))
+	float GroundTraceUpwardOffset;
+
+	// How far down to trace for the ground from the starting point.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Targeting", meta = (ClampMin = "0.0"))
+	float GroundTraceDownwardDistance;
 
 private:
-	UPROPERTY()
-	class UBehaviorTreeComponent* BehaviorTreeComponent; // Component to run a behavior tree
-
-	UPROPERTY()
-	class UBlackboardComponent* BlackboardComponent; // Component to store AI data
-
-
-	UPROPERTY(EditDefaultsOnly, Category = "AI")
-	FName TargetPlayerKeyName; // Blackboard key name for the target player
-
-	void SetTargetPlayer(APawn* PlayerPawn); // Sets the player as target in blackboard
+	float NoiseTimeAccumulator;
+	FVector CurrentTargetLocation;
 };

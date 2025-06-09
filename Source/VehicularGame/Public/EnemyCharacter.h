@@ -13,9 +13,6 @@ class VEHICULARGAME_API AEnemyCharacter : public ACharacter
 public:
 	AEnemyCharacter(); // Constructor
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
-	class UBehaviorTree* BehaviorTree; // Behavior tree for more advanced AI
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float MaxHealth; // Maximum health of the enemy
 
