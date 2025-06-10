@@ -8,6 +8,7 @@ class USphereComponent;
 class UProjectileMovementComponent;
 class UNiagaraComponent;
 class UNiagaraSystem;
+class UStaticMeshComponent; // Forward declaration
 
 UCLASS(config = Game)
 class AProjectile : public AActor
@@ -16,6 +17,10 @@ class AProjectile : public AActor
 
     UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
     USphereComponent* CollisionComp;
+
+    // We no longer create this in C++, so the UPROPERTY macro is removed.
+    // This will be a pointer to the Static Mesh Component that already exists on the Blueprint.
+    UStaticMeshComponent* ProjectileMesh; 
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
     UProjectileMovementComponent* ProjectileMovement;
@@ -37,17 +42,21 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Effects)
     UNiagaraSystem* TrailNiagaraSystemAsset;
-    
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ClampMin = "0.0"))
     float ImpactForceMagnitude;
 
-    // DAMAGE VARIABLE ADDED HERE
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ClampMin = "0.0"))
-    float Damage; // Damage this projectile will deal
+    float Damage;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ClampMin = "0.0"))
+    float LingerDuration;
 
 private:
     UPROPERTY(EditAnywhere, Category = "Projectile", meta = (ClampMin = "0"))
     int32 MaxBounces;
 
     int32 CurrentBounces;
+    
+    bool bIsDying;
 };
