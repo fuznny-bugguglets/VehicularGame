@@ -3,7 +3,7 @@
 AVehicularGameState::AVehicularGameState()
 {
 	// Initialize game state variables.
-	Difficulty = 0.0f;
+	Difficulty = 1.0f;
 	DifficultyIncreaseScaleFactor = 0.1f; // Default value, can be changed in Blueprint.
 }
 

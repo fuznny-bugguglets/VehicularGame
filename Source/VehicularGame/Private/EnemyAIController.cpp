@@ -1,8 +1,7 @@
-// EnemyAIController.cpp
 #include "EnemyAIController.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Pawn.h"
-#include "Engine/World.h" // Needed for GetWorld() and LineTrace
+#include "Engine/World.h"
 
 AEnemyAIController::AEnemyAIController()
 {
