@@ -2,44 +2,43 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "EnemyWaveData.h" // Include our new data structure.
+#include "EnemyWaveData.h"
 #include "VehicularGameMode.generated.h"
 
 UCLASS()
 class VEHICULARGAME_API AVehicularGameMode : public AGameModeBase
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public: 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enemy Spawning")
-	FTimerHandle SpawnWaveTimerHandle; // Manages the timer for spawning waves.
-	
+public:
+    AVehicularGameMode();
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enemy Spawning")
+    FTimerHandle SpawnWaveTimerHandle;
+
 protected:
-	virtual void BeginPlay() override;
+    virtual void BeginPlay() override;
 
-	// Called by a timer to spawn a wave of enemies.
-	void SpawnWave();
+    void SpawnWave();
 
-	// List of all possible enemy types that can be spawned.
-	UPROPERTY(EditDefaultsOnly, Category = "Enemy Spawning")
-	TArray<FEnemyTypeData> AvailableEnemyTypes;
+    UPROPERTY(EditDefaultsOnly, Category = "Enemy Spawning")
+    TArray<FEnemyTypeData> AvailableEnemyTypes;
 
-	// The base time between enemy waves in minutes. 
-	UPROPERTY(EditDefaultsOnly, Category = "Enemy Spawning", meta = (ClampMin = "0.1"))
-	float WaveIntervalMinutes;
+    UPROPERTY(EditDefaultsOnly, Category = "Enemy Spawning", meta = (ClampMin = "0.1"))
+    float WaveIntervalMinutes;
 
-	// A random time in minutes added or subtracted from the interval. 
-	UPROPERTY(EditDefaultsOnly, Category = "Enemy Spawning", meta = (ClampMin = "0.0"))
-	float WaveSpawnOffsetMinutes;
+    UPROPERTY(EditDefaultsOnly, Category = "Enemy Spawning", meta = (ClampMin = "0.0"))
+    float WaveSpawnOffsetMinutes;
 
-	// Used for the sine wave calculation on wave difficulty. 
-	UPROPERTY(EditDefaultsOnly, Category = "Enemy Spawning")
-	float WaveDifficultyAmplitude;
+    UPROPERTY(EditDefaultsOnly, Category = "Enemy Spawning")
+    float WaveDifficultyAmplitude;
 
-	// Used for the sine wave calculation on wave difficulty. 
-	UPROPERTY(EditDefaultsOnly, Category = "Enemy Spawning")
-	float WaveDifficultyFrequency;
+    UPROPERTY(EditDefaultsOnly, Category = "Enemy Spawning")
+    float WaveDifficultyFrequency;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Enemy Spawning", meta = (ClampMin = "1"))
+    int32 SpawnPointPoolSize;
 
 private:
-	TArray<AActor*> SpawnPoints; // Cached list of spawn points found in the world.
+    TArray<AActor*> AllSpawnPoints;
 };
