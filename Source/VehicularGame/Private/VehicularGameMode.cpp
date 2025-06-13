@@ -1,6 +1,6 @@
 #include "VehicularGameMode.h"
-#include "VehicularGameState.h" // IMPORTANT: Replace with your actual Game State header.
-#include "EnemyCharacter.h"     // IMPORTANT: Replace with your actual Enemy Character header.
+#include "VehicularGameState.h"
+#include "EnemyCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
 
@@ -31,7 +31,7 @@ void AVehicularGameMode::SpawnWave()
     // Calculate the target difficulty for this specific wave. 
     const float GameTime = GetWorld()->GetTimeSeconds();
     const float SineOffset = WaveDifficultyAmplitude * FMath::Sin(WaveDifficultyFrequency * GameTime);
-    const float WaveDifficulty = VehicularGameState->Difficulty + SineOffset; // Assumes "Difficulty" is a public float on your game state.
+    const float WaveDifficulty = VehicularGameState->Difficulty + SineOffset;
 
     // Use the wave difficulty as a budget to select enemies. 
     TArray<TSubclassOf<AEnemyCharacter>> EnemiesToSpawn;
@@ -59,7 +59,7 @@ void AVehicularGameMode::SpawnWave()
     if (PlayerPawn && EnemiesToSpawn.Num() > 0)
     {
         // Simple logic: just pick one random spawn point for this wave.
-        // This can be expanded to find the closest points to the player.
+        // expand to find the closest points to the player.
         const int32 RandomSpawnIndex = FMath::RandRange(0, SpawnPoints.Num() - 1);
         AActor* SpawnPoint = SpawnPoints[RandomSpawnIndex];
 
