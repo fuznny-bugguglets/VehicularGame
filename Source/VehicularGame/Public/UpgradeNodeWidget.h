@@ -10,7 +10,7 @@ UCLASS()
 class VEHICULARGAME_API UUpgradeNodeWidget : public UUserWidget
 {
     GENERATED_BODY()
-
+    
 protected:
     virtual void NativePreConstruct() override;
 
