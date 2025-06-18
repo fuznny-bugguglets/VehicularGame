@@ -13,7 +13,7 @@ public:
 	AVehicularGameState();
 
 	// The overall threat level of the world.
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Game State")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Game State")
 	float Difficulty;
 
 	// Call this function from the player vehicle's Tick to increase difficulty.
