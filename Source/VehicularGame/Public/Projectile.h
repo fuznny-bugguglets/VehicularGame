@@ -8,19 +8,20 @@ class USphereComponent;
 class UProjectileMovementComponent;
 class UNiagaraComponent;
 class UNiagaraSystem;
-class UStaticMeshComponent; // Forward declaration
+class UStaticMeshComponent;
+
+// Declares the new event dispatcher that will be broadcast on hit.
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnProjectileImpact, const FVector&, ImpactLocation, AActor*, HitActor);
 
 UCLASS(config = Game)
-class AProjectile : public AActor
+class VEHICULARGAME_API AProjectile : public AActor
 {
     GENERATED_BODY()
 
     UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
     USphereComponent* CollisionComp;
 
-    // We no longer create this in C++, so the UPROPERTY macro is removed.
-    // This will be a pointer to the Static Mesh Component that already exists on the Blueprint.
-    UStaticMeshComponent* ProjectileMesh; 
+    UStaticMeshComponent* ProjectileMesh;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
     UProjectileMovementComponent* ProjectileMovement;
@@ -31,9 +32,18 @@ class AProjectile : public AActor
 public:
     AProjectile();
 
+    // This new function will set the projectile's stats after it has been spawned.
+    UFUNCTION(BlueprintCallable, Category = "Projectile")
+    void InitializeProjectile(float InAdditionalDamage, int32 InPiercingCount, float InSpeedMultiplier);
+
+    // This is the event dispatcher that Blueprints can bind to.
+    UPROPERTY(BlueprintAssignable, Category = "Projectile")
+    FOnProjectileImpact OnProjectileImpact;
+
     UFUNCTION()
     void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
+    // Getters
     USphereComponent* GetCollisionComp() const { return CollisionComp; }
     UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
 
@@ -52,11 +62,14 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ClampMin = "0.0"))
     float LingerDuration;
 
+    // The new variable to track how many enemies this projectile can pierce.
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ClampMin = "0"))
+    int32 ProjectilePiercing;
+
 private:
     UPROPERTY(EditAnywhere, Category = "Projectile", meta = (ClampMin = "0"))
     int32 MaxBounces;
 
     int32 CurrentBounces;
-    
     bool bIsDying;
 };

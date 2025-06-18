@@ -13,36 +13,30 @@ AProjectile::AProjectile()
 
     // Initialize variables
     CurrentBounces = 0;
-    MaxBounces = 1;
+    MaxBounces = 0; // Bouncing is now superseded by piercing logic
     Damage = 10.0f;
     ImpactForceMagnitude = 100.0f;
     LingerDuration = 3.0f;
     bIsDying = false;
+    ProjectilePiercing = 0; // Default to no piercing
 
-    // Setup the root collision component
     CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
     CollisionComp->InitSphereRadius(5.0f);
     CollisionComp->BodyInstance.SetCollisionProfileName("Projectile");
     CollisionComp->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
     RootComponent = CollisionComp;
 
-    // --- REMOVED MESH CREATION ---
-    // The Static Mesh Component is expected to already exist on the Blueprint,
-    // so we no longer create it here. We will find it in BeginPlay.
-    ProjectileMesh = nullptr; // Initialize pointer as null
+    ProjectileMesh = nullptr;
 
-    // Setup the trail component and attach to root
     TrailNSC = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TrailNSC"));
     TrailNSC->SetupAttachment(RootComponent);
 
-    // Setup the projectile movement component
     ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
     ProjectileMovement->UpdatedComponent = CollisionComp;
     ProjectileMovement->InitialSpeed = 3000.f;
     ProjectileMovement->MaxSpeed = 3000.f;
     ProjectileMovement->bRotationFollowsVelocity = true;
-    ProjectileMovement->bShouldBounce = true;
-    ProjectileMovement->Bounciness = 0.6f;
+    ProjectileMovement->bShouldBounce = false; // Disable default bounce behavior
 
     InitialLifeSpan = 10.0f;
 }
@@ -51,40 +45,38 @@ void AProjectile::BeginPlay()
 {
     Super::BeginPlay();
 
-    // --- FIND THE EXISTING STATIC MESH COMPONENT ---
-    // This finds the first component of this type on the actor.
-    // This allows you to add and manage the mesh in the Blueprint editor.
     ProjectileMesh = FindComponentByClass<UStaticMeshComponent>();
     if (!ProjectileMesh)
     {
         UE_LOG(LogTemp, Warning, TEXT("AProjectile (%s) could not find a UStaticMeshComponent."), *GetNameSafe(this));
     }
 
-    // Activate the trail Niagara system if it's assigned
     if (TrailNiagaraSystemAsset)
     {
         TrailNSC->SetAsset(TrailNiagaraSystemAsset);
         TrailNSC->Activate(true);
     }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("AProjectile (%s) has no TrailNiagaraSystemAsset assigned."), *GetNameSafe(this));
-    }
+}
+
+void AProjectile::InitializeProjectile(float InAdditionalDamage, int32 InPiercingCount, float InSpeedMultiplier)
+{
+    // Apply stats passed in from the weapon that fired this projectile.
+    Damage += InAdditionalDamage;
+    ProjectilePiercing = InPiercingCount;
+    
+    ProjectileMovement->InitialSpeed *= InSpeedMultiplier;
+    ProjectileMovement->MaxSpeed *= InSpeedMultiplier;
+    ProjectileMovement->Velocity = GetActorForwardVector() * ProjectileMovement->InitialSpeed;
 }
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-    if (bIsDying)
+    if (bIsDying || !OtherActor || OtherActor == this || OtherActor == GetInstigator())
     {
         return;
     }
 
-    if (!OtherActor || OtherActor == this || OtherActor == GetInstigator())
-    {
-        return;
-    }
-
-    // Apply impulse and damage
+    // Apply damage and impulse first, regardless of what was hit.
     if (OtherComp && OtherComp->IsSimulatingPhysics())
     {
         OtherComp->AddImpulseAtLocation(ProjectileMovement->Velocity.GetSafeNormal() * ImpactForceMagnitude, Hit.ImpactPoint);
@@ -96,32 +88,38 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
         OtherActor->TakeDamage(Damage, DamageEvent, EventInstigator, this);
     }
 
-    CurrentBounces++;
+    // Broadcast the event so Blueprints (like this projectile's own) can react.
+    OnProjectileImpact.Broadcast(Hit.ImpactPoint, OtherActor);
 
-    // Check if the projectile should be destroyed
-    if (!ProjectileMovement->bShouldBounce || (CurrentBounces > MaxBounces))
+    // --- PIERCING LOGIC ---
+    // Check if the hit actor is an enemy.
+    if (OtherActor->ActorHasTag(FName("Enemy")))
     {
-        bIsDying = true;
-
-        ProjectileMovement->StopMovementImmediately();
-        ProjectileMovement->Velocity = FVector::ZeroVector;
-
-        // Disable all future collision on the root component
-        CollisionComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-        // Hide the Static Mesh Component that we found in BeginPlay
-        if (ProjectileMesh)
+        if (ProjectilePiercing > 0)
         {
-            ProjectileMesh->SetVisibility(false, false);
+            // If we can still pierce, decrement the count and continue flying.
+            ProjectilePiercing--;
+            return; // Exit the OnHit function here to allow the projectile to continue.
         }
-
-        // Deactivate the trail so it can fade out gracefully
-        if (TrailNSC && TrailNSC->IsActive())
-        {
-            TrailNSC->Deactivate();
-        }
-
-        // Set the actor to be destroyed after the linger duration
-        SetLifeSpan(LingerDuration);
     }
+
+    // --- END OF LIFE LOGIC ---
+    // This code will only run if the projectile hit something that wasn't an enemy,
+    // or if it hit an enemy but had no piercing left.
+    bIsDying = true;
+    ProjectileMovement->StopMovementImmediately();
+    ProjectileMovement->Velocity = FVector::ZeroVector;
+    CollisionComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+    if (ProjectileMesh)
+    {
+        ProjectileMesh->SetVisibility(false, false);
+    }
+
+    if (TrailNSC && TrailNSC->IsActive())
+    {
+        TrailNSC->Deactivate();
+    }
+
+    SetLifeSpan(LingerDuration);
 }
