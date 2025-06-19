@@ -15,7 +15,7 @@ void UVehicularGameInstance::Init()
 
 void UVehicularGameInstance::LoadGameData()
 {
-	// CORRECTED: Use DoesSaveGameExist to check if the file is on disk.
+	// Use DoesSaveGameExist to check if the file is on disk.
 	if (UGameplayStatics::DoesSaveGameExist(SaveSlotName, 0))
 	{
 		// If it exists, load it from the disk.
