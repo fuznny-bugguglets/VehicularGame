@@ -4,7 +4,7 @@
 #include "Engine/GameInstance.h"
 #include "VehicularGameInstance.generated.h"
 
-class UVehicularSaveGame; // Forward declaration of our SaveGame class.
+class UVehicularSaveGame;
 
 UCLASS()
 class VEHICULARGAME_API UVehicularGameInstance : public UGameInstance

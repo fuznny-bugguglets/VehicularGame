@@ -48,7 +48,7 @@ void AVehicularGameMode::SpawnWave()
 	AVehicularGameState* VehicularGameState = GetWorld()->GetGameState<AVehicularGameState>();
 	AActor* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
-	// Basic checks to ensure we can spawn enemies.
+	// Check to see that we can spawn enemies.
 	if (!VehicularGameState || !PlayerPawn || AllSpawnPoints.Num() == 0 || AvailableEnemyTypes.Num() == 0)
 	{
 		// Set timer for the next wave even if this one fails, to prevent spawning from stopping entirely.
@@ -57,7 +57,7 @@ void AVehicularGameMode::SpawnWave()
 		return;
 	}
 
-	// --- NEW WEIGHTED RANDOM BUDGETING LOGIC ---
+	// --- WEIGHTED RANDOM ENEMY SPAWNING ---
 
 	// Calculate the target difficulty for this specific wave.
 	const float GameTime = GetWorld()->GetTimeSeconds();
@@ -77,7 +77,7 @@ void AVehicularGameMode::SpawnWave()
 	// Loop until budget is spent or the failsafe is reached.
 	while (RemainingBudget > 0 && --Failsafe > 0)
 	{
-		// 1. First, find all enemies that are currently affordable.
+		// 1. Find all enemies that are currently affordable.
 		TArray<FEnemyTypeData> AffordableEnemies;
 		for (const FEnemyTypeData& EnemyData : SortedEnemyTypes)
 		{
@@ -86,7 +86,6 @@ void AVehicularGameMode::SpawnWave()
 				AffordableEnemies.Add(EnemyData);
 			}
 		}
-
 		// If no enemies can be afforded with the remaining budget, stop.
 		if (AffordableEnemies.Num() == 0)
 		{
@@ -97,7 +96,6 @@ void AVehicularGameMode::SpawnWave()
 		TArray<FEnemyTypeData> WeightedSelectionPool;
 		for (int32 i = 0; i < AffordableEnemies.Num(); ++i)
 		{
-			// The cheapest enemy gets the highest weight, equal to the number of affordable enemies.
 			const int32 Weight = AffordableEnemies.Num() - i;
 			for (int32 j = 0; j < Weight; ++j)
 			{
@@ -108,12 +106,12 @@ void AVehicularGameMode::SpawnWave()
 		// 3. Pick one enemy at random from the weighted pool.
 		const FEnemyTypeData& SelectedEnemy = WeightedSelectionPool[FMath::RandRange(0, WeightedSelectionPool.Num() - 1)];
 		
-		// 4. "Purchase" the enemy.
+		// 4. Spawn the enemy and remove points from the spawning budget.
 		EnemiesToSpawn.Add(SelectedEnemy.EnemyClass);
 		RemainingBudget -= SelectedEnemy.DifficultyCost;
 	}
 
-	// --- SPAWNING LOGIC (Find closest points and spawn there) ---
+	// --- SPAWNING LOGIC (Find the closest points, choose random one from those and spawn there) ---
 	if (EnemiesToSpawn.Num() > 0)
 	{
 		const FVector PlayerLocation = PlayerPawn->GetActorLocation();

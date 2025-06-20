@@ -47,7 +47,7 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const&
 
 void AEnemyCharacter::Die()
 {
-    // --- Essential cleanup before destruction ---
+    // Cleanup before destruction
     GetCharacterMovement()->StopMovementImmediately();
     GetCharacterMovement()->DisableMovement();
 
@@ -66,7 +66,7 @@ void AEnemyCharacter::Die()
         AIController->StopMovement();
     }
 
-    // --- INSTANTLY DESTROY THE ACTOR ---
+    // Destroy the enemy.
     Destroy();
 }
 

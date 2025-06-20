@@ -1,4 +1,3 @@
-// EnemyCharacter.h
 #pragma once
 
 #include "CoreMinimal.h"

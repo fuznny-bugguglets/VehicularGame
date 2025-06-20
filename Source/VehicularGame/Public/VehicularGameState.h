@@ -16,7 +16,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Game State")
 	float Difficulty;
 
-	// Call this function from the player vehicle's Tick to increase difficulty.
+	// Call this function to increase difficulty.
 	UFUNCTION(BlueprintCallable, Category = "Game State")
 	void UpdateDifficulty(float VibrationLevel, float DeltaTime);
 

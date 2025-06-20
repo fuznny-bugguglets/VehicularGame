@@ -35,31 +35,30 @@ void AEnemyAIController::Tick(float DeltaTime)
 
 	// --- STABILIZED TARGET CALCULATION ---
 
-	// 1. Get player's vectors but flatten them to be parallel to the ground (ignoring pitch and roll).
+	// 1. get player's vectors, flattening them to be parallel to the ground.
 	FVector PlayerForward = PlayerPawn->GetActorForwardVector();
-	PlayerForward.Z = 0.0f; // Ignore pitch
+	PlayerForward.Z = 0.0f;
 	PlayerForward.Normalize();
 
 	FVector PlayerRight = PlayerPawn->GetActorRightVector();
-	PlayerRight.Z = 0.0f; // Ignore roll
+	PlayerRight.Z = 0.0f;
 	PlayerRight.Normalize();
 
 	// 2. Calculate noise value (-1.0 to 1.0)
 	NoiseTimeAccumulator += DeltaTime * TargetPointNoiseSpeed;
 	const float HorizontalNoise = FMath::PerlinNoise1D(NoiseTimeAccumulator);
 
-	// 3. Calculate the target point on the stabilized horizontal plane.
+	// 3. calculate the target point on the stabilized horizontal plane.
 	const FVector LineCenter = PlayerPawn->GetActorLocation() + (PlayerForward * TargetLineForwardOffset);
 	const FVector HorizontalOffset = PlayerRight * HorizontalNoise * TargetLineHalfWidth;
 	const FVector HorizontalTargetPoint = LineCenter + HorizontalOffset;
-
-	// --- GROUND PROJECTION (LINE TRACE) ---
-
+	
+	// ground projection
 	const FVector TraceStart = HorizontalTargetPoint + FVector(0, 0, GroundTraceUpwardOffset);
 	const FVector TraceEnd = HorizontalTargetPoint - FVector(0, 0, GroundTraceDownwardDistance);
 
 	FHitResult HitResult;
-	// Setup collision query params to ignore the player and the enemy itself
+	// setup collision query params to ignore the player and itself
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(PlayerPawn);
 	if(GetPawn())
@@ -77,13 +76,12 @@ void AEnemyAIController::Tick(float DeltaTime)
 
 	if (bHit)
 	{
-		// If we hit the ground, that's our new target.
+		// If it hit the ground, that's the new target.
 		CurrentTargetLocation = HitResult.Location;
 	}
 	else
 	{
-		// If we don't hit anything (e.g., over a cliff), use the calculated horizontal point.
-		// The AI will try to path to it, and might fail, which our Blueprint will handle.
+		// If it doesn't hit anything (like over a cliff), use the calculated horizontal point.
 		CurrentTargetLocation = HorizontalTargetPoint;
 	}
 }

@@ -14,8 +14,7 @@ class VEHICULARGAME_API AVehicularGameMode : public AGameModeBase
 
 public:
     AVehicularGameMode();
-
-    // Using the original name so your HUD bindings do not break.
+    
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enemy Spawning")
     FTimerHandle SpawnWaveTimerHandle;
 
