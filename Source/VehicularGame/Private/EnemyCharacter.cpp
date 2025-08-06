@@ -1,9 +1,8 @@
-// EnemyCharacter.cpp
 #include "EnemyCharacter.h"
-#include "AIController.h" // Required for AAIController
-#include "GameFramework/CharacterMovementComponent.h" // Required for character movement
-#include "Kismet/GameplayStatics.h" // Required for getting player character
-#include "Components/CapsuleComponent.h" // Include for UCapsuleComponent
+#include "AIController.h" // For AAIController
+#include "GameFramework/CharacterMovementComponent.h" // For character movement
+#include "Kismet/GameplayStatics.h" // For getting player character
+#include "Components/CapsuleComponent.h" // For UCapsuleComponent
 
 AEnemyCharacter::AEnemyCharacter()
 {

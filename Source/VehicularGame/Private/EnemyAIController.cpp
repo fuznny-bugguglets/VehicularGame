@@ -33,9 +33,9 @@ void AEnemyAIController::Tick(float DeltaTime)
 		return;
 	}
 
-	// --- STABILIZED TARGET CALCULATION ---
+	// -- Stablized Target Calculation --
 
-	// 1. get player's vectors, flattening them to be parallel to the ground.
+	// get player's vectors, flattening them to be parallel to the ground.
 	FVector PlayerForward = PlayerPawn->GetActorForwardVector();
 	PlayerForward.Z = 0.0f;
 	PlayerForward.Normalize();
@@ -44,11 +44,11 @@ void AEnemyAIController::Tick(float DeltaTime)
 	PlayerRight.Z = 0.0f;
 	PlayerRight.Normalize();
 
-	// 2. Calculate noise value (-1.0 to 1.0)
+	// Calculate noise value (-1.0 to 1.0)
 	NoiseTimeAccumulator += DeltaTime * TargetPointNoiseSpeed;
 	const float HorizontalNoise = FMath::PerlinNoise1D(NoiseTimeAccumulator);
 
-	// 3. calculate the target point on the stabilized horizontal plane.
+	// calculate the target point on the stabilized horizontal plane.
 	const FVector LineCenter = PlayerPawn->GetActorLocation() + (PlayerForward * TargetLineForwardOffset);
 	const FVector HorizontalOffset = PlayerRight * HorizontalNoise * TargetLineHalfWidth;
 	const FVector HorizontalTargetPoint = LineCenter + HorizontalOffset;
