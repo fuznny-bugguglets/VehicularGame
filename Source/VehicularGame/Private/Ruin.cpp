@@ -4,9 +4,10 @@
 #include "Ruin.h"
 #include "VehicularGameInstance.h"
 #include "VehicularSaveGame.h"
+#include "Components/SphereComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
-void LogError(const FString& ErrorMessage)
+void ARuin::LogError(const FString& ErrorMessage)
 {
 	//if we have the engine pointer, we print to the screen
 	if(GEngine)
@@ -30,7 +31,42 @@ ARuin::ARuin()
 	RuinMeshCommon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ruin Mesh Common"));
 	RuinMeshUncommon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ruin Mesh Unommon"));
 	RuinMeshRare = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ruin Mesh Rare"));
+	ExtractionRingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Extraction Ring Mesh"));
+	CreateDefaultSubobject<USphereComponent>(TEXT("Extraction Radius"));
 
+	//hide all meshes
+	RuinMeshCommon->SetVisibility(false);
+	RuinMeshUncommon->SetVisibility(false);
+	RuinMeshRare->SetVisibility(false);
+	
+	//disable collision on all meshes
+	RuinMeshCommon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	RuinMeshUncommon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	RuinMeshRare->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
+	//set meshes based on type
+    switch (ResourceType)
+    {
+    case EResourceType::COMMON:
+    	ExtractionRingMesh->SetMaterial(0, CommonMaterial);
+    	RuinMeshCommon->SetVisibility(true);
+    	RuinMeshCommon->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    	break;
+    	
+    case EResourceType::UNCOMMON:
+    	ExtractionRingMesh->SetMaterial(0, UncommonMaterial);
+    	RuinMeshUncommon->SetVisibility(true);
+    	RuinMeshUncommon->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    	break;
+    	
+    case EResourceType::RARE:
+    	ExtractionRingMesh->SetMaterial(0, RareMaterial);
+    	RuinMeshRare->SetVisibility(true);
+    	RuinMeshRare->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    	break;
+    }
+
+	
 }
 
 // Called when the game starts or when spawned
@@ -69,6 +105,9 @@ void ARuin::BeginPlay()
 	{
 		//set the resource amount to the default
 		ResourceAmount = StartingResourceAmount;
+
+		//old blueprint code that is probably dead
+		UpdateBubble();
 	}
 	else
 	{
@@ -85,3 +124,11 @@ void ARuin::Tick(float DeltaTime)
 
 }
 
+//sets mesh to nothing if there are no resources
+void ARuin::UpdateBubble()
+{
+	if(ResourceAmount <= 0)
+	{
+		ExtractionRingMesh->SetVisibility(false);
+	}
+}

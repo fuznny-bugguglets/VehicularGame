@@ -3,6 +3,24 @@
 
 #include "Vehicle.h"
 
+#include "GSScavenger.h"
+#include "Components/AudioComponent.h"
+#include "Kismet/GameplayStatics.h"
+
+void AVehicle::LogError(const FString& ErrorMessage)
+{
+	//if we have the engine pointer, we print to the screen
+	if(GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, ErrorMessage);
+	}
+	//otherwise, we print to the log
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *ErrorMessage);
+	}
+}
+
 // Sets default values
 AVehicle::AVehicle()
 {
@@ -15,17 +33,43 @@ AVehicle::AVehicle()
 void AVehicle::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	//get the game state
+	AGameStateBase* GameStateBase = GetWorld()->GetGameState();
+	if(GameStateBase == nullptr)
+	{
+		LogError(TEXT("Failed to get the game state base in vehicle"));
+		return;
+	}
 
 	//get the scavenger game state
-	GetWorld()->GetGameState();
-	
+	ScavengerGameState = Cast<AGSScavenger>(GameStateBase);
+	if(ScavengerGameState == nullptr)
+	{
+		LogError(TEXT("Failed to get the Scavenger Game State from Vehicle"));
+		return;
+	}
+
+	//creates the sound
+	if(EngineSound == nullptr)
+	{
+		LogError(TEXT("No Engine Sound set in Vehicle"));
+		return;
+	}
+	EngineSoundInstance = UGameplayStatics::CreateSound2D(this, EngineSound);
+
+	//sets the volume of the sound
+	SetEngineSoundValues();
+
+	//begins playing
+	EngineSoundInstance->Play();
 }
 
 // Called every frame
 void AVehicle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 }
 
 // Called to bind functionality to input
@@ -68,7 +112,29 @@ void AVehicle::SetRareLootCount(int32 NewValue)
 	RareLootCount = NewValue;
 }
 
+//sets the speed and pitch of the engine based on speed
+void AVehicle::SetEngineSoundValues()
+{
+	//check that the sound instance is in the world and kicking
+	if(EngineSoundInstance == nullptr)
+	{
+		LogError("Trying to set the parameters of the engine sound instance when it doesnt exist in Vehicle");
+		return;
+	}
 
+	//figure out what our volume should be
+	float NewVolume = (((EngineMaxVolume - EngineMinVolume) / SpeedRequiredForMaxEngineSound) * (Speed)) + EngineMinVolume;
+
+	EngineSoundInstance->SetFloatParameter(TEXT("EngineSound"), NewVolume);
+	//EngineSoundInstance->SetVolumeMultiplier(NewVolume);
+}
+
+//temp
+void AVehicle::SetSpeed(float NewSpeed)
+{
+	Speed = NewSpeed;
+	SetEngineSoundValues();
+}
 
 
 
