@@ -27,5 +27,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
+private:
+	//how much the ruin starts with
+	UPROPERTY(EditInstanceOnly, meta = (AllowPrivateAccess = "true"))
+	int32 StartingResourceAmount = 1;
 
+	//how much the ruin currently as
+	int32 ResourceAmount = 0;
 };
