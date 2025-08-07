@@ -37,9 +37,19 @@ void UVehicularGameInstance::LoadGameData()
 
 void UVehicularGameInstance::SaveGameData()
 {
+	//checks we have an object to save to
 	if (SaveGameObject)
 	{
+		//saves to that object
 		UGameplayStatics::SaveGameToSlot(SaveGameObject, SaveSlotName, 0);
+	}
+	else
+	{
+		//let the player know the save failed (they're fucked)
+		if(GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Failed to save"));
+		}
 	}
 }
 
