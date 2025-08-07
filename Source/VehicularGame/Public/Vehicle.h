@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "Vehicle.generated.h"
 
+class USpringArmComponent;
 class AGSScavenger;
 
 UCLASS()
@@ -60,6 +61,10 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
 	float SpeedRequiredForMaxEngineSound = 50.0f;
 
+	//inputs
+	//UPROPERTY(EditDefaultsOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	//UInput
+
 	//reference to the instance of the engine sound
 	UPROPERTY()
 	UAudioComponent* EngineSoundInstance;
@@ -75,6 +80,10 @@ private:
 
 	//how fast we are currently travelling
 	float Speed = 0.0f;
+
+	//reference to the spring arm
+	UPROPERTY()
+	USpringArmComponent* SpringArm;
 	
 	//sets the speed and pitch of the engine based on speed
 	UFUNCTION()

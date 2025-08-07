@@ -3,8 +3,11 @@
 
 #include "Vehicle.h"
 
+#include "CustomWheelComponent.h"
 #include "GSScavenger.h"
+#include "Camera/CameraComponent.h"
 #include "Components/AudioComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 void AVehicle::LogError(const FString& ErrorMessage)
@@ -26,6 +29,33 @@ AVehicle::AVehicle()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	//setup components and attachment
+	UStaticMeshComponent* VehicleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Vehicle Mesh"));
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
+	UCameraComponent* Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	UChildActorComponent* Turret = CreateDefaultSubobject<UChildActorComponent>(TEXT("Turret"));
+	UCustomWheelComponent* FrontLeftWheel = CreateDefaultSubobject<UCustomWheelComponent>(TEXT("Front Left Wheel"));
+	UCustomWheelComponent* FrontRightWheel = CreateDefaultSubobject<UCustomWheelComponent>(TEXT("Front Right Wheel"));
+	UCustomWheelComponent* BackLeftWheel = CreateDefaultSubobject<UCustomWheelComponent>(TEXT("Back Left Wheel"));
+	UCustomWheelComponent* BackRightWheel = CreateDefaultSubobject<UCustomWheelComponent>(TEXT("Back Right Wheel"));
+	UStaticMeshComponent* FrontLeftWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Front Left Wheel Mesh"));
+	UStaticMeshComponent* FrontRightWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Front Right Wheel Mesh"));
+	UStaticMeshComponent* BackLeftWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Back Left Wheel Mesh"));
+	UStaticMeshComponent* BackRightWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Back Right Wheel Mesh"));
+	VehicleMesh->SetupAttachment(RootComponent);
+	SpringArm->SetupAttachment(VehicleMesh);
+	Camera->SetupAttachment(SpringArm);
+	Turret->SetupAttachment(VehicleMesh);
+	FrontLeftWheel->SetupAttachment(VehicleMesh);
+	FrontRightWheel->SetupAttachment(VehicleMesh);
+	BackLeftWheel->SetupAttachment(VehicleMesh);
+	BackRightWheel->SetupAttachment(VehicleMesh);
+	FrontLeftWheelMesh->SetupAttachment(FrontLeftWheel);
+	FrontRightWheelMesh->SetupAttachment(FrontRightWheel);
+	BackLeftWheelMesh->SetupAttachment(BackLeftWheel);
+	BackRightWheelMesh->SetupAttachment(BackRightWheel);
+	
 
 }
 
