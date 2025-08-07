@@ -15,7 +15,7 @@ public:
 	UVehicularGameInstance();
 
 	// Called when the player successfully returns to the city.
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Game Flow")
+	UFUNCTION(BlueprintCallable, Category = "Game Flow")
 	void OnRunSuccess();
 	
 	// Called when the Game Instance is first created.
@@ -33,11 +33,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Save Game")
 	void ResetSaveData();
 
-protected:
-	// A reference to the currently loaded SaveGame object. All other scripts will access data through this.
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save Game")
-	UVehicularSaveGame* SaveGameObject;
+	//returns the save game object
+	UVehicularSaveGame* GetSaveGameObject() const;
 
+protected:
 	// The name of the file slot to save to.
 	UPROPERTY(EditDefaultsOnly, Category = "Save Game")
 	FString SaveSlotName;
@@ -45,4 +44,21 @@ protected:
 	// A reference to our Save Game Blueprint, set in the editor. This ensures we load/create the correct blueprint with your upgrade bools.
 	UPROPERTY(EditDefaultsOnly, Category = "Save Game")
 	TSubclassOf<UVehicularSaveGame> SaveGameClass;
+
+private:
+	//used for debug purposes, logs errors
+	UFUNCTION()
+	void LogError(const FString& ErrorMessage);
+	
+	//Transfers player resources out of their inventory and into the city bank
+	UFUNCTION()
+	void BankInventory();
+
+	//Stores resource count left in ruins (POI's)
+	UFUNCTION()
+	void SaveRuinResources();
+
+	// A reference to the currently loaded SaveGame object. All other scripts will access data through this.
+	UPROPERTY(VisibleAnywhere, Category = "Save Game")
+	UVehicularSaveGame* SaveGameObject;
 };

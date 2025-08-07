@@ -35,3 +35,42 @@ void AVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+// Loot
+int32 AVehicle::GetCommonLootCount() const
+{
+	return CommonLootCount;
+}
+int32 AVehicle::GetUncommonLootCount() const
+{
+	return UncommonLootCount;
+}
+int32 AVehicle::GetRareLootCount() const
+{
+	return RareLootCount;
+}
+
+void AVehicle::ResetAllLoot()
+{
+	SetCommonLootCount(0);
+	SetUncommonLootCount(0);
+	SetRareLootCount(0);
+} 
+void AVehicle::SetCommonLootCount(int32 NewValue)
+{
+	CommonLootCount = NewValue;
+}
+void AVehicle::SetUncommonLootCount(int32 NewValue)
+{
+	UncommonLootCount = NewValue;
+}
+void AVehicle::SetRareLootCount(int32 NewValue)
+{
+	RareLootCount = NewValue;
+}
+
+
+
+
+
+
+

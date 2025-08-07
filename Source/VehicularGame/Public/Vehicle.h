@@ -26,4 +26,19 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// Loot Getters and Setters
+	int32 GetCommonLootCount() const;
+	int32 GetUncommonLootCount() const;
+	int32 GetRareLootCount() const;
+
+	void ResetAllLoot();
+	void SetCommonLootCount(int32 NewValue);
+	void SetUncommonLootCount(int32 NewValue);
+	void SetRareLootCount(int32 NewValue);
+ 
+private:
+	int32 CommonLootCount = 0;
+	int32 UncommonLootCount = 0;
+	int32 RareLootCount = 0;
+
 };
