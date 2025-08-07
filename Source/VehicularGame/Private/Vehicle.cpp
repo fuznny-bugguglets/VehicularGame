@@ -122,11 +122,13 @@ void AVehicle::SetEngineSoundValues()
 		return;
 	}
 
-	//figure out what our volume should be
+	//set new volume
 	float NewVolume = (((EngineMaxVolume - EngineMinVolume) / SpeedRequiredForMaxEngineSound) * (Speed)) + EngineMinVolume;
+	EngineSoundInstance->SetVolumeMultiplier(NewVolume);
 
-	EngineSoundInstance->SetFloatParameter(TEXT("EngineSound"), NewVolume);
-	//EngineSoundInstance->SetVolumeMultiplier(NewVolume);
+	//set new pitch
+	float NewPitch = (((EngineMaxPitch - EngineMinPitch) / SpeedRequiredForMaxEngineSound) * (Speed)) + EngineMinPitch;
+	EngineSoundInstance->SetPitchMultiplier(NewPitch);
 }
 
 //temp

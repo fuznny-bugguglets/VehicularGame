@@ -48,14 +48,14 @@ private:
 	USoundBase* EngineSound;
 	//how loud the engine sound can get
 	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
-	float EngineMinVolume = 1.0f;
+	float EngineMinVolume = 1.f;
 	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
 	float EngineMaxVolume = 2.0f;
 	//how fast the engine sound can get
 	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
-	float EngineMinPitch = 1.0f;
+	float EngineMinPitch = 0.6f;
 	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
-	float EngineMaxPitch = 5.0f;
+	float EngineMaxPitch = 3.0f;
 	//how fast the car needs to travel for max volume and speed
 	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
 	float SpeedRequiredForMaxEngineSound = 50.0f;
@@ -74,7 +74,7 @@ private:
 	AGSScavenger* ScavengerGameState;
 
 	//how fast we are currently travelling
-	float Speed = 50.0f;
+	float Speed = 0.0f;
 	
 	//sets the speed and pitch of the engine based on speed
 	UFUNCTION()
