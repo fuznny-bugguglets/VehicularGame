@@ -10,6 +10,7 @@ class ATurret;
 class USpringArmComponent;
 class AGSScavenger;
 class UInputAction;
+class UCustomWheelComponent;
 
 UENUM()
 enum class EEngineState : uint8
@@ -51,32 +52,42 @@ public:
 	void SetRareLootCount(int32 NewValue);
  
 private:
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Torque", meta = (AllowPrivateAccess = "true"))
 	UCurveFloat* TorqueCurve;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Torque", meta = (AllowPrivateAccess = "true"))
 	float MaxTorqueSpeed = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Torque", meta = (AllowPrivateAccess = "true"))
 	float MaxMotorTorque = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Torque", meta = (AllowPrivateAccess = "true"))
 	float HandbrakeTorque = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Steering", meta = (AllowPrivateAccess = "true"))
 	float MaxSteerSpeed = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Steering", meta = (AllowPrivateAccess = "true"))
 	float MinSteerAngle = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Steering", meta = (AllowPrivateAccess = "true"))
 	float MaxSteerAngle = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Steering", meta = (AllowPrivateAccess = "true"))
+	float SteerChangeSpeed = 0.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Stiffness", meta = (AllowPrivateAccess = "true"))
 	float NormalForwardStiffness = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Stiffness", meta = (AllowPrivateAccess = "true"))
 	float NormalSidewaysStiffness = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Stiffness", meta = (AllowPrivateAccess = "true"))
 	float DriftSidewaysStiffness = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Stiffness", meta = (AllowPrivateAccess = "true"))
 	float HandbrakeStiffness = 0.0f;
 	
 	//the class of the turret
 	UPROPERTY(EditDefaultsOnly, Category = "Turret", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AActor> TurretClass;
+
+	//cooldown between hits
+	UPROPERTY(EditDefaultsOnly, Category = "Damage", meta = (AllowPrivateAccess = "true"))
+	float HitCooldown = 0.0f;
+
+	//
+	UPROPERTY(EditDefaultsOnly, Category = "Difficulty", meta = (AllowPrivateAccess = "true"))
+	float BaseDifficultIncreasePerMinute = 0.0f;
 	
 	//the engine sound file
 	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
@@ -144,6 +155,9 @@ private:
 	//the target angle for steering
 	float TargetSteerAngle = 0.0f;
 
+	//what our current steering angle is
+	float CurrentSteerAngle = 0.0f;
+
 	//our current health
 	int32 Health = 1;
 	//the max health we can have
@@ -152,26 +166,29 @@ private:
 	//whether the handbreak is currently on or off
 	bool bHandbrakeActive = false;
 
+	//how long its been since we were last hit
+	float TimeSinceLastHit;
+
 	//reference to the spring arm
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm;
 
 	//reference to our camera
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* Camera;
 
 	//reference to the child actor that holds the turret
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UChildActorComponent* TurretChildActorComponent;
 
 	//wheels
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCustomWheelComponent* FrontLeftWheel;
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCustomWheelComponent* FrontRightWheel;
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCustomWheelComponent* BackLeftWheel;
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCustomWheelComponent* BackRightWheel;
 
 	//current state of the engine
@@ -214,10 +231,15 @@ private:
 	//when the player is dealt damage
 	UFUNCTION()
 	void OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
-	
+
+	//Sets the speed variable based on wheel velocities
 	void CalculateCurrentSpeed();
+
+	//Smoothly steer wheels to target angle
 	void UpdateEngineStateOnReverse();
 	void SteerWheels(float DeltaTime);
+
+	//Updates the difficulty depending on the noise being produced
 	void UpdateDifficulty(float DeltaTime);
 	void UpdateExtractionProgress(float DeltaTime);
 	void UpdateWorldSpeed(float DeltaTime);

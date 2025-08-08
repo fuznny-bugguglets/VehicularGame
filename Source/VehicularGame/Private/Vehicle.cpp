@@ -60,8 +60,7 @@ AVehicle::AVehicle()
 	BackLeftWheelMesh->SetupAttachment(BackLeftWheel);
 	BackRightWheelMesh->SetupAttachment(BackRightWheel);
 
-	//binds damage delegate
-	OnTakeAnyDamage.AddDynamic(this, &AVehicle::OnTakeDamage);
+
 	
 
 }
@@ -70,6 +69,9 @@ AVehicle::AVehicle()
 void AVehicle::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//binds damage delegate
+	OnTakeAnyDamage.AddDynamic(this, &AVehicle::OnTakeDamage);
 	
 	//get the game state
 	AGameStateBase* GameStateBase = GetWorld()->GetGameState();
@@ -150,6 +152,43 @@ void AVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	if(UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
+		//warn you
+		if(LookAction == nullptr)
+		{
+			LogError("Look Action wasn't set in Vehicle");
+			return;
+		}
+		if(MoveAction == nullptr)
+		{
+			LogError("Move Action wasn't set in Vehicle");
+			return;
+		}
+		if(DriftAction == nullptr)
+		{
+			LogError("Drift Action wasn't set in Vehicle");
+			return;
+		}
+		if(HandbrakeAction == nullptr)
+		{
+			LogError("Handbrake Action wasn't set in Vehicle");
+			return;
+		}
+		if(FireAction == nullptr)
+		{
+			LogError("Fire Action wasn't set in Vehicle");
+			return;
+		}
+		if(EngineShiftUpAction == nullptr)
+		{
+			LogError("Engine shift up Action wasn't set in Vehicle");
+			return;
+		}
+		if(EngineShiftDownAction == nullptr)
+		{
+			LogError("Engine shift down Action wasn't set in Vehicle");
+			return;
+		}
+		
 		//bind the inputs
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AVehicle::OnLook);
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AVehicle::OnMove);
@@ -281,6 +320,11 @@ void AVehicle::OnMove(const FInputActionValue& Value)
 	float TorqueCurveInput = Speed / MyMaxSpeed;
 
 	//get the torque based on our input
+	if(TorqueCurve == nullptr)
+	{
+		LogError("You haven't set a Torque Curve in Vehicle");
+		return;
+	}
 	float TorqueCurveOutput = TorqueCurve->GetFloatValue(TorqueCurveInput);
 
 	//get the amount of torque to apply (before the engine state scaling)
@@ -445,5 +489,109 @@ void AVehicle::OnEngineShiftDown(const FInputActionValue& Value)
 //when damage is dealt to us
 void AVehicle::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-	LogError("RAHHH");
+	//can we get hit?
+	if(TimeSinceLastHit <= HitCooldown)
+	{
+		return;
+	}
+
+	//reset the time since we were last hit
+	TimeSinceLastHit = 0;
+
+	//take damage
+	Health -= Damage;
+
+	//should we die?
+	if(Health <= 0)
+	{
+		UGameplayStatics::OpenLevel(this, FName("Main"));
+	}
 }
+
+//Sets the speed variable based on wheel velocities
+void AVehicle::CalculateCurrentSpeed()
+{
+	//add all wheel velocity
+	float MySpeed = 0.0f;
+	MySpeed += FrontLeftWheel->GetWheelAngularVelocity();
+	MySpeed += FrontRightWheel->GetWheelAngularVelocity();
+	MySpeed += BackLeftWheel->GetWheelAngularVelocity();
+	MySpeed += BackRightWheel->GetWheelAngularVelocity();
+
+	//get the average from the 4 wheels
+	MySpeed /= 4.0f;
+
+	//get the per degree velocity
+	MySpeed /= 360.0f;
+
+	//multiply by the wheel circumference (in meters)
+	MySpeed *= FrontLeftWheel->WheelRadius * 0.02f * PI;
+	
+	//convert from meters per second to kilometers per hour
+	MySpeed *= 3.666f;
+
+	Speed = MySpeed;
+}
+
+//Smoothly steer wheels to target angle
+void AVehicle::SteerWheels(float DeltaTime)
+{
+	//is our target angle greater than our current angle?
+	if(TargetSteerAngle > CurrentSteerAngle)
+	{
+		//calculate new steer angle
+		CurrentSteerAngle = SteerChangeSpeed * DeltaTime + CurrentSteerAngle;
+
+		//clamp
+		if(CurrentSteerAngle > TargetSteerAngle)
+		{
+			CurrentSteerAngle = TargetSteerAngle;
+		}
+	}
+	else
+	{
+		//calculate new steer angle
+		CurrentSteerAngle = SteerChangeSpeed * DeltaTime * 1.0f + CurrentSteerAngle;
+
+		//clamp
+		if (CurrentSteerAngle < TargetSteerAngle)
+		{
+			CurrentSteerAngle = TargetSteerAngle;
+		}
+	}
+
+	//set the steer angle for the front wheels
+	FrontLeftWheel->SetSteerAngle(CurrentSteerAngle);
+	FrontRightWheel->SetSteerAngle(CurrentSteerAngle);
+}
+
+//Updates the difficulty depending on the noise being produced
+void AVehicle::UpdateDifficulty(float DeltaTime)
+{
+	//calculate the vibration level
+	float VibrationLevel = BaseDifficultIncreasePerMinute;
+
+	//multiply vibration based on engine state
+	switch (CurrentEngineState)
+	{
+	case EEngineState::OFF:
+		VibrationLevel *= 0.5f;
+		break;
+	case EEngineState::CRUISE:
+		VibrationLevel *= 1.0f;
+		break;
+	case EEngineState::BOOST1:
+		VibrationLevel *= 2.0f;
+		break;
+	case EEngineState::BOOST2:
+		VibrationLevel *= 4.0f;
+		break;
+	}
+	
+	//divide by 60 (for minute)
+	VibrationLevel /= 60.0f;
+
+	//update the game state with our findings
+	ScavengerGameState->UpdateDifficulty(VibrationLevel, DeltaTime);
+}
+
