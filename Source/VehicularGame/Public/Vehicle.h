@@ -58,11 +58,21 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
 	float MaxMotorTorque = 0.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
+	float HandbrakeTorque = 0.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
 	float MaxSteerSpeed = 0.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
 	float MinSteerAngle = 0.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
 	float MaxSteerAngle = 0.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
+	float NormalForwardStiffness = 0.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
+	float NormalSidewaysStiffness = 0.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
+	float DriftSidewaysStiffness = 0.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel", meta = (AllowPrivateAccess = "true"))
+	float HandbrakeStiffness = 0.0f;
 	
 	//the class of the turret
 	UPROPERTY(EditDefaultsOnly, Category = "Turret", meta = (AllowPrivateAccess = "true"))
@@ -139,6 +149,9 @@ private:
 	//the max health we can have
 	int32 MaxHealth = 1;
 
+	//whether the handbreak is currently on or off
+	bool bHandbrakeActive = false;
+
 	//reference to the spring arm
 	UPROPERTY()
 	USpringArmComponent* SpringArm;
@@ -176,19 +189,31 @@ private:
 	void OnMove(const struct FInputActionValue& Value);
 	//when the player drifts
 	UFUNCTION()
-	void OnDrift(const struct FInputActionValue& Value);
+	void OnStartDrift(const struct FInputActionValue& Value);
+	//when the player stops drifts
+	UFUNCTION()
+	void OnStopDrift(const struct FInputActionValue& Value);
 	//when the player uses the handbreak
 	UFUNCTION()
 	void OnHandbreak(const struct FInputActionValue& Value);
-	//when the player shoots
+	//when the player first begins to shoot
 	UFUNCTION()
-	void OnFire(const struct FInputActionValue& Value);
+	void OnFireStart(const struct FInputActionValue& Value);
+	//while the player is shooting
+	UFUNCTION()
+	void OnFiring(const struct FInputActionValue& Value);
+	//when the player finishes shooting
+	UFUNCTION()
+	void OnFireStop(const struct FInputActionValue& Value);
 	//when the player shifts the engine up
 	UFUNCTION()
 	void OnEngineShiftUp(const struct FInputActionValue& Value);
 	//when the player shifts the engine down
 	UFUNCTION()
 	void OnEngineShiftDown(const struct FInputActionValue& Value);
+	//when the player is dealt damage
+	UFUNCTION()
+	void OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
 	
 	void CalculateCurrentSpeed();
 	void UpdateEngineStateOnReverse();

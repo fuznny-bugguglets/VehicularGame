@@ -11,6 +11,7 @@
 #include "Components/AudioComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+//#include "WheelFrictionCurve.h"
 
 //handy shortcut to displaying things when shit goes wrong
 void AVehicle::LogError(const FString& ErrorMessage)
@@ -58,6 +59,9 @@ AVehicle::AVehicle()
 	FrontRightWheelMesh->SetupAttachment(FrontRightWheel);
 	BackLeftWheelMesh->SetupAttachment(BackLeftWheel);
 	BackRightWheelMesh->SetupAttachment(BackRightWheel);
+
+	//binds damage delegate
+	OnTakeAnyDamage.AddDynamic(this, &AVehicle::OnTakeDamage);
 	
 
 }
@@ -149,9 +153,12 @@ void AVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		//bind the inputs
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AVehicle::OnLook);
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AVehicle::OnMove);
-		EnhancedInputComponent->BindAction(DriftAction, ETriggerEvent::Triggered, this, &AVehicle::OnDrift);
-		EnhancedInputComponent->BindAction(HandbrakeAction, ETriggerEvent::Triggered, this, &AVehicle::OnHandbreak);
-		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &AVehicle::OnFire);
+		EnhancedInputComponent->BindAction(DriftAction, ETriggerEvent::Started, this, &AVehicle::OnStartDrift);
+		EnhancedInputComponent->BindAction(DriftAction, ETriggerEvent::Completed, this, &AVehicle::OnStopDrift);
+		EnhancedInputComponent->BindAction(HandbrakeAction, ETriggerEvent::Started, this, &AVehicle::OnHandbreak);
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &AVehicle::OnFireStart);
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Ongoing, this, &AVehicle::OnFiring);
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, this, &AVehicle::OnFireStop);
 		EnhancedInputComponent->BindAction(EngineShiftUpAction, ETriggerEvent::Triggered, this, &AVehicle::OnEngineShiftUp);
 		EnhancedInputComponent->BindAction(EngineShiftDownAction, ETriggerEvent::Triggered, this, &AVehicle::OnEngineShiftDown);
 	}
@@ -304,21 +311,123 @@ void AVehicle::OnMove(const FInputActionValue& Value)
 }
 
 //when the player drifts
-void AVehicle::OnDrift(const FInputActionValue& Value)
+void AVehicle::OnStartDrift(const FInputActionValue& Value)
 {
-	
+	//make sure the handbrake is off
+	if(bHandbrakeActive)
+	{
+		return;
+	}
+
+	//change the stiffness of the wheels
+	FrontLeftWheel->SidewaysFrictionCurve.Stiffness = DriftSidewaysStiffness;
+	FrontRightWheel->SidewaysFrictionCurve.Stiffness = DriftSidewaysStiffness;
+	BackLeftWheel->SidewaysFrictionCurve.Stiffness = DriftSidewaysStiffness;
+	BackRightWheel->SidewaysFrictionCurve.Stiffness = DriftSidewaysStiffness;
+
+	//update the wheel info
+	FrontLeftWheel->SidewaysFrictionCurve.UpdateArrays();
+	FrontRightWheel->SidewaysFrictionCurve.UpdateArrays();
+	BackLeftWheel->SidewaysFrictionCurve.UpdateArrays();
+	BackRightWheel->SidewaysFrictionCurve.UpdateArrays();
 }
 
-//when the player uses the handbreak
+//when the player stops drifts
+void AVehicle::OnStopDrift(const FInputActionValue& Value)
+{
+	//change the stiffness of the wheels
+	FrontLeftWheel->SidewaysFrictionCurve.Stiffness = NormalSidewaysStiffness;
+	FrontRightWheel->SidewaysFrictionCurve.Stiffness = NormalSidewaysStiffness;
+	BackLeftWheel->SidewaysFrictionCurve.Stiffness = NormalSidewaysStiffness;
+	BackRightWheel->SidewaysFrictionCurve.Stiffness = NormalSidewaysStiffness;
+
+	//update the wheel info
+	FrontLeftWheel->SidewaysFrictionCurve.UpdateArrays();
+	FrontRightWheel->SidewaysFrictionCurve.UpdateArrays();
+	BackLeftWheel->SidewaysFrictionCurve.UpdateArrays();
+	BackRightWheel->SidewaysFrictionCurve.UpdateArrays();
+}
+
+//when the player uses the handbrake
 void AVehicle::OnHandbreak(const FInputActionValue& Value)
 {
-	
+	//checks whether the handbrake is active or inactive
+	if(bHandbrakeActive)
+	{
+		//makes the handbrake off
+		bHandbrakeActive = false;
+
+		//set the brake torque to 0 for all wheels
+		FrontLeftWheel->SetBrakeTorque(0);
+		FrontRightWheel->SetBrakeTorque(0);
+		BackLeftWheel->SetBrakeTorque(0);
+		BackRightWheel->SetBrakeTorque(0);
+
+		//set the sideways friction to normal for all wheels
+		FrontLeftWheel->SidewaysFrictionCurve.Stiffness = NormalSidewaysStiffness;
+		FrontRightWheel->SidewaysFrictionCurve.Stiffness = NormalSidewaysStiffness;
+		BackLeftWheel->SidewaysFrictionCurve.Stiffness = NormalSidewaysStiffness;
+		BackRightWheel->SidewaysFrictionCurve.Stiffness = NormalSidewaysStiffness;
+
+		//set the forward friction to normal for all wheels
+		FrontLeftWheel->ForwardFrictionCurve.Stiffness = NormalForwardStiffness;
+		FrontRightWheel->ForwardFrictionCurve.Stiffness = NormalForwardStiffness;
+		BackLeftWheel->ForwardFrictionCurve.Stiffness = NormalForwardStiffness;
+		BackRightWheel->ForwardFrictionCurve.Stiffness = NormalForwardStiffness;
+		
+	}
+	else
+	{
+		//makes the handbrake on
+		bHandbrakeActive = true;
+
+		//set the brake torque for all wheels
+		FrontLeftWheel->SetBrakeTorque(HandbrakeTorque);
+		FrontRightWheel->SetBrakeTorque(HandbrakeTorque);
+		BackLeftWheel->SetBrakeTorque(HandbrakeTorque);
+		BackRightWheel->SetBrakeTorque(HandbrakeTorque);
+
+		//set the sideways friction to the handbrake one for all wheels
+		FrontLeftWheel->SidewaysFrictionCurve.Stiffness = HandbrakeStiffness;
+		FrontRightWheel->SidewaysFrictionCurve.Stiffness = HandbrakeStiffness;
+		BackLeftWheel->SidewaysFrictionCurve.Stiffness = HandbrakeStiffness;
+		BackRightWheel->SidewaysFrictionCurve.Stiffness = HandbrakeStiffness;
+
+		//set the forward friction to the handbrake one for all wheels
+		FrontLeftWheel->ForwardFrictionCurve.Stiffness = HandbrakeStiffness;
+		FrontRightWheel->ForwardFrictionCurve.Stiffness = HandbrakeStiffness;
+		BackLeftWheel->ForwardFrictionCurve.Stiffness = HandbrakeStiffness;
+		BackRightWheel->ForwardFrictionCurve.Stiffness = HandbrakeStiffness;
+		
+	}
+
+	//update all the wheels
+	FrontLeftWheel->SidewaysFrictionCurve.UpdateArrays();
+	FrontRightWheel->SidewaysFrictionCurve.UpdateArrays();
+	BackLeftWheel->SidewaysFrictionCurve.UpdateArrays();
+	BackRightWheel->SidewaysFrictionCurve.UpdateArrays();
+	FrontLeftWheel->ForwardFrictionCurve.UpdateArrays();
+	FrontRightWheel->ForwardFrictionCurve.UpdateArrays();
+	BackLeftWheel->ForwardFrictionCurve.UpdateArrays();
+	BackRightWheel->ForwardFrictionCurve.UpdateArrays();
 }
 
-//when the player shoots
-void AVehicle::OnFire(const FInputActionValue& Value)
+//when the player first begins to shoot
+void AVehicle::OnFireStart(const FInputActionValue& Value)
 {
-	
+	Turret->FirePressed();
+}
+
+//while the player is firing
+void AVehicle::OnFiring(const FInputActionValue& Value)
+{
+	Turret->FireHeld();
+}
+
+//when the player lets go of fire
+void AVehicle::OnFireStop(const FInputActionValue& Value)
+{
+	Turret->FireReleased();
 }
 
 //when the player shifts the engine up
@@ -333,11 +442,8 @@ void AVehicle::OnEngineShiftDown(const FInputActionValue& Value)
 	
 }
 
-
-
-
-
-
-
-
-
+//when damage is dealt to us
+void AVehicle::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+{
+	LogError("RAHHH");
+}
