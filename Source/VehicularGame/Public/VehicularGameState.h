@@ -20,8 +20,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Game State")
 	void UpdateDifficulty(float VibrationLevel, float DeltaTime);
 
+	//gets additional max speed
+	UFUNCTION()
+	float GetAdditionalMaxSpeed() const;
+
 protected:
 	// A multiplier to control how fast difficulty increases.
 	UPROPERTY(EditDefaultsOnly, Category = "Game State")
 	float DifficultyIncreaseScaleFactor;
+
+private:
+	float AdditionalMaxHealth = 0.0f;
+	float AdditionalMaxSpeed = 0.0f;
 };
