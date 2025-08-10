@@ -129,6 +129,14 @@ void AVehicle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
+	CalculateCurrentSpeed();
+	UpdateEngineStateOnReverse();
+	SteerWheels(DeltaTime);
+	UpdateDifficulty(DeltaTime);
+	UpdateExtractionProgress(DeltaTime);
+	UpdateWorldSpeed(DeltaTime);
+	UpdateTimeSinceLastHit(DeltaTime);
+	SetEngineSoundValues();
 }
 
 // Called to bind functionality to input
@@ -256,12 +264,13 @@ void AVehicle::SetEngineSoundValues()
 		return;
 	}
 
+	
 	//set new volume
-	float NewVolume = (((EngineMaxVolume - EngineMinVolume) / SpeedRequiredForMaxEngineSound) * (Speed)) + EngineMinVolume;
+	float NewVolume = (((EngineMaxVolume - EngineMinVolume) / SpeedRequiredForMaxEngineSound) * (FMath::Abs(Speed))) + EngineMinVolume;
 	EngineSoundInstance->SetVolumeMultiplier(NewVolume);
 
 	//set new pitch
-	float NewPitch = (((EngineMaxPitch - EngineMinPitch) / SpeedRequiredForMaxEngineSound) * (Speed)) + EngineMinPitch;
+	float NewPitch = (((EngineMaxPitch - EngineMinPitch) / SpeedRequiredForMaxEngineSound) * (FMath::Abs(Speed))) + EngineMinPitch;
 	EngineSoundInstance->SetPitchMultiplier(NewPitch);
 }
 
@@ -615,7 +624,7 @@ void AVehicle::SteerWheels(float DeltaTime)
 	else
 	{
 		//calculate new steer angle
-		CurrentSteerAngle = SteerChangeSpeed * DeltaTime * 1.0f + CurrentSteerAngle;
+		CurrentSteerAngle = SteerChangeSpeed * DeltaTime * -1.0f + CurrentSteerAngle;
 
 		//clamp
 		if (CurrentSteerAngle < TargetSteerAngle)
@@ -624,6 +633,7 @@ void AVehicle::SteerWheels(float DeltaTime)
 		}
 	}
 
+	UE_LOG(LogTemp, Display, TEXT("%f"), CurrentSteerAngle);
 	//set the steer angle for the front wheels
 	FrontLeftWheel->SetSteerAngle(CurrentSteerAngle);
 	FrontRightWheel->SetSteerAngle(CurrentSteerAngle);
