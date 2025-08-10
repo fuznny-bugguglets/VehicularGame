@@ -56,27 +56,27 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Torque", meta = (AllowPrivateAccess = "true"))
 	UCurveFloat* TorqueCurve;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Torque", meta = (AllowPrivateAccess = "true"))
-	float MaxTorqueSpeed = 0.0f;
+	float MaxTorqueSpeed = 90.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Torque", meta = (AllowPrivateAccess = "true"))
-	float MaxMotorTorque = 0.0f;
+	float MaxMotorTorque = 10000000.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Torque", meta = (AllowPrivateAccess = "true"))
-	float HandbrakeTorque = 0.0f;
+	float HandbrakeTorque = 100000000.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Steering", meta = (AllowPrivateAccess = "true"))
-	float MaxSteerSpeed = 0.0f;
+	float MaxSteerSpeed = 150.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Steering", meta = (AllowPrivateAccess = "true"))
-	float MinSteerAngle = 0.0f;
+	float MinSteerAngle = 2.5f;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Steering", meta = (AllowPrivateAccess = "true"))
-	float MaxSteerAngle = 0.0f;
+	float MaxSteerAngle = 30.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Steering", meta = (AllowPrivateAccess = "true"))
-	float SteerChangeSpeed = 0.0f;
+	float SteerChangeSpeed = 60.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Stiffness", meta = (AllowPrivateAccess = "true"))
-	float NormalForwardStiffness = 0.0f;
+	float NormalForwardStiffness = 30.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Stiffness", meta = (AllowPrivateAccess = "true"))
-	float NormalSidewaysStiffness = 0.0f;
+	float NormalSidewaysStiffness = 40.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Stiffness", meta = (AllowPrivateAccess = "true"))
-	float DriftSidewaysStiffness = 0.0f;
+	float DriftSidewaysStiffness = 20.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Stiffness", meta = (AllowPrivateAccess = "true"))
-	float HandbrakeStiffness = 0.0f;
+	float HandbrakeStiffness = 60.0;
 	//time between holding engine shift and actually shifting 
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Shifting", meta = (AllowPrivateAccess = "true"))
 	float ShiftUpHoldMaxTime = 0.0f;
@@ -87,13 +87,19 @@ private:
 
 	//cooldown between hits
 	UPROPERTY(EditDefaultsOnly, Category = "Shooting | Balancing", meta = (AllowPrivateAccess = "true"))
-	float HitCooldown = 0.0f;
+	float HitCooldown = 0.75f;
 	
-	
+	//how long extractions take
+	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
+	float ExtractionTimePerCommon = 8.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
+	float ExtractionTimePerUncommon = 12.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
+	float ExtractionTimePerRare = 16.0f;
 
 	//
 	UPROPERTY(EditDefaultsOnly, Category = "Difficulty", meta = (AllowPrivateAccess = "true"))
-	float BaseDifficultIncreasePerMinute = 0.0f;
+	float BaseDifficultIncreasePerMinute = 3.0f;
 	
 	//the engine sound file
 	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
@@ -149,9 +155,10 @@ private:
 
 	//reference to the game state
 	UPROPERTY()
-	AGSScavenger* ScavengerGameState;
+	AVehicularGameState* VehicularGameState;
 
 	//reference to the vehicle mesh
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* VehicleMesh;
 	
 	//reference to our turret
@@ -178,7 +185,13 @@ private:
 	bool bHandbrakeActive = false;
 
 	//how long its been since we were last hit
-	float TimeSinceLastHit;
+	float TimeSinceLastHit = 0.0f;
+
+	//how long we have been extracting for
+	float ExtractionTime = 0.0f;
+
+	//where we were last frame
+	FVector LastTickPosition = FVector(0.0f);
 
 	//reference to the spring arm
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -201,6 +214,16 @@ private:
 	UCustomWheelComponent* BackLeftWheel;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCustomWheelComponent* BackRightWheel;
+
+	//wheel meshes
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* FrontLeftWheelMesh;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* FrontRightWheelMesh;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* BackLeftWheelMesh;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* BackRightWheelMesh;
 
 	//current state of the engine
 	EEngineState CurrentEngineState = EEngineState::OFF;

@@ -5,7 +5,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "CustomWheelComponent.h"
-#include "GSScavenger.h"
+#include "VehicularGameState.h"
 #include "Turret.h"
 #include "Ruin.h"
 #include "Camera/CameraComponent.h"
@@ -43,10 +43,10 @@ AVehicle::AVehicle()
 	FrontRightWheel = CreateDefaultSubobject<UCustomWheelComponent>(TEXT("Front Right Wheel"));
 	BackLeftWheel = CreateDefaultSubobject<UCustomWheelComponent>(TEXT("Back Left Wheel"));
 	BackRightWheel = CreateDefaultSubobject<UCustomWheelComponent>(TEXT("Back Right Wheel"));
-	UStaticMeshComponent* FrontLeftWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Front Left Wheel Mesh"));
-	UStaticMeshComponent* FrontRightWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Front Right Wheel Mesh"));
-	UStaticMeshComponent* BackLeftWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Back Left Wheel Mesh"));
-	UStaticMeshComponent* BackRightWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Back Right Wheel Mesh"));
+	FrontLeftWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Front Left Wheel Mesh"));
+	FrontRightWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Front Right Wheel Mesh"));
+	BackLeftWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Back Left Wheel Mesh"));
+	BackRightWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Back Right Wheel Mesh"));
 	VehicleMesh->SetupAttachment(RootComponent);
 	SpringArm->SetupAttachment(VehicleMesh);
 	Camera->SetupAttachment(SpringArm);
@@ -85,8 +85,8 @@ void AVehicle::BeginPlay()
 	}
 
 	//get the scavenger game state
-	ScavengerGameState = Cast<AGSScavenger>(GameStateBase);
-	if(ScavengerGameState == nullptr)
+	VehicularGameState = Cast<AVehicularGameState>(GameStateBase);
+	if(VehicularGameState == nullptr)
 	{
 		LogError(TEXT("Failed to get the Scavenger Game State from Vehicle"));
 		return;
@@ -295,7 +295,7 @@ void AVehicle::OnMove(const FInputActionValue& Value)
 	FVector2D InputVector = Value.Get<FVector2D>();
 	
 	//what are max speed can be, taking in default plus upgrades
-	float MyMaxTorque = ScavengerGameState->GetAdditionalMaxSpeed() + MaxTorqueSpeed;
+	float MyMaxTorque = VehicularGameState->GetAdditionalMaxSpeed() + MaxTorqueSpeed;
 
 	//multiplier for our speed increase (based on engine state)
 	float EngineStateMultiplier = 0.0f;
@@ -354,9 +354,9 @@ void AVehicle::OnMove(const FInputActionValue& Value)
 	NormalizedCurrentSpeed = FMath::Clamp(NormalizedCurrentSpeed, 0.0f, 1.0f);
 
 	//get the new current steer angle
-	float CurrentSteerAngle = FMath::Lerp(MaxSteerAngle, MinSteerAngle, NormalizedCurrentSpeed);
-	CurrentSteerAngle *= InputVector.X;
-	TargetSteerAngle = CurrentSteerAngle;
+	float MySteerAngle = FMath::Lerp(MaxSteerAngle, MinSteerAngle, NormalizedCurrentSpeed);
+	MySteerAngle *= InputVector.X;
+	TargetSteerAngle = MySteerAngle;
 }
 
 //when the player drifts
@@ -510,19 +510,17 @@ void AVehicle::OnEngineShiftUpOnGoing(const FInputActionValue& Value)
 		break;
 	case EEngineState::CRUISE:
 		//can you boost?
-		if(ScavengerGameState->GetMaxBoostLevel() > 0)
+		if(VehicularGameState->GetMaxBoostLevel() > 0)
 		{
 			CurrentEngineState = EEngineState::BOOST1;
 		}
 		break;
 	case EEngineState::BOOST1:
 		//can you boost boost?
-		if(ScavengerGameState->GetMaxBoostLevel() > 1)
+		if(VehicularGameState->GetMaxBoostLevel() > 1)
 		{
 			CurrentEngineState = EEngineState::BOOST2;
 		}
-		break;
-	case default:
 		break;
 	}
 	
@@ -548,8 +546,6 @@ void AVehicle::OnEngineShiftDown(const FInputActionValue& Value)
 		break;
 	case EEngineState::BOOST2:
 		CurrentEngineState = EEngineState::BOOST1;
-		break;
-	case default:
 		break;
 	}
 }
@@ -660,7 +656,7 @@ void AVehicle::UpdateDifficulty(float DeltaTime)
 	VibrationLevel /= 60.0f;
 
 	//update the game state with our findings
-	ScavengerGameState->UpdateDifficulty(VibrationLevel, DeltaTime);
+	VehicularGameState->UpdateDifficulty(VibrationLevel, DeltaTime);
 }
 
 void AVehicle::UpdateEngineStateOnReverse()
@@ -719,6 +715,115 @@ void AVehicle::ExtractOneUnit()
 		return;
 	}
 
+	//set extraction time back to 0
+	ExtractionTime = 0.0f;
+	
 	//take a resource
 	OverlappingRuin->TakeOneResource();
+
+	//increment count based on resource type
+	switch (OverlappingRuin->GetResourceType())
+	{
+	case EResourceType::COMMON:
+		CommonLootCount++;
+		break;
+	case EResourceType::UNCOMMON:
+		UncommonLootCount++;
+		break;
+	case EResourceType::RARE:
+		RareLootCount++;
+		break;
+	}
 }
+
+void AVehicle::UpdateExtractionProgress(float DeltaTime)
+{
+	//if the handbrake isnt active, do nothing
+	if(!bHandbrakeActive)
+	{
+		ExtractionTime = 0.0f;
+		return;
+	}
+
+	//if we arent overlapping with a ruin, do nothing
+	if(OverlappingRuin == nullptr)
+	{
+		ExtractionTime = 0.0f;
+		return;
+	}
+
+	//if the ruin doesnt have resources, do nothing
+	if(OverlappingRuin->GetResourceAmount() <= 0)
+	{
+		ExtractionTime = 0.0f;
+		return;
+	}
+
+	//increment extraction time
+	ExtractionTime += DeltaTime;
+
+	//can we extract the resource? if we can, extract!
+	switch (OverlappingRuin->GetResourceType())
+	{
+	case EResourceType::COMMON:
+		if(ExtractionTimePerCommon >= ExtractionTime)
+		{
+			ExtractOneUnit();
+		}
+		break;
+		
+	case EResourceType::UNCOMMON:
+		if(ExtractionTimePerUncommon >= ExtractionTime)
+		{
+			ExtractOneUnit();
+		}
+		break;
+		
+	case EResourceType::RARE:
+		if(ExtractionTimePerRare >= ExtractionTime)
+		{
+			ExtractOneUnit();
+		}
+		break;
+	}
+
+	
+}
+
+void AVehicle::UpdateWorldSpeed(float DeltaTime)
+{
+	//get the direction vector from last position to current posiiton
+	FVector LastPosToCurrentVector = VehicleMesh->GetComponentLocation() - LastTickPosition;
+	
+	//get the magnitude of the vector
+	float MySpeed = LastPosToCurrentVector.Length();
+
+	//divide that distance by deltatime
+	MySpeed /= DeltaTime;
+
+	//convert to km/h
+	MySpeed *= 0.03666;
+
+	//figure out if we're travelling forward or backwards
+	float DotResult = LastPosToCurrentVector.Dot(VehicleMesh->GetForwardVector());
+	//if we're travelling backwards
+	if(DotResult < 0.0f)
+	{
+		//negate our Speed
+		MySpeed *= 1.0f;
+	}
+
+	//set the result to the new world speed
+	WorldSpeed = MySpeed;
+
+	//set the last position to where we are now
+	LastTickPosition = VehicleMesh->GetComponentLocation();
+
+	
+}
+
+void AVehicle::UpdateTimeSinceLastHit(float DeltaTime)
+{
+	TimeSinceLastHit += DeltaTime;
+}
+

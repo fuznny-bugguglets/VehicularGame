@@ -29,6 +29,9 @@ public:
 	//lowers the resource count by one
 	void TakeOneResource();
 
+	//returns the type of resource this ruin contains
+	EResourceType GetResourceType() const;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

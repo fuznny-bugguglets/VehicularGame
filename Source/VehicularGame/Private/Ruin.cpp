@@ -148,3 +148,10 @@ void ARuin::TakeOneResource()
 	UpdateBubble();
 }
 
+//returns the type of resource this ruin has
+EResourceType ARuin::GetResourceType() const
+{
+	return ResourceType;
+}
+
+
