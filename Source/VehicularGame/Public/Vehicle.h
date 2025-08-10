@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "Vehicle.generated.h"
 
+class ARuin;
 class ATurret;
 class USpringArmComponent;
 class AGSScavenger;
@@ -52,38 +53,43 @@ public:
 	void SetRareLootCount(int32 NewValue);
  
 private:
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Torque", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving | Torque", meta = (AllowPrivateAccess = "true"))
 	UCurveFloat* TorqueCurve;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Torque", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving | Torque", meta = (AllowPrivateAccess = "true"))
 	float MaxTorqueSpeed = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Torque", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving | Torque", meta = (AllowPrivateAccess = "true"))
 	float MaxMotorTorque = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Torque", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving | Torque", meta = (AllowPrivateAccess = "true"))
 	float HandbrakeTorque = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Steering", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving | Steering", meta = (AllowPrivateAccess = "true"))
 	float MaxSteerSpeed = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Steering", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving | Steering", meta = (AllowPrivateAccess = "true"))
 	float MinSteerAngle = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Steering", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving | Steering", meta = (AllowPrivateAccess = "true"))
 	float MaxSteerAngle = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Steering", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving | Steering", meta = (AllowPrivateAccess = "true"))
 	float SteerChangeSpeed = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Stiffness", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving | Stiffness", meta = (AllowPrivateAccess = "true"))
 	float NormalForwardStiffness = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Stiffness", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving | Stiffness", meta = (AllowPrivateAccess = "true"))
 	float NormalSidewaysStiffness = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Stiffness", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving | Stiffness", meta = (AllowPrivateAccess = "true"))
 	float DriftSidewaysStiffness = 0.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Driving Feel | Stiffness", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Driving | Stiffness", meta = (AllowPrivateAccess = "true"))
 	float HandbrakeStiffness = 0.0f;
+	//time between holding engine shift and actually shifting 
+	UPROPERTY(EditDefaultsOnly, Category = "Driving | Shifting", meta = (AllowPrivateAccess = "true"))
+	float ShiftUpHoldMaxTime = 0.0f;
 	
 	//the class of the turret
-	UPROPERTY(EditDefaultsOnly, Category = "Turret", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Shooting | Turret Class", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AActor> TurretClass;
 
 	//cooldown between hits
-	UPROPERTY(EditDefaultsOnly, Category = "Damage", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Shooting | Balancing", meta = (AllowPrivateAccess = "true"))
 	float HitCooldown = 0.0f;
+	
+	
 
 	//
 	UPROPERTY(EditDefaultsOnly, Category = "Difficulty", meta = (AllowPrivateAccess = "true"))
@@ -145,12 +151,17 @@ private:
 	UPROPERTY()
 	AGSScavenger* ScavengerGameState;
 
+	//reference to the vehicle mesh
+	UStaticMeshComponent* VehicleMesh;
+	
 	//reference to our turret
 	UPROPERTY()
 	ATurret* Turret;
 
 	//how fast we are currently travelling
 	float Speed = 0.0f;
+	//how fast we are travelling in the world
+	float WorldSpeed = 0.0f;
 
 	//the target angle for steering
 	float TargetSteerAngle = 0.0f;
@@ -193,6 +204,17 @@ private:
 
 	//current state of the engine
 	EEngineState CurrentEngineState = EEngineState::OFF;
+
+	//how long we have held down engine shift
+	float EngineUpTimestamp = 0.0f;
+	float EngineDownTimestamp = 0.0f;
+
+	//whether the engine is being held
+	bool bShiftUpHeld = false;
+	bool bShiftDownHeld = false;
+
+	//the ruin we are currently overlapping with
+	ARuin* OverlappingRuin = nullptr;
 	
 	//sets the speed and pitch of the engine based on speed
 	UFUNCTION()
@@ -224,13 +246,35 @@ private:
 	void OnFireStop(const struct FInputActionValue& Value);
 	//when the player shifts the engine up
 	UFUNCTION()
-	void OnEngineShiftUp(const struct FInputActionValue& Value);
+	void OnEngineShiftUpStart(const struct FInputActionValue& Value);
+	UFUNCTION()
+	void OnEngineShiftUpOnGoing(const struct FInputActionValue& Value);
 	//when the player shifts the engine down
+	UFUNCTION()
+	void OnEngineShiftUpStop(const struct FInputActionValue& Value);
 	UFUNCTION()
 	void OnEngineShiftDown(const struct FInputActionValue& Value);
 	//when the player is dealt damage
 	UFUNCTION()
 	void OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
+	//when the vehicle mesh starts to overlaps with something
+	UFUNCTION()
+	void OnVehicleBeginOverlap(
+	UPrimitiveComponent* OverlappedComponent,  // The component that triggered the overlap
+	AActor* OtherActor,                        // The other actor involved in the overlap
+	UPrimitiveComponent* OtherComp,            // The other actor's component
+	int32 OtherBodyIndex,                      // Index of the body in the other component
+	bool bFromSweep,                           // Whether this overlap came from movement (sweep)
+	const FHitResult& SweepResult              // Hit result from sweep (if applicable)
+	);
+	//when the vehicle mesh stops overlapping with something
+	UFUNCTION()
+	void OnVehicleEndOverlap(
+		UPrimitiveComponent* OverlappedComponent,  // The component on this actor that was overlapped
+		AActor* OtherActor,                        // The other actor that stopped overlapping
+		UPrimitiveComponent* OtherComp,            // The specific component on the other actor that stopped overlapping
+		int32 OtherBodyIndex                       // Body index of the other component (used for complex physics bodies)
+	);
 
 	//Sets the speed variable based on wheel velocities
 	void CalculateCurrentSpeed();
@@ -242,8 +286,11 @@ private:
 	//Updates the difficulty depending on the noise being produced
 	void UpdateDifficulty(float DeltaTime);
 	void UpdateExtractionProgress(float DeltaTime);
+	void ExtractOneUnit();
 	void UpdateWorldSpeed(float DeltaTime);
 	void UpdateTimeSinceLastHit(float DeltaTime);
+
+	
 
 	void LogError(const FString& ErrorMessage);
 };

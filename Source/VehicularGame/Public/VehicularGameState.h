@@ -24,6 +24,10 @@ public:
 	UFUNCTION()
 	float GetAdditionalMaxSpeed() const;
 
+	//gets the max boost leve;
+	UFUNCTION()
+	int32 GetMaxBoostLevel() const;
+
 protected:
 	// A multiplier to control how fast difficulty increases.
 	UPROPERTY(EditDefaultsOnly, Category = "Game State")
@@ -32,4 +36,5 @@ protected:
 private:
 	float AdditionalMaxHealth = 0.0f;
 	float AdditionalMaxSpeed = 0.0f;
+	int32 MaxBoostLevel = 0;
 };

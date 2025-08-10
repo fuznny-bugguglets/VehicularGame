@@ -23,6 +23,12 @@ public:
 	// Sets default values for this actor's properties
 	ARuin();
 
+	//returns the amount of resources the ruin has
+	int32 GetResourceAmount() const;
+
+	//lowers the resource count by one
+	void TakeOneResource();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

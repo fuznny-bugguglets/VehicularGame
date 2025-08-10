@@ -132,3 +132,19 @@ void ARuin::UpdateBubble()
 		ExtractionRingMesh->SetVisibility(false);
 	}
 }
+
+int32 ARuin::GetResourceAmount() const
+{
+	return ResourceAmount;	
+}
+
+//lowers the resource count by one
+void ARuin::TakeOneResource()
+{
+	//lowers resource by one
+	ResourceAmount--;
+
+	//runs a check to see if we have resources left
+	UpdateBubble();
+}
+

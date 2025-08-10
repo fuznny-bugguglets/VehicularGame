@@ -17,3 +17,8 @@ float AVehicularGameState::GetAdditionalMaxSpeed() const
 {
 	return AdditionalMaxSpeed;
 }
+
+int32 AVehicularGameState::GetMaxBoostLevel() const
+{
+	return MaxBoostLevel;
+}

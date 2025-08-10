@@ -7,11 +7,11 @@
 #include "CustomWheelComponent.h"
 #include "GSScavenger.h"
 #include "Turret.h"
+#include "Ruin.h"
 #include "Camera/CameraComponent.h"
 #include "Components/AudioComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
-//#include "WheelFrictionCurve.h"
 
 //handy shortcut to displaying things when shit goes wrong
 void AVehicle::LogError(const FString& ErrorMessage)
@@ -35,7 +35,7 @@ AVehicle::AVehicle()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//setup components and attachment
-	UStaticMeshComponent* VehicleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Vehicle Mesh"));
+	VehicleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Vehicle Mesh"));
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	TurretChildActorComponent = CreateDefaultSubobject<UChildActorComponent>(TEXT("Turret"));
@@ -72,6 +72,9 @@ void AVehicle::BeginPlay()
 
 	//binds damage delegate
 	OnTakeAnyDamage.AddDynamic(this, &AVehicle::OnTakeDamage);
+	//binds overlap delegates
+	VehicleMesh->OnComponentBeginOverlap.AddDynamic(this, &AVehicle::OnVehicleBeginOverlap);
+	VehicleMesh->OnComponentEndOverlap.AddDynamic(this, &AVehicle::OnVehicleEndOverlap);
 	
 	//get the game state
 	AGameStateBase* GameStateBase = GetWorld()->GetGameState();
@@ -198,7 +201,9 @@ void AVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &AVehicle::OnFireStart);
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Ongoing, this, &AVehicle::OnFiring);
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, this, &AVehicle::OnFireStop);
-		EnhancedInputComponent->BindAction(EngineShiftUpAction, ETriggerEvent::Triggered, this, &AVehicle::OnEngineShiftUp);
+		EnhancedInputComponent->BindAction(EngineShiftUpAction, ETriggerEvent::Started, this, &AVehicle::OnEngineShiftUpStart);
+		EnhancedInputComponent->BindAction(EngineShiftUpAction, ETriggerEvent::Ongoing, this, &AVehicle::OnEngineShiftUpOnGoing);
+		EnhancedInputComponent->BindAction(EngineShiftUpAction, ETriggerEvent::Canceled, this, &AVehicle::OnEngineShiftUpStop);
 		EnhancedInputComponent->BindAction(EngineShiftDownAction, ETriggerEvent::Triggered, this, &AVehicle::OnEngineShiftDown);
 	}
 	else
@@ -475,15 +480,78 @@ void AVehicle::OnFireStop(const FInputActionValue& Value)
 }
 
 //when the player shifts the engine up
-void AVehicle::OnEngineShiftUp(const FInputActionValue& Value)
+void AVehicle::OnEngineShiftUpStart(const FInputActionValue& Value)
 {
+	//set time for when we have started our shifting
+	EngineUpTimestamp = UGameplayStatics::GetTimeSeconds(this);
+
+	//set that we are holding down the engine shift up
+	bShiftUpHeld = true;
+}
+
+void AVehicle::OnEngineShiftUpOnGoing(const FInputActionValue& Value)
+{
+	//figure out how long we've held the button down for
+	float ElapsedTime = UGameplayStatics::GetTimeSeconds(this) - EngineUpTimestamp;
+
+	//is it still less than the time required?
+	if(ElapsedTime <= ShiftUpHoldMaxTime)
+	{
+		return;
+	}
+	//otherwise, lets shift that engine up!
+
+	//what state is the engine currently?
+	switch (CurrentEngineState)
+	{
+	case EEngineState::OFF:
+		//now you're cruising
+		CurrentEngineState = EEngineState::CRUISE;
+		break;
+	case EEngineState::CRUISE:
+		//can you boost?
+		if(ScavengerGameState->GetMaxBoostLevel() > 0)
+		{
+			CurrentEngineState = EEngineState::BOOST1;
+		}
+		break;
+	case EEngineState::BOOST1:
+		//can you boost boost?
+		if(ScavengerGameState->GetMaxBoostLevel() > 1)
+		{
+			CurrentEngineState = EEngineState::BOOST2;
+		}
+		break;
+	case default:
+		break;
+	}
 	
+}
+
+void AVehicle::OnEngineShiftUpStop(const FInputActionValue& Value)
+{
+	//no longer shifting up
+	bShiftUpHeld = false;
 }
 
 //when the player shifts the engine down
 void AVehicle::OnEngineShiftDown(const FInputActionValue& Value)
 {
-	
+	//what state is the engine currently?
+	switch (CurrentEngineState)
+	{
+	case EEngineState::CRUISE:
+		CurrentEngineState = EEngineState::OFF;
+		break;
+	case EEngineState::BOOST1:
+		CurrentEngineState = EEngineState::CRUISE;
+		break;
+	case EEngineState::BOOST2:
+		CurrentEngineState = EEngineState::BOOST1;
+		break;
+	case default:
+		break;
+	}
 }
 
 //when damage is dealt to us
@@ -595,3 +663,62 @@ void AVehicle::UpdateDifficulty(float DeltaTime)
 	ScavengerGameState->UpdateDifficulty(VibrationLevel, DeltaTime);
 }
 
+void AVehicle::UpdateEngineStateOnReverse()
+{
+	//are we reversing?
+	if(WorldSpeed < -1.0f)
+	{
+		//are we boosting?
+		if(CurrentEngineState == EEngineState::BOOST1 || CurrentEngineState == EEngineState::BOOST2)
+		{
+			//now we're cruising
+			CurrentEngineState = EEngineState::CRUISE;
+		}
+	}
+}
+
+void AVehicle::OnVehicleBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	//cast the other actor to a ruin
+	OverlappingRuin = Cast<ARuin>(OtherActor);
+
+	//doesn't matter if it fails, because it returns nullptr
+}
+
+void AVehicle::OnVehicleEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	//are we overlapping with a ruin?
+	if(OverlappingRuin == nullptr)
+	{
+		return;
+	}
+
+	//did we leave the ruin?
+	if(OverlappingRuin == OtherActor)
+	{
+		//null out overlapping ruin
+		OverlappingRuin = nullptr;
+	}
+	
+	
+}
+
+void AVehicle::ExtractOneUnit()
+{
+	//are we overlapping with a ruin?
+	if(OverlappingRuin == nullptr)
+	{
+		return;
+	}
+
+	//does the ruin have resources?
+	if(OverlappingRuin->GetResourceAmount() <= 0)
+	{
+		return;
+	}
+
+	//take a resource
+	OverlappingRuin->TakeOneResource();
+}
