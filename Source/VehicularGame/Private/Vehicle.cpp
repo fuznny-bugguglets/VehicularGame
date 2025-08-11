@@ -203,6 +203,7 @@ void AVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		//bind the inputs
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AVehicle::OnLook);
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AVehicle::OnMove);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &AVehicle::OnMoveStop);
 		EnhancedInputComponent->BindAction(DriftAction, ETriggerEvent::Started, this, &AVehicle::OnStartDrift);
 		EnhancedInputComponent->BindAction(DriftAction, ETriggerEvent::Completed, this, &AVehicle::OnStopDrift);
 		EnhancedInputComponent->BindAction(HandbrakeAction, ETriggerEvent::Started, this, &AVehicle::OnHandbreak);
@@ -366,6 +367,16 @@ void AVehicle::OnMove(const FInputActionValue& Value)
 	float MySteerAngle = FMath::Lerp(MaxSteerAngle, MinSteerAngle, NormalizedCurrentSpeed);
 	MySteerAngle *= InputVector.X;
 	TargetSteerAngle = MySteerAngle;
+}
+
+//when the player stops moving
+void AVehicle::OnMoveStop(const FInputActionValue& Value)
+{
+	//reduce the torque to nothing
+	FrontLeftWheel->SetMotorTorque(0);
+	FrontRightWheel->SetMotorTorque(0);
+	BackLeftWheel->SetMotorTorque(0);
+	BackRightWheel->SetMotorTorque(0);
 }
 
 //when the player drifts

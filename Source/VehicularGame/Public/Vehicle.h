@@ -249,6 +249,9 @@ private:
 	//when the player moves
 	UFUNCTION()
 	void OnMove(const struct FInputActionValue& Value);
+	//when the player stops moving
+	UFUNCTION()
+	void OnMoveStop(const struct FInputActionValue& Value);
 	//when the player drifts
 	UFUNCTION()
 	void OnStartDrift(const struct FInputActionValue& Value);
