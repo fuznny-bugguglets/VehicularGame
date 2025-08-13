@@ -22,3 +22,13 @@ int32 AVehicularGameState::GetMaxBoostLevel() const
 {
 	return MaxBoostLevel;
 }
+
+float AVehicularGameState::GetFireRateUpgradeLevel() const
+{
+	return FireRateUpgradeLevel;
+}
+
+float AVehicularGameState::GetProjectileSpreadMultiplier() const
+{
+	return ProjectileSpreadMultiplier;
+}

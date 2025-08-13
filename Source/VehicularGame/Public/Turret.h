@@ -32,6 +32,23 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	//seconds since we last fired a bullet
+	float TimeSinceLastShot = 0.0f;
+
+	//the projectile that should spawn
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> BulletBlueprint;
+
+	//bullets per second that is fired
+	UPROPERTY(EditDefaultsOnly, Category = "Firing", meta = (AllowPrivateAccess = "true"))
+	float FireRate = 4.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing", meta = (AllowPrivateAccess = "true"))
+	float MaxSpreadAngle = 1.0f;
+
+	//whether the bullet fires from the left or right barrel
+	bool bFireFromLeftBarrel = true;
+
 	//reference to game state
 	UPROPERTY()
 	class AVehicularGameState* VehicularGameState;
@@ -58,6 +75,10 @@ private:
 	USceneComponent* BulletSpawnL;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USceneComponent* BulletSpawnR;
+
+	float UpgradedFireRate();
+
+	FRotator GetRotationWithSpread(const FTransform& InputTransform, const float SpreadAngle) const;
 
 	void LogError(const FString& ErrorMessage);
 

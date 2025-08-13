@@ -5,6 +5,7 @@
 #include "VehicularGameState.h"
 #include "TurretRotationComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 void ATurret::LogError(const FString& ErrorMessage)
 {
@@ -68,13 +69,22 @@ void ATurret::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//make sure we have a turret rotation component
 	if(TurretRotationComponent == nullptr)
 	{
 		LogError("failed to access turret rotation component in turret");
 		return;
 	}
 
+	//tell the turret to rotate
 	TurretRotationComponent->RotateTurretHead(VehicleCamera->GetComponentTransform(), DeltaTime, 10000, 20);
+
+	//check if the time since last shot timer should still increment
+	if (TimeSinceLastShot < (1.0f / UpgradedFireRate()))
+	{
+		//increment time since last shot
+		TimeSinceLastShot += DeltaTime;
+	}
 
 }
 
@@ -96,21 +106,110 @@ void ATurret::InitializeVariables(UCameraComponent* InCameraComponent, APawn* In
 	ShooterPawn = InShootingPawn;
 }
 
+//no function 
 void ATurret::FirePressed()
 {
 	
 }
 
+//checks if we can shoot, and shoots
 void ATurret::FireHeld()
 {
-	
+	if (VehicularGameState == nullptr)
+	{
+		LogError("failed to get game state in fire held in turret");
+		return;
+	}
+
+	//can we shoot?
+	if (TimeSinceLastShot > (1.0f / UpgradedFireRate()))
+	{
+		float Spread = VehicularGameState->GetProjectileSpreadMultiplier() * MaxSpreadAngle;
+
+		//setup Instigator 
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Instigator = ShooterPawn;
+
+		//are we shooting left or right barrel
+		if (bFireFromLeftBarrel)
+		{
+			//GetWorld()->SpawnActor(BulletBlueprint, &BulletSpawnL->GetComponentLocation(), &BulletSpawnL->GetComponentRotation(), SpawnParams);
+		}
+		else
+		{
+			//GetWorld()->SpawnActor(BulletBlueprint, &BulletSpawnR->GetComponentLocation(), &BulletSpawnR->GetComponentRotation(), SpawnParams);
+		}
+
+
+		
+		
+		//flip barrel
+		bFireFromLeftBarrel = !bFireFromLeftBarrel;
+	}
 }
 
+//no function
 void ATurret::FireReleased()
 {
 	
 }
 
 
+float ATurret::UpgradedFireRate()
+{
+	//do we have the game state reference?
+	if (VehicularGameState == nullptr)
+	{
+		LogError("failed to get vehicular game state in the turret");
+		return 0.0f;
+	}
 
+	//set the upgraded fire rate to what our base fire rate is
+	float UpgradedFireRate = FireRate;
 
+	//then add on the upgrade
+	HEHRHEHEHERHRHREHERHREH
+	switch (VehicularGameState->GetFireRateUpgradeLevel())
+	{
+		case 0:
+			UpgradedFireRate += 0.0f;
+			break;
+
+		case 1:
+			UpgradedFireRate += 2.0f;
+			break;
+
+		case 2:
+			UpgradedFireRate += 4.0f;
+			break;
+
+		case 3:
+			UpgradedFireRate += 8.0f;
+			break;
+
+		default:
+			LogError("Unknown fire rate upgrade level in turret");
+			break;
+	}
+
+}
+
+//returns a transform with a random amount of spread
+FRotator ATurret::GetRotationWithSpread(const FTransform& InputTransform, const float SpreadAngle) const
+{
+	//get the rotator from the spawn transform
+	FRotator MyRotator = InputTransform.Rotator();
+
+	//get randomised directions
+	float RandomPitch = UKismetMathLibrary::RandomFloatInRange(SpreadAngle * 1.0f, SpreadAngle);
+	float RandomYaw = UKismetMathLibrary::RandomFloatInRange(SpreadAngle * 1.0f, SpreadAngle);
+
+	//make a rotator from these values
+	FRotator RandomRotation(RandomPitch, RandomYaw, 0.0f);
+
+	//add the random rotation to the spawn rotation
+	MyRotator += RandomRotation;
+
+	//return the new rotation
+	return MyRotator;
+}

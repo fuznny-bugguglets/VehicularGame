@@ -28,6 +28,11 @@ public:
 	UFUNCTION()
 	int32 GetMaxBoostLevel() const;
 
+	//gets the additional fire rate
+	float GetFireRateUpgradeLevel() const;
+
+	float GetProjectileSpreadMultiplier() const;
+
 protected:
 	// A multiplier to control how fast difficulty increases.
 	UPROPERTY(EditDefaultsOnly, Category = "Game State")
@@ -37,4 +42,6 @@ private:
 	float AdditionalMaxHealth = 0.0f;
 	float AdditionalMaxSpeed = 0.0f;
 	int32 MaxBoostLevel = 0;
+	float FireRateUpgradeLevel = 0.0f;
+	float ProjectileSpreadMultiplier = 0.0f;
 };
