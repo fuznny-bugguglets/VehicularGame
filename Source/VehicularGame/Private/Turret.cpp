@@ -5,6 +5,8 @@
 #include "VehicularGameState.h"
 #include "TurretRotationComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/AudioComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
 void ATurret::LogError(const FString& ErrorMessage)
@@ -46,7 +48,7 @@ ATurret::ATurret()
 void ATurret::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	//save a reference to the game state
 	AGameStateBase* GameStateBase = GetWorld()->GetGameState();
 	if(GameStateBase == nullptr)
@@ -60,7 +62,28 @@ void ATurret::BeginPlay()
 		LogError("Failed to cast game state to vehicular game state in turret");
 		return;
 	}
-	
+
+	if(BulletBlueprint == nullptr)
+	{
+		LogError("Bullet Blueprint is not set in the turret");
+		return;
+	}
+
+	if(BulletSoundFile == nullptr)
+	{
+		LogError("Bullet Sound is not set in the turret");
+		return;
+	}
+
+	BulletSoundInstance = UGameplayStatics::CreateSound2D(this, BulletSoundFile);
+	if(BulletSoundInstance == nullptr)
+	{
+		LogError("failed to create an instance of the bullet sound");
+		return;
+	}
+
+	//prevents the bullet sound from being garbage collected
+	//BulletSoundInstance->AddToRoot();
 	
 }
 
@@ -133,18 +156,36 @@ void ATurret::FireHeld()
 		//are we shooting left or right barrel
 		if (bFireFromLeftBarrel)
 		{
-			//GetWorld()->SpawnActor(BulletBlueprint, &BulletSpawnL->GetComponentLocation(), &BulletSpawnL->GetComponentRotation(), SpawnParams);
+			const FVector Location = BulletSpawnL->GetComponentLocation();
+			const FRotator Rotation = BulletSpawnL->GetComponentRotation();
+			GetWorld()->SpawnActor(BulletBlueprint, &Location, &Rotation, SpawnParams); 
 		}
 		else
 		{
-			//GetWorld()->SpawnActor(BulletBlueprint, &BulletSpawnR->GetComponentLocation(), &BulletSpawnR->GetComponentRotation(), SpawnParams);
+			const FVector Location = BulletSpawnR->GetComponentLocation();
+			const FRotator Rotation = BulletSpawnR->GetComponentRotation();
+			GetWorld()->SpawnActor(BulletBlueprint, &Location, &Rotation, SpawnParams); 
 		}
 
-
-		
+		//reset time since last shot
+		TimeSinceLastShot = 0.0f;
 		
 		//flip barrel
 		bFireFromLeftBarrel = !bFireFromLeftBarrel;
+
+		//play the sound
+		if(BulletSoundInstance == nullptr)
+		{
+			LogError("the bullet sound doesnt exist anymore! what the fuck!!!!");
+			LogError("creating a new audio instance");
+			if(BulletSoundFile == nullptr)
+			{
+				LogError("nevermind, there is no bullet audio file. give the turret a sound to play");
+				return;
+			}
+			BulletSoundInstance = UGameplayStatics::CreateSound2D(this, BulletSoundFile);
+		}
+		BulletSoundInstance->Play();
 	}
 }
 
@@ -168,29 +209,29 @@ float ATurret::UpgradedFireRate()
 	float UpgradedFireRate = FireRate;
 
 	//then add on the upgrade
-	HEHRHEHEHERHRHREHERHREH
 	switch (VehicularGameState->GetFireRateUpgradeLevel())
 	{
 		case 0:
 			UpgradedFireRate += 0.0f;
 			break;
+	 	case 1:
+	 		UpgradedFireRate += 2.0f;
+	 		break;
+	
+	 	case 2:
+	 		UpgradedFireRate += 4.0f;
+	 		break;
+	
+	 	case 3:
+	 		UpgradedFireRate += 8.0f;
+	 		break;
+	
+	 	default:
+	 		LogError("Unknown fire rate upgrade level in turret");
+	 		break;
+	 }
 
-		case 1:
-			UpgradedFireRate += 2.0f;
-			break;
-
-		case 2:
-			UpgradedFireRate += 4.0f;
-			break;
-
-		case 3:
-			UpgradedFireRate += 8.0f;
-			break;
-
-		default:
-			LogError("Unknown fire rate upgrade level in turret");
-			break;
-	}
+	return UpgradedFireRate;
 
 }
 

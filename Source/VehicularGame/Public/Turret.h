@@ -39,6 +39,14 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AActor> BulletBlueprint;
 
+	//the sound that plays when the projectile is spawned
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
+	USoundBase* BulletSoundFile;
+
+	//reference to the instance of the bullet sund
+	UPROPERTY()
+	UAudioComponent* BulletSoundInstance = nullptr;
+
 	//bullets per second that is fired
 	UPROPERTY(EditDefaultsOnly, Category = "Firing", meta = (AllowPrivateAccess = "true"))
 	float FireRate = 4.0f;

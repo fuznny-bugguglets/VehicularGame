@@ -23,7 +23,7 @@ int32 AVehicularGameState::GetMaxBoostLevel() const
 	return MaxBoostLevel;
 }
 
-float AVehicularGameState::GetFireRateUpgradeLevel() const
+int32 AVehicularGameState::GetFireRateUpgradeLevel() const
 {
 	return FireRateUpgradeLevel;
 }

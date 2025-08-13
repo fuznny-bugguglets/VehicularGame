@@ -29,7 +29,7 @@ public:
 	int32 GetMaxBoostLevel() const;
 
 	//gets the additional fire rate
-	float GetFireRateUpgradeLevel() const;
+	int32 GetFireRateUpgradeLevel() const;
 
 	float GetProjectileSpreadMultiplier() const;
 
@@ -42,6 +42,6 @@ private:
 	float AdditionalMaxHealth = 0.0f;
 	float AdditionalMaxSpeed = 0.0f;
 	int32 MaxBoostLevel = 0;
-	float FireRateUpgradeLevel = 0.0f;
+	int32 FireRateUpgradeLevel = 0.0f;
 	float ProjectileSpreadMultiplier = 0.0f;
 };

@@ -80,10 +80,6 @@ private:
 	//time between holding engine shift and actually shifting 
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Shifting", meta = (AllowPrivateAccess = "true"))
 	float ShiftUpHoldMaxTime = 0.0f;
-	
-	//the class of the turret
-	UPROPERTY(EditDefaultsOnly, Category = "Shooting | Turret Class", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AActor> TurretClass;
 
 	//cooldown between hits
 	UPROPERTY(EditDefaultsOnly, Category = "Shooting | Balancing", meta = (AllowPrivateAccess = "true"))

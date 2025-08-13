@@ -106,9 +106,6 @@ void AVehicle::BeginPlay()
 	//begins playing
 	EngineSoundInstance->Play();
 
-	//sets the child actor to be a turret
-	TurretChildActorComponent->SetChildActorClass(TurretClass);
-
 	//get the turret from the child actor
 	Turret = Cast<ATurret>(TurretChildActorComponent->GetChildActor());
 	if(Turret == nullptr)
@@ -116,7 +113,7 @@ void AVehicle::BeginPlay()
 		LogError("Failed to access the turret class from the vehicle's turret child");
 		return;
 	}
-
+	
 	//initialize the turret
 	Turret->InitializeVariables(Camera, this);
 
@@ -643,8 +640,7 @@ void AVehicle::SteerWheels(float DeltaTime)
 			CurrentSteerAngle = TargetSteerAngle;
 		}
 	}
-
-	UE_LOG(LogTemp, Display, TEXT("%f"), CurrentSteerAngle);
+	
 	//set the steer angle for the front wheels
 	FrontLeftWheel->SetSteerAngle(CurrentSteerAngle);
 	FrontRightWheel->SetSteerAngle(CurrentSteerAngle);
