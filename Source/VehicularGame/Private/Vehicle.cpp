@@ -844,3 +844,7 @@ void AVehicle::UpdateTimeSinceLastHit(float DeltaTime)
 	TimeSinceLastHit += DeltaTime;
 }
 
+float AVehicle::GetSpeed() const
+{
+	return Speed;
+}

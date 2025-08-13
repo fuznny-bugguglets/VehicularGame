@@ -4,6 +4,9 @@
 #include "GameFramework/Character.h"
 #include "EnemyCharacter.generated.h"
 
+class AVehicle;
+class AVehicularGameState;
+
 UCLASS()
 class VEHICULARGAME_API AEnemyCharacter : public ACharacter
 {
@@ -30,4 +33,39 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
 	bool IsDead() const; // Checks if the enemy is dead
+
+private:
+	
+	//reference to the game state
+	UPROPERTY()
+	AVehicularGameState* VehicularGameState = nullptr;
+
+	//reference to the player
+	UPROPERTY()
+	AVehicle* VehicleRef = nullptr;
+
+	//how fast the enemy should move based on player speed
+	UPROPERTY(EditDefaultsOnly, Category = "Speed", meta = (AllowPrivateAccess = "true"))
+	UCurveFloat* SpeedCurve;
+
+	//the rate at which the enemy should slow when near the player
+	UPROPERTY(EditDefaultsOnly, Category = "Speed", meta = (AllowPrivateAccess = "true"))
+	float CloseToPlayerDeceleration = 10.0f;
+
+	//the rate at which the enemy should change their speed
+	UPROPERTY(EditDefaultsOnly, Category = "Speed", meta = (AllowPrivateAccess = "true"))
+	float SpeedChangeRatePerSec = 3.0f;
+
+	bool bIsOverlappingWithPlayer = false;
+
+	float TargetSpeed = 0.0f;
+	float RollingAverageTargetSpeed = 0.0f;
+
+	void UpdateSpeed(float DeltaTime);
+	void RotateToGround(float DeltaTime);
+	void PathfindToPoint(float DeltaTime);
+	void IncrementTimeSinceLastRammed(float DeltaTime);
+	void HitByPlayer();
+
+	void LogError(const FString& ErrorMessage);
 };

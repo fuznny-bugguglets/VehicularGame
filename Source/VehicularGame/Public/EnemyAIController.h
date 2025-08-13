@@ -16,6 +16,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "AI|Targeting")
 	FVector GetMovingTargetLocation() const;
+	float GetTargetLineForwardOffset() const;
 
 protected:
 	// --- TARGETING PARAMETERS ---

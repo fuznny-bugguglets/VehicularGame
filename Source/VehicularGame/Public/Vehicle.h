@@ -51,6 +51,9 @@ public:
 	void SetCommonLootCount(int32 NewValue);
 	void SetUncommonLootCount(int32 NewValue);
 	void SetRareLootCount(int32 NewValue);
+
+	//returns the current speed of the player
+	float GetSpeed() const;
  
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Torque", meta = (AllowPrivateAccess = "true"))

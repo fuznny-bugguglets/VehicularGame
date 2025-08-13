@@ -90,3 +90,8 @@ FVector AEnemyAIController::GetMovingTargetLocation() const
 {
 	return CurrentTargetLocation;
 }
+
+float AEnemyAIController::GetTargetLineForwardOffset() const
+{
+	return TargetLineForwardOffset;
+}
