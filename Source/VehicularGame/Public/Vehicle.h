@@ -54,6 +54,8 @@ public:
 
 	//returns the current speed of the player
 	float GetSpeed() const;
+
+	UStaticMeshComponent* GetStaticMesh() const;
  
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Torque", meta = (AllowPrivateAccess = "true"))
@@ -96,6 +98,10 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
 	float ExtractionTimePerRare = 16.0f;
 
+	//the max health we can have
+	UPROPERTY(EditDefaultsOnly, Category = "Health", meta = (AllowPrivateAccess = "true"))
+	int32 MaxHealth = 1;
+	
 	//
 	UPROPERTY(EditDefaultsOnly, Category = "Difficulty", meta = (AllowPrivateAccess = "true"))
 	float BaseDifficultIncreasePerMinute = 3.0f;
@@ -177,8 +183,7 @@ private:
 
 	//our current health
 	int32 Health = 1;
-	//the max health we can have
-	int32 MaxHealth = 1;
+	
 
 	//whether the handbreak is currently on or off
 	bool bHandbrakeActive = false;

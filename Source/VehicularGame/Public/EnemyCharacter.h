@@ -60,7 +60,16 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	float NavUpdateDistanceScaleFactor = 2.5f;
 
-	bool bIsOverlappingWithPlayer = false;
+	//how far the player gets launched when attacked
+	UPROPERTY(EditDefaultsOnly, Category = "Damage", meta = (AllowPrivateAccess = "true"))
+	float PlayerPushForce = 250.f;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Damage", meta = (AllowPrivateAccess = "true"))
+	float DamageToPlayer = 5.f;
+
+	//the engine sound file
+	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	USoundBase* AttackPlayerSound;
 
 	float TargetSpeed = 0.0f;
 	float RollingAverageTargetSpeed = 0.0f;
@@ -72,8 +81,11 @@ private:
 	void UpdateSpeed(float DeltaTime);
 	void RotateToGround(float DeltaTime);
 	void PathfindToPoint(float DeltaTime);
-	void IncrementTimeSinceLastRammed(float DeltaTime);
 	void HitByPlayer();
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit );
 
 	void LogError(const FString& ErrorMessage);
 };

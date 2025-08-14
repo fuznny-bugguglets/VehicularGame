@@ -80,6 +80,14 @@ void AEnemyCharacter::BeginPlay()
         return;
     }
 
+    if(AttackPlayerSound == nullptr)
+    {
+        LogError("no attack player sound set in enemy");
+        return;
+    }
+
+    GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &AEnemyCharacter::OnHit);
+
 
     
 }
@@ -91,12 +99,6 @@ void AEnemyCharacter::Tick(float DeltaTime)
     UpdateSpeed(DeltaTime);
     RotateToGround(DeltaTime);
     PathfindToPoint(DeltaTime);
-    IncrementTimeSinceLastRammed(DeltaTime);
-
-    if(bIsOverlappingWithPlayer)
-    {
-        HitByPlayer();
-    }
 }
 
 float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
@@ -298,25 +300,92 @@ void AEnemyCharacter::PathfindToPoint(float DeltaTime)
         }
 
         //create a point from the interped values
-        FVector ProjectionPoint(XInterp, YInterp, ZInterp);
+        const FVector InterpProjectionPoint(XInterp, YInterp, ZInterp);
 
-        //FVec
-        NavSystem->ProjectPointToNavigation(ProjectionPoint);
+        FNavLocation OutLocation;
+        const FVector Extent(500.f);
+
+        //honestly no idea. john did this
+        //pretty sure it tries to go to some interpolated point
+        if(NavSystem->ProjectPointToNavigation(InterpProjectionPoint, OutLocation, Extent))
+        {
+            AIController->MoveToLocation(OutLocation, 1.0f);
+        }
+        //otherwise it tries to go to the player (on the nav mesh)
+        else if(NavSystem->ProjectPointToNavigation(VehicleRef->GetActorLocation(), OutLocation, Extent))
+        {
+            AIController->MoveToLocation(OutLocation, 1.0f);
+        }
+        //and if all else fails, fuck it, just raw dog direct to the player
+        else
+        {
+            AIController->MoveToActor(VehicleRef, 1.0f);
+        }
+        
 
         
     }
 }
 
-void AEnemyCharacter::IncrementTimeSinceLastRammed(float DeltaTime)
-{
-    
-}
-
 void AEnemyCharacter::HitByPlayer()
 {
+    if(VehicleRef == nullptr)
+    {
+        LogError("failed to access player reference in enemy");
+        return;
+    }
+
+    if(VehicleRef->GetStaticMesh() == nullptr)
+    {
+        LogError("failed to access static mesh component from player in enemy");
+        return;
+    }
+
+    if(GetCharacterMovement() == nullptr)
+    {
+        LogError("failed to get character movement component in enemy");
+    }
+
+    FVector PlayerMeshVelocity = VehicleRef->GetStaticMesh()->GetPhysicsLinearVelocity();
+
+    GetCharacterMovement()->SetMovementMode(MOVE_Falling);
+
+    FVector PushVector = UKismetMathLibrary::GetDirectionUnitVector(VehicleRef->GetActorLocation(), GetActorLocation());
+    PushVector.Z = 0.5f;
+    PushVector *= PlayerPushForce;
     
+
+    //is the enemy in front of the vehicle?
+    if(UKismetMathLibrary::InverseTransformLocation(VehicleRef->GetActorTransform(), GetActorLocation()).X > 250.0f)
+    {
+        //launch ourselves away from the vehicle with extra oomf
+        LaunchCharacter(PushVector * 2.5f, false, false);
+    }
+    //deal damage to the player
+    else
+    {
+        const TSubclassOf<UDamageType> DamageType;
+        //deal damage to the player
+        UGameplayStatics::ApplyDamage(VehicleRef, DamageToPlayer, GetController(), this, DamageType);
+
+        //play attack damage sound
+        UGameplayStatics::PlaySound2D(this, AttackPlayerSound);
+        
+        //launch ourselves away from the vehicle
+        LaunchCharacter(PushVector, false, false);
+    }
+    
+     
 }
 
 
-
-
+void AEnemyCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
+    UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+    //is it the vehicle
+    if(Cast<AVehicle>(OtherActor))
+    {
+        HitByPlayer();
+    }
+    
+}

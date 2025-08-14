@@ -103,9 +103,6 @@ void AVehicle::BeginPlay()
 	//sets the volume of the sound
 	SetEngineSoundValues();
 
-	//begins playing
-	EngineSoundInstance->Play();
-
 	//get the turret from the child actor
 	Turret = Cast<ATurret>(TurretChildActorComponent->GetChildActor());
 	if(Turret == nullptr)
@@ -258,8 +255,7 @@ void AVehicle::SetEngineSoundValues()
 	//check that the sound instance is in the world and kicking
 	if(EngineSoundInstance == nullptr)
 	{
-		LogError("Trying to set the parameters of the engine sound instance when it doesnt exist in Vehicle");
-		return;
+		EngineSoundInstance = UGameplayStatics::CreateSound2D(this, EngineSound);
 	}
 
 	
@@ -527,6 +523,16 @@ void AVehicle::OnEngineShiftUpOnGoing(const FInputActionValue& Value)
 	case EEngineState::OFF:
 		//now you're cruising
 		CurrentEngineState = EEngineState::CRUISE;
+
+		//turn on engine
+		if(EngineSoundInstance == nullptr)
+		{
+			EngineSoundInstance = UGameplayStatics::CreateSound2D(this, EngineSound);
+		}
+		
+		SetEngineSoundValues();
+
+		EngineSoundInstance->Play();
 		break;
 	case EEngineState::CRUISE:
 		//can you boost?
@@ -541,6 +547,8 @@ void AVehicle::OnEngineShiftUpOnGoing(const FInputActionValue& Value)
 		{
 			CurrentEngineState = EEngineState::BOOST2;
 		}
+		break;
+	case EEngineState::BOOST2:
 		break;
 	}
 	
@@ -559,6 +567,7 @@ void AVehicle::OnEngineShiftDown(const FInputActionValue& Value)
 	switch (CurrentEngineState)
 	{
 	case EEngineState::CRUISE:
+		EngineSoundInstance->Stop();
 		CurrentEngineState = EEngineState::OFF;
 		break;
 	case EEngineState::BOOST1:
@@ -851,3 +860,9 @@ float AVehicle::GetSpeed() const
 {
 	return Speed;
 }
+
+UStaticMeshComponent* AVehicle::GetStaticMesh() const
+{
+	return VehicleMesh;
+}
+

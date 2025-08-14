@@ -33,6 +33,8 @@ public:
 
 	float GetProjectileSpreadMultiplier() const;
 
+	float GetBumperDamage() const;
+
 protected:
 	// A multiplier to control how fast difficulty increases.
 	UPROPERTY(EditDefaultsOnly, Category = "Game State")
@@ -44,4 +46,6 @@ private:
 	int32 MaxBoostLevel = 0;
 	int32 FireRateUpgradeLevel = 0.0f;
 	float ProjectileSpreadMultiplier = 0.0f;
+	float AdditionalDamage = 0.0f;
+	float BumperDamage = 0.0f;
 };

@@ -32,3 +32,8 @@ float AVehicularGameState::GetProjectileSpreadMultiplier() const
 {
 	return ProjectileSpreadMultiplier;
 }
+
+float AVehicularGameState::GetBumperDamage() const
+{
+	return BumperDamage;
+}
