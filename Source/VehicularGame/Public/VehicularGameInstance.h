@@ -34,7 +34,7 @@ public:
 	void ResetSaveData();
 
 	//returns the save game object
-	UVehicularSaveGame* GetSaveGameObject() const;
+	UVehicularSaveGame* GetSaveGameObject() const; 
 
 protected:
 	// The name of the file slot to save to.
@@ -61,4 +61,7 @@ private:
 	// A reference to the currently loaded SaveGame object. All other scripts will access data through this.
 	UPROPERTY(VisibleAnywhere, Category = "Save Game")
 	UVehicularSaveGame* SaveGameObject;
+
+	UPROPERTY(VisibleAnywhere, Category = "Classes", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> RuinClass;
 };

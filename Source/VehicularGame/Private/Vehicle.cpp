@@ -866,3 +866,22 @@ UStaticMeshComponent* AVehicle::GetStaticMesh() const
 	return VehicleMesh;
 }
 
+float AVehicle::GetHealth() const
+{
+	return Health;
+}
+
+float AVehicle::GetMaxHealth() const
+{
+	return MaxHealth;
+}
+
+EEngineState AVehicle::GetEngineState() const
+{
+	return CurrentEngineState;
+}
+
+bool AVehicle::IsHandbrakeActive() const
+{
+	return bHandbrakeActive;
+}

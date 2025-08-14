@@ -232,7 +232,7 @@ void AEnemyCharacter::RotateToGround(float DeltaTime)
         OutSlopePitchDegreeAngle, OutSlopeRollDegreeAngle);
 
     //interpolate between current and target rotation
-    FRotator TargetRotation(OutSlopePitchDegreeAngle, GetMesh()->GetComponentRotation().Yaw, OutSlopeRollDegreeAngle * 1.0f);
+    FRotator TargetRotation(OutSlopePitchDegreeAngle, GetMesh()->GetComponentRotation().Yaw, OutSlopeRollDegreeAngle * -1.0f);
     GetMesh()->SetWorldRotation(UKismetMathLibrary::RInterpTo(GetMesh()->GetComponentRotation(), TargetRotation, DeltaTime, 2.0f));
     
 }

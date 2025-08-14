@@ -3,6 +3,8 @@
 #include "Vehicle.h"
 #include "VehicularSaveGame.h"
 #include "Kismet/GameplayStatics.h"
+#include "Ruin.h"
+#include "Engine/Engine.h"
 
 UVehicularGameInstance::UVehicularGameInstance()
 {
@@ -120,8 +122,32 @@ void UVehicularGameInstance::SaveRuinResources()
 	//wipes the ruin resource data
 	SaveGameObject->RuinResourceData.Reset();
 
-	//implements the data
+	if(RuinClass == nullptr)
+	{
+		LogError("ruin class not set in game instance");
+	}
 	
+	//implements the data
+	TArray<AActor*> Ruins;
+	UGameplayStatics::GetAllActorsOfClass(this, RuinClass, Ruins);
+
+	for(AActor* Actor : Ruins)
+	{
+		if(Actor == nullptr)
+		{
+			LogError("the game instance fetched a null ruin while saving! somehow?!");
+			return;
+		}
+
+		ARuin* Ruin = Cast<ARuin>(Actor);
+		if(Ruin == nullptr)
+		{
+			LogError("failed to cast 'a ruin' into an actual ruin class.");
+			return;
+		}
+		
+		SaveGameObject->RuinResourceData.Add(FName(UKismetSystemLibrary::GetDisplayName(Ruin)), Ruin->GetResourceAmount());
+	}
 }
 
 UVehicularSaveGame* UVehicularGameInstance::GetSaveGameObject() const

@@ -55,6 +55,13 @@ public:
 	//returns the current speed of the player
 	float GetSpeed() const;
 
+	float GetHealth() const;
+	float GetMaxHealth() const;
+
+	bool IsHandbrakeActive() const;
+
+	EEngineState GetEngineState() const;
+
 	UStaticMeshComponent* GetStaticMesh() const;
  
 private:
