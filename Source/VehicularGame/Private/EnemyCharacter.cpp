@@ -1,6 +1,7 @@
 #include "EnemyCharacter.h"
 #include "AIController.h" // For AAIController
 #include "EnemyAIController.h"
+#include "NavigationSystem.h"
 #include "Vehicle.h"
 #include "VehicularGameState.h"
 #include "GameFramework/CharacterMovementComponent.h" // For character movement
@@ -236,7 +237,74 @@ void AEnemyCharacter::RotateToGround(float DeltaTime)
 
 void AEnemyCharacter::PathfindToPoint(float DeltaTime)
 {
+    if(VehicleRef == nullptr)
+    {
+        LogError("failed to get a reference to the player in enemy character");
+        return;
+    }
     
+    TimeSinceLastNavUpdate += DeltaTime;
+    
+    //is it time to update?
+    if(TimeSinceLastNavUpdate > (GetDistanceTo(VehicleRef) * NavUpdateDistanceScaleFactor) / 10000.0f)
+    {
+        TimeSinceLastNavUpdate = 0.0f;
+
+        if(IsDead())
+        {
+            return;
+        }
+
+        //grab the ai controller
+        AEnemyAIController* AIController = Cast<AEnemyAIController>(GetController());
+        if (AIController == nullptr)
+        {
+            LogError("failed to get ai controller for enemy");
+            return;
+        }
+
+        float Alpha = VehicleRef->GetSpeed() / (PlayerMinSpeed * 27.77f);
+        if(GetDistanceTo(VehicleRef) > 3000.0f)
+        {
+            Alpha = 1.0f;
+        }
+        else
+        {
+            Alpha = UKismetMathLibrary::FClamp(Alpha, 0.0f, 1.0f);
+        }
+        
+        //interp points
+        float XInterp = UKismetMathLibrary::FInterpEaseInOut(
+            VehicleRef->GetActorLocation().X,
+            AIController->GetMovingTargetLocation().X,
+            Alpha,
+            5.0f);
+        float YInterp = UKismetMathLibrary::FInterpEaseInOut(
+            VehicleRef->GetActorLocation().Y,
+            AIController->GetMovingTargetLocation().Y,
+            Alpha,
+            5.0f);
+        float ZInterp = UKismetMathLibrary::FInterpEaseInOut(
+            VehicleRef->GetActorLocation().Z,
+            AIController->GetMovingTargetLocation().Z,
+            Alpha,
+            5.0f);
+        
+        UNavigationSystemV1* NavSystem = Cast<UNavigationSystemV1>(GetWorld()->GetNavigationSystem());
+        if(NavSystem == nullptr)
+        {
+            LogError("failed to get the nav system in character");
+            return;
+        }
+
+        //create a point from the interped values
+        FVector ProjectionPoint(XInterp, YInterp, ZInterp);
+
+        //FVec
+        NavSystem->ProjectPointToNavigation(ProjectionPoint);
+
+        
+    }
 }
 
 void AEnemyCharacter::IncrementTimeSinceLastRammed(float DeltaTime)

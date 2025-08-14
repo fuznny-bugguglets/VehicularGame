@@ -374,6 +374,9 @@ void AVehicle::OnMoveStop(const FInputActionValue& Value)
 	FrontRightWheel->SetMotorTorque(0);
 	BackLeftWheel->SetMotorTorque(0);
 	BackRightWheel->SetMotorTorque(0);
+
+	//tell the wheels to straighten
+	TargetSteerAngle = 0.0f;
 }
 
 //when the player drifts

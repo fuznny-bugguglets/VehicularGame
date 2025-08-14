@@ -56,10 +56,18 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Speed", meta = (AllowPrivateAccess = "true"))
 	float SpeedChangeRatePerSec = 3.0f;
 
+	//the rate at which the enemy should recalculate their pathfinding
+	UPROPERTY(EditDefaultsOnly, Category = "AI", meta = (AllowPrivateAccess = "true"))
+	float NavUpdateDistanceScaleFactor = 2.5f;
+
 	bool bIsOverlappingWithPlayer = false;
 
 	float TargetSpeed = 0.0f;
 	float RollingAverageTargetSpeed = 0.0f;
+
+	float TimeSinceLastNavUpdate = 0.0f;
+
+	float PlayerMinSpeed = 30.0f;
 
 	void UpdateSpeed(float DeltaTime);
 	void RotateToGround(float DeltaTime);
