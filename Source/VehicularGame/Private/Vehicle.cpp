@@ -816,6 +816,18 @@ void AVehicle::ExtractOneUnit()
 		IncrementRareLootCount();
 		break;
 	}
+
+	//did we take everything?
+	if(OverlappingRuin->GetResourceAmount() <= 0)
+	{
+		if(!VehicularGameMode)
+		{
+			LogError("couldnt get game mode in vehicle");
+			return;
+		}
+
+		VehicularGameMode->SetRuinOverlap(nullptr);
+	}
 }
 
 void AVehicle::UpdateExtractionProgress(float DeltaTime)
@@ -953,4 +965,30 @@ void AVehicle::IncrementRareLootCount()
 {
 	SetRareLootCount(RareLootCount + 1);
 }
+
+float AVehicle::GetElapsedExtractionTime() const
+{
+	return ExtractionTime;
+}
+
+float AVehicle::GetTotalExtractionTime() const
+{
+	if(!OverlappingRuin)
+	{
+		return 0.0f;
+	}
+
+	switch (OverlappingRuin->GetResourceType())
+	{
+	case EResourceType::COMMON:
+		return ExtractionTimePerCommon;
+	case EResourceType::UNCOMMON:
+		return ExtractionTimePerUncommon;
+	case EResourceType::RARE:
+		return ExtractionTimePerRare;
+	}
+
+	return 0.0f;
+}
+
 

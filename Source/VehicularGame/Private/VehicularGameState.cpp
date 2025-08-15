@@ -1,5 +1,7 @@
 #include "VehicularGameState.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "VehicularGameMode.h"
 
 void AVehicularGameState::LogError(const FString& ErrorMessage)
 {
@@ -27,6 +29,20 @@ void AVehicularGameState::UpdateDifficulty(float VibrationLevel, float DeltaTime
 {
 	// This formula increases difficulty based on player-generated vibrations.
 	Difficulty += VibrationLevel * DeltaTime * DifficultyIncreaseScaleFactor;
+
+	// update the display of difficulty
+	if(!VehicularGameMode)
+	{
+		VehicularGameMode = Cast<AVehicularGameMode>(UGameplayStatics::GetGameMode(this));
+		if(!VehicularGameMode)
+		{
+			LogError("failed to get gamemode in game state");
+			return;
+		}
+	}
+
+	VehicularGameMode->UpdateCurrentNoise(VibrationLevel);
+	VehicularGameMode->UpdateCurrentDifficulty(Difficulty);
 }
 
 float AVehicularGameState::GetAdditionalMaxSpeed() const

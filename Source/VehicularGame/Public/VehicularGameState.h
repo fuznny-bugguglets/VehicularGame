@@ -5,6 +5,8 @@
 #include "VehicularGameState.generated.h"
 
 
+class AVehicularGameMode;
+
 UCLASS()
 class VEHICULARGAME_API AVehicularGameState : public AGameStateBase
 {
@@ -52,4 +54,7 @@ private:
 	float BumperDamage = 0.0f;
 
 	void LogError(const FString& ErrorMessage);
+
+	UPROPERTY()
+	AVehicularGameMode* VehicularGameMode = nullptr;
 };

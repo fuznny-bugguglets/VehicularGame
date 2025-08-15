@@ -48,7 +48,7 @@ AVehicularGameMode::AVehicularGameMode()
 void AVehicularGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("EnemySpawnPoint"), AllSpawnPoints);
 
 	if (AllSpawnPoints.Num() > 0)
@@ -250,5 +250,34 @@ void AVehicularGameMode::UpdateRareLootDisplay(int32 Loot)
 	}
 
 	MainHUDInstance->UpdateRareLootDisplay(Loot);
+}
+
+void AVehicularGameMode::UpdateCurrentNoise(float Noise)
+{
+	if(!MainHUDInstance)
+	{
+		LogError("failed to access main hud instance");
+		return;
+	}
+
+	MainHUDInstance->UpdateCurrentNoiseDisplay(Noise * 60.0f);
+}
+
+void AVehicularGameMode::UpdateCurrentDifficulty(float Difficulty)
+{
+	if(!MainHUDInstance)
+	{
+		LogError("failed to access main hud instance");
+		return;
+	}
+
+	const float RoundedDifficulty = FMath::RoundHalfToEven(Difficulty);
+	MainHUDInstance->UpdateCurrentDifficultyDisplay(RoundedDifficulty);
+}
+
+
+ARuin* AVehicularGameMode::GetOverlappingRuin() const
+{
+	return OverlappingRuin;
 }
 

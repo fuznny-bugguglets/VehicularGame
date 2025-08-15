@@ -46,7 +46,7 @@ private:
 
 	//how fast the enemy should move based on player speed
 	UPROPERTY(EditDefaultsOnly, Category = "Speed", meta = (AllowPrivateAccess = "true"))
-	UCurveFloat* SpeedCurve;
+	UCurveFloat* MySpeedCurve;
 
 	//the rate at which the enemy should slow when near the player
 	UPROPERTY(EditDefaultsOnly, Category = "Speed", meta = (AllowPrivateAccess = "true"))

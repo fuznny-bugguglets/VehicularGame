@@ -163,3 +163,7 @@ EResourceType ARuin::GetResourceType() const
 }
 
 
+int32 ARuin::GetInitialResourceAmount() const
+{
+	return StartingResourceAmount;
+}

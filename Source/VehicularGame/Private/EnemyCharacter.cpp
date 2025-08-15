@@ -74,7 +74,7 @@ void AEnemyCharacter::BeginPlay()
     }
 
     //check the float curve is active
-    if(SpeedCurve == nullptr)
+    if(MySpeedCurve == nullptr)
     {
         LogError("no speed curve set for the enemies");
         return;
@@ -150,7 +150,7 @@ bool AEnemyCharacter::IsDead() const
 
 void AEnemyCharacter::UpdateSpeed(float DeltaTime)
 {
-    if(SpeedCurve == nullptr)
+    if(MySpeedCurve == nullptr)
     {
         LogError("no speed curve set for the enemies");
         return;
@@ -181,7 +181,7 @@ void AEnemyCharacter::UpdateSpeed(float DeltaTime)
     {
         //set target speed based on float curve
         float SpeedKMH = VehicleRef->GetSpeed() * 0.3666f;
-        float SpeedCurveOutput = SpeedCurve->GetFloatValue(SpeedKMH);
+        float SpeedCurveOutput = MySpeedCurve->GetFloatValue(SpeedKMH);
         TargetSpeed = SpeedCurveOutput + SpeedKMH;
     }
 

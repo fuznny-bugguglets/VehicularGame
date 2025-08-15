@@ -36,4 +36,11 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateCurrentNoiseDisplay(float Noise);
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateCurrentDifficultyDisplay(float Difficulty);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateResourcesExtractedBar(int32 ResourcesExtracted, int32 TotalResource);
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateExtractionProgress(float CurrentExtractionTime, float TotalExtractionTime);
 };

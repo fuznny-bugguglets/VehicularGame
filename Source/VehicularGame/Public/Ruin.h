@@ -26,7 +26,11 @@ public:
 	ARuin();
 
 	//returns the amount of resources the ruin has
+	UFUNCTION(BlueprintCallable)
 	int32 GetResourceAmount() const;
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetInitialResourceAmount() const;
 
 	//lowers the resource count by one
 	void TakeOneResource();

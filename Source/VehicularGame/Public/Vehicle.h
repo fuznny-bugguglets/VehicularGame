@@ -58,6 +58,11 @@ public:
 	void IncrementUncommonLootCount();
 	void IncrementRareLootCount();
 
+	UFUNCTION(BlueprintCallable)
+	float GetElapsedExtractionTime() const;
+	UFUNCTION(BlueprintCallable)
+	float GetTotalExtractionTime() const;
+
 	//returns the current speed of the player
 	float GetSpeed() const;
 

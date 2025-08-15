@@ -20,12 +20,18 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enemy Spawning")
     FTimerHandle SpawnWaveTimerHandle;
 
+    UFUNCTION(BlueprintCallable)
+    ARuin* GetOverlappingRuin() const;
+    
     void SetHandbrake(bool InHandbrake);
     void SetRuinOverlap(ARuin* InRuin);
 
     void UpdateCommonLootDisplay(int32 loot);
     void UpdateUncommonLootDisplay(int32 loot);
     void UpdateRareLootDisplay(int32 loot);
+
+    void UpdateCurrentNoise(float Noise);
+    void UpdateCurrentDifficulty(float Difficulty);
 
 protected:
     virtual void BeginPlay() override;
