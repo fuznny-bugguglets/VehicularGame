@@ -5,6 +5,7 @@
 #include "Vehicle.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetTextLibrary.h"
+#include "VehicularGameState.h"
 
 void UPlayerHUD::LogError(const FString& ErrorMessage) const
 {
@@ -130,3 +131,19 @@ float UPlayerHUD::FetchHPPercentage()
 
 	return (PlayerRef->GetHealth() / PlayerRef->GetMaxHealth());
 }
+
+float UPlayerHUD::FetchDPMPercentage()
+{
+	if(!GameStateRef)
+	{
+		GameStateRef = Cast<AVehicularGameState>(GetWorld()->GetGameState());
+		if(!GameStateRef)
+		{
+			LogError("failed to get game state ref in player hud (you can ignore this in editor mode)");
+			return 0.0f;
+		}
+	}
+	
+	return GameStateRef->Difficulty / DifficultyMax;
+}
+

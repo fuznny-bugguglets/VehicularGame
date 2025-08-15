@@ -32,39 +32,23 @@ ARuin::ARuin()
 	RuinMeshUncommon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ruin Mesh Unommon"));
 	RuinMeshRare = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ruin Mesh Rare"));
 	ExtractionRingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Extraction Ring Mesh"));
-	CreateDefaultSubobject<USphereComponent>(TEXT("Extraction Radius"));
+	SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("Extraction Radius"));
 
-	//hide all meshes
-	RuinMeshCommon->SetVisibility(false);
-	RuinMeshUncommon->SetVisibility(false);
-	RuinMeshRare->SetVisibility(false);
+	//setup attachments
+	RuinMeshCommon->SetupAttachment(RootComponent);
+	RuinMeshUncommon->SetupAttachment(RuinMeshCommon);
+	RuinMeshRare->SetupAttachment(RuinMeshCommon);
+	ExtractionRingMesh->SetupAttachment(RuinMeshCommon);
+	SphereCollider->SetupAttachment(RuinMeshCommon);
+
+	
 	
 	//disable collision on all meshes
 	RuinMeshCommon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	RuinMeshUncommon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	RuinMeshRare->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	
-	//set meshes based on type
-    switch (ResourceType)
-    {
-    case EResourceType::COMMON:
-    	ExtractionRingMesh->SetMaterial(0, CommonMaterial);
-    	RuinMeshCommon->SetVisibility(true);
-    	RuinMeshCommon->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-    	break;
-    	
-    case EResourceType::UNCOMMON:
-    	ExtractionRingMesh->SetMaterial(0, UncommonMaterial);
-    	RuinMeshUncommon->SetVisibility(true);
-    	RuinMeshUncommon->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-    	break;
-    	
-    case EResourceType::RARE:
-    	ExtractionRingMesh->SetMaterial(0, RareMaterial);
-    	RuinMeshRare->SetVisibility(true);
-    	RuinMeshRare->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-    	break;
-    }
+	
 
 	
 }
@@ -73,6 +57,30 @@ ARuin::ARuin()
 void ARuin::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//hide all meshes
+	RuinMeshCommon->SetVisibility(false);
+	RuinMeshUncommon->SetVisibility(false);
+	RuinMeshRare->SetVisibility(false);
+	
+	//set meshes based on type
+	switch (ResourceType)
+	{
+	case EResourceType::COMMON:
+		ExtractionRingMesh->SetMaterial(0, CommonMaterial);
+		RuinMeshCommon->SetVisibility(true);
+		break;
+    	
+	case EResourceType::UNCOMMON:
+		ExtractionRingMesh->SetMaterial(0, UncommonMaterial);
+		RuinMeshUncommon->SetVisibility(true);
+		break;
+    	
+	case EResourceType::RARE:
+		ExtractionRingMesh->SetMaterial(0, RareMaterial);
+		RuinMeshRare->SetVisibility(true);
+		break;
+	}
 
 	//make sure the game instance is real
 	if(!GetGameInstance())

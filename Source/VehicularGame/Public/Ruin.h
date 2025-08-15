@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Ruin.generated.h"
 
+class USphereComponent;
+
 UENUM(BlueprintType)
 enum class EResourceType : uint8
 {
@@ -48,7 +50,7 @@ protected:
 
 	//the type of resource this is
 	UPROPERTY(EditInstanceOnly, Category = "Resource Type", meta = (AllowPrivateAccess = "true"))
-	EResourceType ResourceType;
+	EResourceType ResourceType = EResourceType::COMMON;
 
 	//materials
 	UPROPERTY(EditDefaultsOnly, Category = "Ring Materials", meta = (AllowPrivateAccess = "true"))
@@ -59,14 +61,17 @@ protected:
 	UMaterialInstance* RareMaterial;
 	
 	//mesh types
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly)
 	UStaticMeshComponent* RuinMeshCommon;
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly)
 	UStaticMeshComponent* RuinMeshUncommon;
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly)
 	UStaticMeshComponent* RuinMeshRare;
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly)
 	UStaticMeshComponent* ExtractionRingMesh;
+
+	UPROPERTY(EditDefaultsOnly)
+	USphereComponent* SphereCollider = nullptr;
 
 private:
 	void LogError(const FString& ErrorMessage);

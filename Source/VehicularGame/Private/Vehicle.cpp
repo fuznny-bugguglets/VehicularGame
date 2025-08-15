@@ -8,6 +8,7 @@
 #include "VehicularGameState.h"
 #include "Turret.h"
 #include "Ruin.h"
+#include "VehicularGameMode.h"
 #include "Camera/CameraComponent.h"
 #include "Components/AudioComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -92,6 +93,13 @@ void AVehicle::BeginPlay()
 		return;
 	}
 
+	//get gamemode
+	VehicularGameMode = Cast<AVehicularGameMode>(UGameplayStatics::GetGameMode(this));
+	if(!VehicularGameMode)
+	{
+		LogError("failed to get the game mode in vehicle");
+	}
+
 	//creates the sound
 	if(EngineSound == nullptr)
 	{
@@ -116,6 +124,8 @@ void AVehicle::BeginPlay()
 
 	//set our health to our max health
 	Health = MaxHealth;
+
+	ResetAllLoot();
 }
 
 // Called every frame
@@ -239,14 +249,32 @@ void AVehicle::ResetAllLoot()
 void AVehicle::SetCommonLootCount(int32 NewValue)
 {
 	CommonLootCount = NewValue;
+
+	if(!VehicularGameMode)
+	{
+		LogError("failed to access game mode in vehicle");
+	}
+	VehicularGameMode->UpdateCommonLootDisplay(CommonLootCount);
 }
 void AVehicle::SetUncommonLootCount(int32 NewValue)
 {
 	UncommonLootCount = NewValue;
+
+	if(!VehicularGameMode)
+	{
+		LogError("failed to access game mode in vehicle");
+	}
+	VehicularGameMode->UpdateUncommonLootDisplay(UncommonLootCount);
 }
 void AVehicle::SetRareLootCount(int32 NewValue)
 {
 	RareLootCount = NewValue;
+
+	if(!VehicularGameMode)
+	{
+		LogError("failed to access game mode in vehicle");
+	}
+	VehicularGameMode->UpdateRareLootDisplay(RareLootCount);
 }
 
 //sets the speed and pitch of the engine based on speed
@@ -475,6 +503,14 @@ void AVehicle::OnHandbreak(const FInputActionValue& Value)
 	FrontRightWheel->ForwardFrictionCurve.UpdateArrays();
 	BackLeftWheel->ForwardFrictionCurve.UpdateArrays();
 	BackRightWheel->ForwardFrictionCurve.UpdateArrays();
+
+	//tell the gamemode our handbrake updated
+	if(!VehicularGameMode)
+	{
+		LogError("vehicle couldnt access game mode");
+		return;
+	}
+	VehicularGameMode->SetHandbrake(bHandbrakeActive);
 }
 
 //when the player first begins to shoot
@@ -705,10 +741,19 @@ void AVehicle::UpdateEngineStateOnReverse()
 void AVehicle::OnVehicleBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//cast the other actor to a ruin
-	OverlappingRuin = Cast<ARuin>(OtherActor);
+	//was it a ruin?
+	if(ARuin* TestRuin = Cast<ARuin>(OtherActor))
+	{
+		OverlappingRuin = TestRuin;
 
-	//doesn't matter if it fails, because it returns nullptr
+		//tell the gamemode about the ruin
+		if(!VehicularGameMode)
+		{
+			LogError("vehicle couldnt access game mode");
+			return;
+		}
+		VehicularGameMode->SetRuinOverlap(OverlappingRuin);
+	}
 }
 
 void AVehicle::OnVehicleEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -725,6 +770,14 @@ void AVehicle::OnVehicleEndOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 	{
 		//null out overlapping ruin
 		OverlappingRuin = nullptr;
+
+		//tell the gamemode about the ruin
+		if(!VehicularGameMode)
+		{
+			LogError("vehicle couldnt access game mode");
+			return;
+		}
+		VehicularGameMode->SetRuinOverlap(nullptr);
 	}
 	
 	
@@ -754,13 +807,13 @@ void AVehicle::ExtractOneUnit()
 	switch (OverlappingRuin->GetResourceType())
 	{
 	case EResourceType::COMMON:
-		CommonLootCount++;
+		IncrementCommonLootCount();
 		break;
 	case EResourceType::UNCOMMON:
-		UncommonLootCount++;
+		IncrementUncommonLootCount();
 		break;
 	case EResourceType::RARE:
-		RareLootCount++;
+		IncrementRareLootCount();
 		break;
 	}
 }
@@ -795,21 +848,21 @@ void AVehicle::UpdateExtractionProgress(float DeltaTime)
 	switch (OverlappingRuin->GetResourceType())
 	{
 	case EResourceType::COMMON:
-		if(ExtractionTimePerCommon >= ExtractionTime)
+		if(ExtractionTimePerCommon < ExtractionTime)
 		{
 			ExtractOneUnit();
 		}
 		break;
 		
 	case EResourceType::UNCOMMON:
-		if(ExtractionTimePerUncommon >= ExtractionTime)
+		if(ExtractionTimePerUncommon < ExtractionTime)
 		{
 			ExtractOneUnit();
 		}
 		break;
 		
 	case EResourceType::RARE:
-		if(ExtractionTimePerRare >= ExtractionTime)
+		if(ExtractionTimePerRare < ExtractionTime)
 		{
 			ExtractOneUnit();
 		}
@@ -885,3 +938,19 @@ bool AVehicle::IsHandbrakeActive() const
 {
 	return bHandbrakeActive;
 }
+
+void AVehicle::IncrementCommonLootCount()
+{
+	SetCommonLootCount(CommonLootCount + 1);
+}
+
+void AVehicle::IncrementUncommonLootCount()
+{
+	SetUncommonLootCount(UncommonLootCount + 1);
+}
+
+void AVehicle::IncrementRareLootCount()
+{
+	SetRareLootCount(RareLootCount + 1);
+}
+

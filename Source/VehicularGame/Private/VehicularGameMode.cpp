@@ -4,6 +4,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
 #include "GameFramework/Pawn.h"
+#include "Ruin.h"
+#include "MainHUD.h"
 
 struct FSpawnPointData
 {
@@ -15,6 +17,21 @@ struct FSpawnPointData
         return DistanceSq < Other.DistanceSq;
     }
 };
+
+void AVehicularGameMode::LogError(const FString& ErrorMessage)
+{
+	//if we have the engine pointer, we print to the screen
+	if(GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, ErrorMessage);
+	}
+	//otherwise, we print to the log
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *ErrorMessage);
+	}
+}
+
 
 AVehicularGameMode::AVehicularGameMode()
 {
@@ -40,6 +57,21 @@ void AVehicularGameMode::BeginPlay()
 		// Uses the original timer handle name.
 		GetWorldTimerManager().SetTimer(SpawnWaveTimerHandle, this, &AVehicularGameMode::SpawnWave, FirstWaveDelay, false);
 	}
+
+	if(!MainHUDClass)
+	{
+		LogError("main hud was not set in game mode");
+		return;
+	}
+
+	MainHUDInstance = CreateWidget<UMainHUD>(GetWorld(), MainHUDClass);
+	if(!MainHUDInstance)
+	{
+		LogError("main hud failed to cast from user widget");
+		return;
+	}
+
+	MainHUDInstance->AddToViewport();
 }
 
 void AVehicularGameMode::SpawnWave()
@@ -148,3 +180,75 @@ void AVehicularGameMode::SpawnWave()
 	const float NextWaveDelay = FMath::Max(10.0f, IntervalSeconds + FMath::FRandRange(-OffsetSeconds, OffsetSeconds));
 	GetWorldTimerManager().SetTimer(SpawnWaveTimerHandle, this, &AVehicularGameMode::SpawnWave, NextWaveDelay, false);
 }
+
+void AVehicularGameMode::SetHandbrake(bool InHandbrake)
+{
+	bIsHandbrakeOn = InHandbrake;
+	DisplayRuinPrompt();
+}
+
+void AVehicularGameMode::SetRuinOverlap(ARuin* InRuin)
+{
+	OverlappingRuin = InRuin;
+	DisplayRuinPrompt();
+}
+
+void AVehicularGameMode::DisplayRuinPrompt()
+{
+	if(!MainHUDInstance)
+	{
+		LogError("failed to access main hud instance");
+		return;
+	}
+
+	if(!OverlappingRuin)
+	{
+		MainHUDInstance->HideRuinPrompts();
+	}
+	else if(OverlappingRuin->GetResourceAmount() <= 0)
+	{
+		MainHUDInstance->DisplayExtracted();
+	}
+	else if(!bIsHandbrakeOn)
+	{
+		MainHUDInstance->DisplayHandbrakePrompt();
+	}
+	else
+	{
+		MainHUDInstance->DisplayExtracting();
+	}
+}
+
+void AVehicularGameMode::UpdateCommonLootDisplay(int32 Loot)
+{
+	if(!MainHUDInstance)
+	{
+		LogError("failed to access main hud instance");
+		return;
+	}
+
+	MainHUDInstance->UpdateCommonLootDisplay(Loot);
+}
+
+void AVehicularGameMode::UpdateUncommonLootDisplay(int32 Loot)
+{
+	if(!MainHUDInstance)
+	{
+		LogError("failed to access main hud instance");
+		return;
+	}
+
+	MainHUDInstance->UpdateUncommonLootDisplay(Loot);
+}
+
+void AVehicularGameMode::UpdateRareLootDisplay(int32 Loot)
+{
+	if(!MainHUDInstance)
+	{
+		LogError("failed to access main hud instance");
+		return;
+	}
+
+	MainHUDInstance->UpdateRareLootDisplay(Loot);
+}
+

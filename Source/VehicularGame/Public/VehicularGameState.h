@@ -4,6 +4,7 @@
 #include "GameFramework/GameStateBase.h"
 #include "VehicularGameState.generated.h"
 
+
 UCLASS()
 class VEHICULARGAME_API AVehicularGameState : public AGameStateBase
 {
@@ -35,6 +36,7 @@ public:
 
 	float GetBumperDamage() const;
 
+
 protected:
 	// A multiplier to control how fast difficulty increases.
 	UPROPERTY(EditDefaultsOnly, Category = "Game State")
@@ -48,4 +50,6 @@ private:
 	float ProjectileSpreadMultiplier = 0.0f;
 	float AdditionalDamage = 0.0f;
 	float BumperDamage = 0.0f;
+
+	void LogError(const FString& ErrorMessage);
 };

@@ -1,10 +1,26 @@
 #include "VehicularGameState.h"
 
+
+void AVehicularGameState::LogError(const FString& ErrorMessage)
+{
+	//if we have the engine pointer, we print to the screen
+	if(GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, ErrorMessage);
+	}
+	//otherwise, we print to the log
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *ErrorMessage);
+	}
+}
+
 AVehicularGameState::AVehicularGameState()
 {
 	// Initialize game state variables.
 	Difficulty = 1.0f;
 	DifficultyIncreaseScaleFactor = 0.1f; // Default value, can be changed in Blueprint.
+	
 }
 
 void AVehicularGameState::UpdateDifficulty(float VibrationLevel, float DeltaTime)
@@ -37,3 +53,6 @@ float AVehicularGameState::GetBumperDamage() const
 {
 	return BumperDamage;
 }
+
+
+

@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "Vehicle.generated.h"
 
+class AVehicularGameState;
+class AVehicularGameMode;
 class ARuin;
 class ATurret;
 class USpringArmComponent;
@@ -51,6 +53,10 @@ public:
 	void SetCommonLootCount(int32 NewValue);
 	void SetUncommonLootCount(int32 NewValue);
 	void SetRareLootCount(int32 NewValue);
+
+	void IncrementCommonLootCount();
+	void IncrementUncommonLootCount();
+	void IncrementRareLootCount();
 
 	//returns the current speed of the player
 	float GetSpeed() const;
@@ -168,6 +174,10 @@ private:
 	//reference to the game state
 	UPROPERTY()
 	AVehicularGameState* VehicularGameState;
+
+	//reference to the game mode
+	UPROPERTY()
+	AVehicularGameMode* VehicularGameMode;
 
 	//reference to the vehicle mesh
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))

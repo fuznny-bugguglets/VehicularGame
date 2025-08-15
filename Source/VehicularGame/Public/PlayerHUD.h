@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "PlayerHUD.generated.h"
 
+class AVehicularGameState;
 class AVehicle;
 /**
  * 
@@ -33,6 +34,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float FetchHPPercentage();
 
+	UFUNCTION(BlueprintCallable)
+	float FetchDPMPercentage();
+	
+
 	
 	
 private:
@@ -40,5 +45,11 @@ private:
 
 	UPROPERTY()
 	AVehicle* PlayerRef = nullptr;
+
+	UPROPERTY()
+	AVehicularGameState* GameStateRef = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	float DifficultyMax = 30.0f;
 
 };
