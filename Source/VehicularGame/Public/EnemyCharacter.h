@@ -4,6 +4,9 @@
 #include "GameFramework/Character.h"
 #include "EnemyCharacter.generated.h"
 
+class AVehicle;
+class AVehicularGameState;
+
 UCLASS()
 class VEHICULARGAME_API AEnemyCharacter : public ACharacter
 {
@@ -30,4 +33,59 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
 	bool IsDead() const; // Checks if the enemy is dead
+
+private:
+	
+	//reference to the game state
+	UPROPERTY()
+	AVehicularGameState* VehicularGameState = nullptr;
+
+	//reference to the player
+	UPROPERTY()
+	AVehicle* VehicleRef = nullptr;
+
+	//how fast the enemy should move based on player speed
+	UPROPERTY(EditDefaultsOnly, Category = "Speed", meta = (AllowPrivateAccess = "true"))
+	UCurveFloat* MySpeedCurve;
+
+	//the rate at which the enemy should slow when near the player
+	UPROPERTY(EditDefaultsOnly, Category = "Speed", meta = (AllowPrivateAccess = "true"))
+	float CloseToPlayerDeceleration = 10.0f;
+
+	//the rate at which the enemy should change their speed
+	UPROPERTY(EditDefaultsOnly, Category = "Speed", meta = (AllowPrivateAccess = "true"))
+	float SpeedChangeRatePerSec = 3.0f;
+
+	//the rate at which the enemy should recalculate their pathfinding
+	UPROPERTY(EditDefaultsOnly, Category = "AI", meta = (AllowPrivateAccess = "true"))
+	float NavUpdateDistanceScaleFactor = 2.5f;
+
+	//how far the player gets launched when attacked
+	UPROPERTY(EditDefaultsOnly, Category = "Damage", meta = (AllowPrivateAccess = "true"))
+	float PlayerPushForce = 250.f;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Damage", meta = (AllowPrivateAccess = "true"))
+	float DamageToPlayer = 5.f;
+
+	//the engine sound file
+	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	USoundBase* AttackPlayerSound;
+
+	float TargetSpeed = 0.0f;
+	float RollingAverageTargetSpeed = 0.0f;
+
+	float TimeSinceLastNavUpdate = 0.0f;
+
+	float PlayerMinSpeed = 30.0f;
+
+	void UpdateSpeed(float DeltaTime);
+	void RotateToGround(float DeltaTime);
+	void PathfindToPoint(float DeltaTime);
+	void HitByPlayer();
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit );
+
+	void LogError(const FString& ErrorMessage);
 };

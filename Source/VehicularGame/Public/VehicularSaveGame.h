@@ -14,13 +14,13 @@ public:
 
 	// Total resources the player has successfully banked in the city.
 	UPROPERTY(BlueprintReadWrite, Category = "Save Data | Inventory")
-	int32 BankedScrap;
+	int32 BankedCommonLoot;
 
 	UPROPERTY(BlueprintReadWrite, Category = "Save Data | Inventory")
-	int32 BankedComponents;
+	int32 BankedUncommonLoot;
 
 	UPROPERTY(BlueprintReadWrite, Category = "Save Data | Inventory")
-	int32 BankedRelics;
+	int32 BankedRareLoot;
 
 	// Stores the remaining resource count for each ruin in the level.
 	// We use the ruin's unique actor name (FName) as the key.
