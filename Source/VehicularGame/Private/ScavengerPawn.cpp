@@ -1,0 +1,77 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "ScavengerPawn.h"
+
+void AScavengerPawn::LogError(const FString& ErrorMessage)
+{
+	//if we have the engine pointer, we print to the screen
+	if(GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, ErrorMessage);
+	}
+	//otherwise, we print to the log
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *ErrorMessage);
+	}
+}
+
+
+// Sets default values
+AScavengerPawn::AScavengerPawn()
+{
+ 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+
+}
+
+// Called when the game starts or when spawned
+void AScavengerPawn::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//get a reference to the ai controller
+	AIController = Cast<AAIController>(GetController());
+	if(!AIController)
+	{
+		LogError("Failed to get AI Controller in Scavenger");
+	}
+}
+
+// Called every frame
+void AScavengerPawn::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
+// Called to bind functionality to input
+void AScavengerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+}
+
+void AScavengerPawn::SetActive()
+{
+	//ADD VISIBILITY CODE HERE
+	SetActorTickEnabled(true);
+}
+
+void AScavengerPawn::SetActive(const FVector& SpawnPos)
+{
+	SetActive();
+
+	SetActorLocation(SpawnPos);
+}
+
+void AScavengerPawn::SetInactive()
+{
+	//ADD VISIBILITY CODE HERE
+	SetActorTickEnabled(false);
+}
+
+
+
+
