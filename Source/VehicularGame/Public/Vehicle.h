@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "Vehicle.generated.h"
 
+class AScavengerPawn;
 class AVehicularGameState;
 class AVehicularGameMode;
 class ARuin;
@@ -107,6 +108,9 @@ private:
 	//cooldown between hits
 	UPROPERTY(EditDefaultsOnly, Category = "Shooting | Balancing", meta = (AllowPrivateAccess = "true"))
 	float HitCooldown = 0.75f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Scavengers", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AScavengerPawn> ScavengerClass = nullptr;
 	
 	//how long extractions take
 	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))

@@ -38,6 +38,9 @@ public:
 	//returns the type of resource this ruin contains
 	EResourceType GetResourceType() const;
 
+	//returns the position of the enterance of the ruin
+	FVector GetEnteranceLocation() const;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -77,8 +80,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	USphereComponent* SphereCollider = nullptr;
 
+	UPROPERTY(EditDefaultsOnly)
+	USceneComponent* RuinEnteranceLocation = nullptr;
+
 private:
-	void LogError(const FString& ErrorMessage);
+	void LogError(const FString& ErrorMessage) const;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

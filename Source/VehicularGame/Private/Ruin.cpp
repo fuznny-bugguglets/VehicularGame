@@ -7,7 +7,7 @@
 #include "Components/SphereComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
-void ARuin::LogError(const FString& ErrorMessage)
+void ARuin::LogError(const FString& ErrorMessage) const
 {
 	//if we have the engine pointer, we print to the screen
 	if(GEngine)
@@ -33,6 +33,7 @@ ARuin::ARuin()
 	RuinMeshRare = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ruin Mesh Rare"));
 	ExtractionRingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Extraction Ring Mesh"));
 	SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("Extraction Radius"));
+	RuinEnteranceLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Ruin Enterance Location"));
 
 	//setup attachments
 	RuinMeshCommon->SetupAttachment(RootComponent);
@@ -40,6 +41,7 @@ ARuin::ARuin()
 	RuinMeshRare->SetupAttachment(RuinMeshCommon);
 	ExtractionRingMesh->SetupAttachment(RuinMeshCommon);
 	SphereCollider->SetupAttachment(RuinMeshCommon);
+	RuinEnteranceLocation->SetupAttachment(RuinMeshCommon);
 
 	
 	
@@ -166,4 +168,14 @@ EResourceType ARuin::GetResourceType() const
 int32 ARuin::GetInitialResourceAmount() const
 {
 	return StartingResourceAmount;
+}
+
+FVector ARuin::GetEnteranceLocation() const
+{
+	if(!RuinEnteranceLocation)
+	{
+		LogError("failed to access ruin enterance location");
+		return FVector(0.0f);
+	}
+	return RuinEnteranceLocation->GetComponentLocation();
 }

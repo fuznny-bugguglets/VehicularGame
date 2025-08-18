@@ -2,6 +2,7 @@
 
 
 #include "ScavengerPawn.h"
+#include "AIController.h"
 
 void AScavengerPawn::LogError(const FString& ErrorMessage)
 {
@@ -37,6 +38,8 @@ void AScavengerPawn::BeginPlay()
 	{
 		LogError("Failed to get AI Controller in Scavenger");
 	}
+
+	
 }
 
 // Called every frame

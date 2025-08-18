@@ -13,6 +13,7 @@
 #include "Components/AudioComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "ScavengerPawn.h"
 
 //handy shortcut to displaying things when shit goes wrong
 void AVehicle::LogError(const FString& ErrorMessage)
@@ -126,6 +127,12 @@ void AVehicle::BeginPlay()
 	Health = MaxHealth;
 
 	ResetAllLoot();
+
+	//check we have scavengers
+	if(!ScavengerClass)
+	{
+		LogError("Scavenger class not set in vehicle");
+	}
 }
 
 // Called every frame
@@ -322,6 +329,7 @@ void AVehicle::OnLook(const FInputActionValue& Value)
 //when the player moves
 void AVehicle::OnMove(const FInputActionValue& Value)
 {
+	
 	//get the vec2 out of the input
 	FVector2D InputVector = Value.Get<FVector2D>();
 	
