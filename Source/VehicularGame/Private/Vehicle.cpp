@@ -49,6 +49,7 @@ AVehicle::AVehicle()
 	FrontRightWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Front Right Wheel Mesh"));
 	BackLeftWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Back Left Wheel Mesh"));
 	BackRightWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Back Right Wheel Mesh"));
+	DoorLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Door Location"));
 	VehicleMesh->SetupAttachment(RootComponent);
 	SpringArm->SetupAttachment(VehicleMesh);
 	Camera->SetupAttachment(SpringArm);
@@ -61,6 +62,7 @@ AVehicle::AVehicle()
 	FrontRightWheelMesh->SetupAttachment(FrontRightWheel);
 	BackLeftWheelMesh->SetupAttachment(BackLeftWheel);
 	BackRightWheelMesh->SetupAttachment(BackRightWheel);
+	DoorLocation->SetupAttachment(VehicleMesh);
 
 
 	
@@ -210,6 +212,11 @@ void AVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 			LogError("Engine shift down Action wasn't set in Vehicle");
 			return;
 		}
+		if(OpenDoorAction == nullptr)
+		{
+			LogError("Open door action not set in vehicle");
+			return;
+		}
 		
 		//bind the inputs
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AVehicle::OnLook);
@@ -225,6 +232,7 @@ void AVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		EnhancedInputComponent->BindAction(EngineShiftUpAction, ETriggerEvent::Ongoing, this, &AVehicle::OnEngineShiftUpOnGoing);
 		EnhancedInputComponent->BindAction(EngineShiftUpAction, ETriggerEvent::Canceled, this, &AVehicle::OnEngineShiftUpStop);
 		EnhancedInputComponent->BindAction(EngineShiftDownAction, ETriggerEvent::Triggered, this, &AVehicle::OnEngineShiftDown);
+		EnhancedInputComponent->BindAction(OpenDoorAction, ETriggerEvent::Triggered, this, &AVehicle::OnOpenDoor);
 	}
 	else
 	{
@@ -623,6 +631,44 @@ void AVehicle::OnEngineShiftDown(const FInputActionValue& Value)
 	}
 }
 
+void AVehicle::OnOpenDoor(const FInputActionValue& Value)
+{
+	//dont do anything if we aren't near a ruin
+	if(!OverlappingRuin && !bIsDoorOpen)
+	{
+		LogError("Not near ruin, door will remain shut");
+		return;
+	}
+
+	bIsDoorOpen = !bIsDoorOpen;
+
+	if(bIsDoorOpen)
+	{
+		LogError("Door Opened");
+		const FVector DoorVector = DoorLocation->GetComponentLocation();
+		const FRotator MyRotation = GetActorRotation();
+		AActor* MyScavyActor = GetWorld()->SpawnActor(ScavengerClass, &DoorVector, &MyRotation);
+		MyScavenger = Cast<AScavengerPawn>(MyScavyActor);
+		if(!MyScavenger)
+		{
+			LogError("failed to get scavenger class from spawned instance");
+			return;
+		}
+		MyScavenger->MoveTo(OverlappingRuin->GetEnteranceLocation());
+	}
+	else
+	{
+		LogError("Door Closed");
+		if(MyScavenger)
+		{
+			MyScavenger->Destroy();
+		}
+	}
+	
+	 
+}
+
+
 //when damage is dealt to us
 void AVehicle::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
@@ -981,9 +1027,9 @@ float AVehicle::GetElapsedExtractionTime() const
 
 float AVehicle::GetTotalExtractionTime() const
 {
-	if(!OverlappingRuin)
+	if(OverlappingRuin == nullptr)
 	{
-		return 0.0f;
+		return 1.0f;
 	}
 
 	switch (OverlappingRuin->GetResourceType())
@@ -996,7 +1042,7 @@ float AVehicle::GetTotalExtractionTime() const
 		return ExtractionTimePerRare;
 	}
 
-	return 0.0f;
+	return 3.0f;
 }
 
 

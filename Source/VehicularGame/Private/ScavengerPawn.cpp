@@ -3,6 +3,9 @@
 
 #include "ScavengerPawn.h"
 #include "AIController.h"
+#include "Ruin.h"
+#include "Vehicle.h"
+#include "GameFramework/CharacterMovementComponent.h" // For character movement
 
 void AScavengerPawn::LogError(const FString& ErrorMessage)
 {
@@ -56,25 +59,33 @@ void AScavengerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
-void AScavengerPawn::SetActive()
+
+void AScavengerPawn::MoveTo(const FVector& TargetLocation)
 {
-	//ADD VISIBILITY CODE HERE
-	SetActorTickEnabled(true);
+	if(!AIController)
+	{
+		LogError("Failed to get AI Controller in Scavenger");
+		return;
+	}
+
+	AIController->MoveToLocation(TargetLocation);
 }
 
-void AScavengerPawn::SetActive(const FVector& SpawnPos)
+void AScavengerPawn::SetLocations(ARuin* InputRuin, AVehicle* InputVehicle)
 {
-	SetActive();
-
-	SetActorLocation(SpawnPos);
+	SetRuin(InputRuin);
+	SetVehicle(InputVehicle);
 }
 
-void AScavengerPawn::SetInactive()
+void AScavengerPawn::SetRuin(ARuin* InputRuin)
 {
-	//ADD VISIBILITY CODE HERE
-	SetActorTickEnabled(false);
+	MyRuin = InputRuin;
 }
 
+void AScavengerPawn::SetVehicle(AVehicle* InputVehicle)
+{
+	MyVehicle = InputVehicle;
+}
 
 
 

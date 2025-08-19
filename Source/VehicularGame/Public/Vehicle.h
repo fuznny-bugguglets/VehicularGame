@@ -169,6 +169,8 @@ private:
 	//input for shifting the engine down
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputAction* EngineShiftDownAction;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* OpenDoorAction;
 	
 
 	//reference to the instance of the engine sound
@@ -255,6 +257,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* BackRightWheelMesh;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USceneComponent* DoorLocation;
+
 	//current state of the engine
 	EEngineState CurrentEngineState = EEngineState::OFF;
 
@@ -265,6 +270,9 @@ private:
 	//whether the engine is being held
 	bool bShiftUpHeld = false;
 	bool bShiftDownHeld = false;
+
+	bool bIsDoorOpen = false;
+	AScavengerPawn* MyScavenger = nullptr;
 
 	//the ruin we are currently overlapping with
 	ARuin* OverlappingRuin = nullptr;
@@ -310,6 +318,8 @@ private:
 	void OnEngineShiftUpStop(const struct FInputActionValue& Value);
 	UFUNCTION()
 	void OnEngineShiftDown(const struct FInputActionValue& Value);
+	UFUNCTION()
+	void OnOpenDoor(const struct FInputActionValue& Value);
 	//when the player is dealt damage
 	UFUNCTION()
 	void OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
