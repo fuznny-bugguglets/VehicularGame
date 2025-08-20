@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ruin.h"
 #include "GameFramework/Pawn.h"
 #include "Vehicle.generated.h"
 
@@ -15,6 +16,9 @@ class USpringArmComponent;
 class AGSScavenger;
 class UInputAction;
 class UCustomWheelComponent;
+class UCameraComponent;
+class UAudioComponent;
+class UCurveFloat;
 
 UENUM()
 enum class EEngineState : uint8
@@ -55,6 +59,7 @@ public:
 	void SetUncommonLootCount(int32 NewValue);
 	void SetRareLootCount(int32 NewValue);
 
+	void IncrementLootCount(EResourceType GivenType);
 	void IncrementCommonLootCount();
 	void IncrementUncommonLootCount();
 	void IncrementRareLootCount();
@@ -75,6 +80,8 @@ public:
 	EEngineState GetEngineState() const;
 
 	UStaticMeshComponent* GetStaticMesh() const;
+
+	FVector GetDoorLocation() const;
  
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Torque", meta = (AllowPrivateAccess = "true"))
@@ -113,11 +120,11 @@ private:
 	TSubclassOf<AScavengerPawn> ScavengerClass = nullptr;
 	
 	//how long extractions take
-	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Depricated (Do Not Use)", meta = (AllowPrivateAccess = "true"))
 	float ExtractionTimePerCommon = 8.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Depricated (Do Not Use)", meta = (AllowPrivateAccess = "true"))
 	float ExtractionTimePerUncommon = 12.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Depricated (Do Not Use)", meta = (AllowPrivateAccess = "true"))
 	float ExtractionTimePerRare = 16.0f;
 
 	//the max health we can have

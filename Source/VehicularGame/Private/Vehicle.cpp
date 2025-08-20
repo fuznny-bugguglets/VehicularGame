@@ -14,6 +14,9 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "ScavengerPawn.h"
+#include "Camera/CameraComponent.h"
+#include "Components/AudioComponent.h"
+#include "Curves/CurveFloat.h"
 
 //handy shortcut to displaying things when shit goes wrong
 void AVehicle::LogError(const FString& ErrorMessage)
@@ -654,7 +657,9 @@ void AVehicle::OnOpenDoor(const FInputActionValue& Value)
 			LogError("failed to get scavenger class from spawned instance");
 			return;
 		}
-		MyScavenger->MoveTo(OverlappingRuin->GetEnteranceLocation());
+		MyScavenger->SetRuin(OverlappingRuin);
+		MyScavenger->SetVehicle(this);
+		MyScavenger->GoToRuin();
 	}
 	else
 	{
@@ -858,18 +863,9 @@ void AVehicle::ExtractOneUnit()
 	OverlappingRuin->TakeOneResource();
 
 	//increment count based on resource type
-	switch (OverlappingRuin->GetResourceType())
-	{
-	case EResourceType::COMMON:
-		IncrementCommonLootCount();
-		break;
-	case EResourceType::UNCOMMON:
-		IncrementUncommonLootCount();
-		break;
-	case EResourceType::RARE:
-		IncrementRareLootCount();
-		break;
-	}
+	IncrementLootCount(OverlappingRuin->GetResourceType());
+
+	
 
 	//did we take everything?
 	if(OverlappingRuin->GetResourceAmount() <= 0)
@@ -1005,6 +1001,23 @@ bool AVehicle::IsHandbrakeActive() const
 	return bHandbrakeActive;
 }
 
+void AVehicle::IncrementLootCount(EResourceType GivenType)
+{
+	switch (GivenType)
+	{
+	case EResourceType::COMMON:
+		IncrementCommonLootCount();
+		break;
+	case EResourceType::UNCOMMON:
+		IncrementUncommonLootCount();
+		break;
+	case EResourceType::RARE:
+		IncrementRareLootCount();
+		break;
+	}
+}
+
+
 void AVehicle::IncrementCommonLootCount()
 {
 	SetCommonLootCount(CommonLootCount + 1);
@@ -1046,3 +1059,7 @@ float AVehicle::GetTotalExtractionTime() const
 }
 
 
+FVector AVehicle::GetDoorLocation() const
+{
+	return DoorLocation->GetComponentLocation();
+}

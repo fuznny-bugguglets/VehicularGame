@@ -149,13 +149,16 @@ int32 ARuin::GetResourceAmount() const
 }
 
 //lowers the resource count by one
-void ARuin::TakeOneResource()
+EResourceType ARuin::TakeOneResource()
 {
 	//lowers resource by one
 	ResourceAmount--;
 
 	//runs a check to see if we have resources left
 	UpdateBubble();
+
+	//returns the type of resource taken
+	return ResourceType;
 }
 
 //returns the type of resource this ruin has
@@ -178,4 +181,19 @@ FVector ARuin::GetEnteranceLocation() const
 		return FVector(0.0f);
 	}
 	return RuinEnteranceLocation->GetComponentLocation();
+}
+
+float ARuin::GetExtractionTime() const
+{
+	switch (ResourceType)
+	{
+	case EResourceType::COMMON:
+		return ExtractionTimePerCommon;
+	case EResourceType::UNCOMMON:
+		return ExtractionTimePerCommon;
+	case EResourceType::RARE:
+		return ExtractionTimePerCommon;
+	}
+
+	return 999.0f;
 }
