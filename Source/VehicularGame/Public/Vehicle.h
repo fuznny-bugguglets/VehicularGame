@@ -82,6 +82,8 @@ public:
 	UStaticMeshComponent* GetStaticMesh() const;
 
 	FVector GetDoorLocation() const;
+
+	void ReturnScavenger(AScavengerPawn* Scavenger);
  
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Torque", meta = (AllowPrivateAccess = "true"))
@@ -115,6 +117,19 @@ private:
 	//cooldown between hits
 	UPROPERTY(EditDefaultsOnly, Category = "Shooting | Balancing", meta = (AllowPrivateAccess = "true"))
 	float HitCooldown = 0.75f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Scavengers", meta = (AllowPrivateAccess = "true"))
+	int ScavengerCount = 3;
+
+	//how many seconds between each scavenger exiting the truck
+	UPROPERTY(EditDefaultsOnly, Category = "Scavengers", meta = (AllowPrivateAccess = "true"))
+	float ScavengerExitTime = 0.5f;
+
+	float ElapsedScavengerExitTime = 0.0f;
+
+	//active scavengers
+	UPROPERTY()
+	TArray<AScavengerPawn*> ActiveScavengers;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Scavengers", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AScavengerPawn> ScavengerClass = nullptr;
@@ -279,7 +294,6 @@ private:
 	bool bShiftDownHeld = false;
 
 	bool bIsDoorOpen = false;
-	AScavengerPawn* MyScavenger = nullptr;
 
 	//the ruin we are currently overlapping with
 	ARuin* OverlappingRuin = nullptr;
@@ -363,7 +377,7 @@ private:
 	void UpdateWorldSpeed(float DeltaTime);
 	void UpdateTimeSinceLastHit(float DeltaTime);
 
-	
+	void SpawnScavengers(const float DeltaTime);
 
 	void LogError(const FString& ErrorMessage);
 };

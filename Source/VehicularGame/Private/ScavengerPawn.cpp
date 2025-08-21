@@ -4,6 +4,7 @@
 #include "ScavengerPawn.h"
 #include "AIController.h"
 #include "Vehicle.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h" // For character movement
 
 void AScavengerPawn::LogError(const FString& ErrorMessage)
@@ -84,6 +85,9 @@ void AScavengerPawn::DoTravelToRuin()
 	{
 		LogError("arrived at ruin entrance location");
 		ElapsedScavengeTime = 0.0f;
+
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 		CurrentBehaviour = EScavengerBehaviourState::SCAVENGING;
 	}
 	
@@ -133,6 +137,9 @@ void AScavengerPawn::DoTravelToTruck()
 		return;
 	}
 
+	//update target position
+	GoToTruck();
+
 	//are we close enough to the truck door?
 	if (FVector::DistSquared(GetActorLocation(), MyVehicle->GetDoorLocation()) <= TargetTolerance * TargetTolerance)
 	{
@@ -154,8 +161,8 @@ void AScavengerPawn::DoTravelToTruck()
 			}
 		}
 
-		ElapsedScavengeTime = 0.0f;
-		CurrentBehaviour = EScavengerBehaviourState::IDLE;
+		MyVehicle->ReturnScavenger(this);
+
 	}
 }
 
@@ -219,6 +226,8 @@ void AScavengerPawn::GoToRuin()
 void AScavengerPawn::GoToTruck()
 {
 	CurrentBehaviour = EScavengerBehaviourState::TRAVELLING_TO_TRUCK;
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
 	if (!MyVehicle)
 	{
