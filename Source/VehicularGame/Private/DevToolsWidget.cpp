@@ -48,3 +48,14 @@ void UDevToolsWidget::ForceSpawnEnemyWave()
 
 	
 }
+
+void UDevToolsWidget::InfiniteHealth()
+{
+	if (!Vehicle)
+	{
+		return;
+	}
+
+	Vehicle->SetHealth(99999);
+}
+

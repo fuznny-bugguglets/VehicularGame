@@ -23,6 +23,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ForceSpawnEnemyWave();
 
+	UFUNCTION(BlueprintCallable)
+	void InfiniteHealth();
+
 protected:
 	virtual void NativeConstruct() override;
 

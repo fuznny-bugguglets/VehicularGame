@@ -1014,6 +1014,12 @@ float AVehicle::GetMaxHealth() const
 	return MaxHealth;
 }
 
+void AVehicle::SetHealth(int32 NewHealth)
+{
+	Health = NewHealth;
+}
+
+
 EEngineState AVehicle::GetEngineState() const
 {
 	return CurrentEngineState;

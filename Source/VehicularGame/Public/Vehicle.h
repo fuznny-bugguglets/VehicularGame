@@ -74,6 +74,7 @@ public:
 
 	float GetHealth() const;
 	float GetMaxHealth() const;
+	void SetHealth(int32 NewHealth);
 
 	bool IsHandbrakeActive() const;
 
