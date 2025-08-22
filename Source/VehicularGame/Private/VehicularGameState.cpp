@@ -25,6 +25,7 @@ AVehicularGameState::AVehicularGameState()
 	
 }
 
+
 void AVehicularGameState::UpdateDifficulty(float VibrationLevel, float DeltaTime)
 {
 	// This formula increases difficulty based on player-generated vibrations.
@@ -44,6 +45,18 @@ void AVehicularGameState::UpdateDifficulty(float VibrationLevel, float DeltaTime
 	VehicularGameMode->UpdateCurrentNoise(VibrationLevel);
 	VehicularGameMode->UpdateCurrentDifficulty(Difficulty);
 }
+
+void AVehicularGameState::IncrementDifficulty()
+{
+	Difficulty++;
+}
+
+void AVehicularGameState::DecrementDifficulty()
+{
+	Difficulty--;
+}
+
+
 
 float AVehicularGameState::GetAdditionalMaxSpeed() const
 {

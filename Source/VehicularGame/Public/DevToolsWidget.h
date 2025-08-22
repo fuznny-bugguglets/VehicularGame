@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "DevToolsWidget.generated.h"
 
+class AVehicularGameState;
 class AVehicularGameMode;
 class AVehicle;
 /**
@@ -26,12 +27,24 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void InfiniteHealth();
 
+	UFUNCTION(BlueprintCallable)
+	void TeleportToPOI();
+
+	UFUNCTION(BlueprintCallable)
+	void IncreaseDifficulty();
+
+	UFUNCTION(BlueprintCallable)
+	void DecreaseDifficulty();
+
 protected:
 	virtual void NativeConstruct() override;
 
 private:
 	UPROPERTY()
 	AVehicularGameMode* VehicularGameMode = nullptr;
+
+	UPROPERTY()
+	AVehicularGameState* VehicularGameState = nullptr;
 	
 	UPROPERTY()
 	AVehicle* Vehicle = nullptr;

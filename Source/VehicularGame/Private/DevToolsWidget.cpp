@@ -5,11 +5,13 @@
 
 #include "Vehicle.h"
 #include "VehicularGameMode.h"
+#include "VehicularGameState.h"
 #include "Kismet/GameplayStatics.h"
 
 void UDevToolsWidget::NativeConstruct()
 {
 	VehicularGameMode = Cast<AVehicularGameMode>(UGameplayStatics::GetGameMode(this));
+	VehicularGameState = Cast<AVehicularGameState>(UGameplayStatics::GetGameState(this));
 	Vehicle = Cast<AVehicle>(UGameplayStatics::GetPlayerPawn(this, 0));
 }
 
@@ -58,4 +60,46 @@ void UDevToolsWidget::InfiniteHealth()
 
 	Vehicle->SetHealth(99999);
 }
+
+void UDevToolsWidget::TeleportToPOI()
+{
+	if (!Vehicle)
+	{
+		return;
+	}
+
+	TArray<AActor*> POIs;
+	UGameplayStatics::GetAllActorsOfClass(this, ARuin::StaticClass(), POIs);
+	if (POIs.Num() <= 0)
+	{
+		return;
+	}
+
+	int32 RandIndex = FMath::RandRange(0, (POIs.Num()-1));
+
+	FVector NewLocation = POIs[RandIndex]->GetActorLocation();
+	NewLocation += FVector(2000);
+	Vehicle->SetActorLocation(NewLocation);
+}
+
+void UDevToolsWidget::IncreaseDifficulty()
+{
+	if (!VehicularGameState)
+	{
+		return;
+	}
+
+	VehicularGameState->IncrementDifficulty();
+}
+
+void UDevToolsWidget::DecreaseDifficulty()
+{
+	if (!VehicularGameState)
+	{
+		return;
+	}
+
+	VehicularGameState->DecrementDifficulty();
+}
+
 
