@@ -661,8 +661,21 @@ void AVehicle::OnEngineShiftDown(const FInputActionValue& Value)
 
 void AVehicle::OnOpenDoor(const FInputActionValue& Value)
 {
+	//is the door currently open?
+	if (bIsDoorOpen)
+	{
+		bIsDoorOpen = false;
+		LogError("Door Closed");
+		for (int32 i = 0; i < ActiveScavengers.Num(); i++)
+		{
+			ActiveScavengers[i]->SetRuin(nullptr);
+			ActiveScavengers[i]->GoToTruck();
+		}
+		return;
+	}
+
 	//dont do anything if we aren't near a ruin
-	if(!OverlappingRuin && !bIsDoorOpen)
+	if(!OverlappingRuin)
 	{
 		LogError("Not near ruin, door will remain shut");
 		return;
@@ -674,29 +687,10 @@ void AVehicle::OnOpenDoor(const FInputActionValue& Value)
 		return;
 	}
 
-	bIsDoorOpen = !bIsDoorOpen;
-
-	if(bIsDoorOpen)
-	{
-		
-
-		LogError("Door Opened");
-
-		ElapsedScavengerExitTime = ScavengerExitTime;
-
-		
-	}
-	else
-	{
-		LogError("Door Closed");
-		for (int32 i = 0; i < ActiveScavengers.Num(); i++)
-		{
-			ActiveScavengers[i]->SetRuin(nullptr);
-			ActiveScavengers[i]->GoToTruck();
-		}
-	}
-	
-	 
+	//open the door
+	bIsDoorOpen = true;
+	LogError("Door Opened");
+	ElapsedScavengerExitTime = ScavengerExitTime;
 }
 
 
