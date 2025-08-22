@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "DevToolsWidget.generated.h"
 
+class AVehicularGameMode;
 class AVehicle;
 /**
  * 
@@ -19,10 +20,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void GiveInfiniteResources();
 
+	UFUNCTION(BlueprintCallable)
+	void ForceSpawnEnemyWave();
+
 protected:
 	virtual void NativeConstruct() override;
 
 private:
 	UPROPERTY()
-	AVehicle* Vehicle;
+	AVehicularGameMode* VehicularGameMode = nullptr;
+	
+	UPROPERTY()
+	AVehicle* Vehicle = nullptr;
 };
