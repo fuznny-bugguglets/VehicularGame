@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ruin.h"
 #include "GameFramework/Pawn.h"
 #include "Vehicle.generated.h"
 
+class AScavengerPawn;
 class AVehicularGameState;
 class AVehicularGameMode;
 class ARuin;
@@ -14,6 +16,9 @@ class USpringArmComponent;
 class AGSScavenger;
 class UInputAction;
 class UCustomWheelComponent;
+class UCameraComponent;
+class UAudioComponent;
+class UCurveFloat;
 
 UENUM()
 enum class EEngineState : uint8
@@ -54,6 +59,7 @@ public:
 	void SetUncommonLootCount(int32 NewValue);
 	void SetRareLootCount(int32 NewValue);
 
+	void IncrementLootCount(EResourceType GivenType);
 	void IncrementCommonLootCount();
 	void IncrementUncommonLootCount();
 	void IncrementRareLootCount();
@@ -74,6 +80,10 @@ public:
 	EEngineState GetEngineState() const;
 
 	UStaticMeshComponent* GetStaticMesh() const;
+
+	FVector GetDoorLocation() const;
+
+	void ReturnScavenger(AScavengerPawn* Scavenger);
  
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Torque", meta = (AllowPrivateAccess = "true"))
@@ -107,13 +117,29 @@ private:
 	//cooldown between hits
 	UPROPERTY(EditDefaultsOnly, Category = "Shooting | Balancing", meta = (AllowPrivateAccess = "true"))
 	float HitCooldown = 0.75f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Scavengers", meta = (AllowPrivateAccess = "true"))
+	int ScavengerCount = 3;
+
+	//how many seconds between each scavenger exiting the truck
+	UPROPERTY(EditDefaultsOnly, Category = "Scavengers", meta = (AllowPrivateAccess = "true"))
+	float ScavengerExitTime = 0.5f;
+
+	float ElapsedScavengerExitTime = 0.0f;
+
+	//active scavengers
+	UPROPERTY()
+	TArray<AScavengerPawn*> ActiveScavengers;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Scavengers", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AScavengerPawn> ScavengerClass = nullptr;
 	
 	//how long extractions take
-	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Depricated (Do Not Use)", meta = (AllowPrivateAccess = "true"))
 	float ExtractionTimePerCommon = 8.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Depricated (Do Not Use)", meta = (AllowPrivateAccess = "true"))
 	float ExtractionTimePerUncommon = 12.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Depricated (Do Not Use)", meta = (AllowPrivateAccess = "true"))
 	float ExtractionTimePerRare = 16.0f;
 
 	//the max health we can have
@@ -165,6 +191,8 @@ private:
 	//input for shifting the engine down
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputAction* EngineShiftDownAction;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* OpenDoorAction;
 	
 
 	//reference to the instance of the engine sound
@@ -251,6 +279,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* BackRightWheelMesh;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USceneComponent* DoorLocation;
+
 	//current state of the engine
 	EEngineState CurrentEngineState = EEngineState::OFF;
 
@@ -261,6 +292,8 @@ private:
 	//whether the engine is being held
 	bool bShiftUpHeld = false;
 	bool bShiftDownHeld = false;
+
+	bool bIsDoorOpen = false;
 
 	//the ruin we are currently overlapping with
 	ARuin* OverlappingRuin = nullptr;
@@ -306,6 +339,8 @@ private:
 	void OnEngineShiftUpStop(const struct FInputActionValue& Value);
 	UFUNCTION()
 	void OnEngineShiftDown(const struct FInputActionValue& Value);
+	UFUNCTION()
+	void OnOpenDoor(const struct FInputActionValue& Value);
 	//when the player is dealt damage
 	UFUNCTION()
 	void OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
@@ -342,7 +377,7 @@ private:
 	void UpdateWorldSpeed(float DeltaTime);
 	void UpdateTimeSinceLastHit(float DeltaTime);
 
-	
+	void SpawnScavengers(const float DeltaTime);
 
 	void LogError(const FString& ErrorMessage);
 };

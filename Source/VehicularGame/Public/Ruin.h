@@ -13,7 +13,8 @@ enum class EResourceType : uint8
 {
 	COMMON UMETA(DisplayName = "Common"),
 	UNCOMMON UMETA(DisplayName = "Uncommon"),
-	RARE UMETA(DisplayName = "Rare")
+	RARE UMETA(DisplayName = "Rare"),
+	NULLRESOURCE UMETA(DisplayName = "Null")
 };
 
 UCLASS()
@@ -33,10 +34,17 @@ public:
 	int32 GetInitialResourceAmount() const;
 
 	//lowers the resource count by one
-	void TakeOneResource();
+	EResourceType TakeOneResource();
 
 	//returns the type of resource this ruin contains
 	EResourceType GetResourceType() const;
+
+	//returns the position of the enterance of the ruin
+	FVector GetEnteranceLocation() const;
+
+	//returns how long it takes to take a resource
+	UFUNCTION(BlueprintCallable)
+	float GetExtractionTime() const;
 
 protected:
 	// Called when the game starts or when spawned
@@ -77,8 +85,20 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	USphereComponent* SphereCollider = nullptr;
 
+	UPROPERTY(EditDefaultsOnly)
+	USceneComponent* RuinEnteranceLocation = nullptr;
+
 private:
-	void LogError(const FString& ErrorMessage);
+	void LogError(const FString& ErrorMessage) const;
+
+
+	//how long extractions take
+	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
+	float ExtractionTimePerCommon = 8.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
+	float ExtractionTimePerUncommon = 12.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
+	float ExtractionTimePerRare = 16.0f;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

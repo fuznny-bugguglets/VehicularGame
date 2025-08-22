@@ -13,6 +13,10 @@
 #include "Components/AudioComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "ScavengerPawn.h"
+#include "Camera/CameraComponent.h"
+#include "Components/AudioComponent.h"
+#include "Curves/CurveFloat.h"
 
 //handy shortcut to displaying things when shit goes wrong
 void AVehicle::LogError(const FString& ErrorMessage)
@@ -48,6 +52,7 @@ AVehicle::AVehicle()
 	FrontRightWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Front Right Wheel Mesh"));
 	BackLeftWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Back Left Wheel Mesh"));
 	BackRightWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Back Right Wheel Mesh"));
+	DoorLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Door Location"));
 	VehicleMesh->SetupAttachment(RootComponent);
 	SpringArm->SetupAttachment(VehicleMesh);
 	Camera->SetupAttachment(SpringArm);
@@ -60,6 +65,7 @@ AVehicle::AVehicle()
 	FrontRightWheelMesh->SetupAttachment(FrontRightWheel);
 	BackLeftWheelMesh->SetupAttachment(BackLeftWheel);
 	BackRightWheelMesh->SetupAttachment(BackRightWheel);
+	DoorLocation->SetupAttachment(VehicleMesh);
 
 
 	
@@ -126,6 +132,14 @@ void AVehicle::BeginPlay()
 	Health = MaxHealth;
 
 	ResetAllLoot();
+
+	//check we have scavengers
+	if(!ScavengerClass)
+	{
+		LogError("Scavenger class not set in vehicle");
+	}
+
+	ActiveScavengers.Empty();
 }
 
 // Called every frame
@@ -141,6 +155,29 @@ void AVehicle::Tick(float DeltaTime)
 	UpdateWorldSpeed(DeltaTime);
 	UpdateTimeSinceLastHit(DeltaTime);
 	SetEngineSoundValues();
+
+	
+	if (bIsDoorOpen)
+	{
+		//if the overlapping ruin doesn't have resources, the door should be shut
+		if (OverlappingRuin)
+		{
+			if (OverlappingRuin->GetResourceAmount() <= 0)
+			{
+				bIsDoorOpen = false;
+			}
+		}
+
+		//are there scavengers in the truck that should leave?
+		if (ScavengerCount > 0)
+		{
+			SpawnScavengers(DeltaTime);
+		}
+
+		
+	}
+
+	
 }
 
 // Called to bind functionality to input
@@ -203,6 +240,11 @@ void AVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 			LogError("Engine shift down Action wasn't set in Vehicle");
 			return;
 		}
+		if(OpenDoorAction == nullptr)
+		{
+			LogError("Open door action not set in vehicle");
+			return;
+		}
 		
 		//bind the inputs
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AVehicle::OnLook);
@@ -218,6 +260,7 @@ void AVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		EnhancedInputComponent->BindAction(EngineShiftUpAction, ETriggerEvent::Ongoing, this, &AVehicle::OnEngineShiftUpOnGoing);
 		EnhancedInputComponent->BindAction(EngineShiftUpAction, ETriggerEvent::Canceled, this, &AVehicle::OnEngineShiftUpStop);
 		EnhancedInputComponent->BindAction(EngineShiftDownAction, ETriggerEvent::Triggered, this, &AVehicle::OnEngineShiftDown);
+		EnhancedInputComponent->BindAction(OpenDoorAction, ETriggerEvent::Triggered, this, &AVehicle::OnOpenDoor);
 	}
 	else
 	{
@@ -322,6 +365,7 @@ void AVehicle::OnLook(const FInputActionValue& Value)
 //when the player moves
 void AVehicle::OnMove(const FInputActionValue& Value)
 {
+	
 	//get the vec2 out of the input
 	FVector2D InputVector = Value.Get<FVector2D>();
 	
@@ -615,6 +659,41 @@ void AVehicle::OnEngineShiftDown(const FInputActionValue& Value)
 	}
 }
 
+void AVehicle::OnOpenDoor(const FInputActionValue& Value)
+{
+	//is the door currently open?
+	if (bIsDoorOpen)
+	{
+		bIsDoorOpen = false;
+		LogError("Door Closed");
+		for (int32 i = 0; i < ActiveScavengers.Num(); i++)
+		{
+			ActiveScavengers[i]->SetRuin(nullptr);
+			ActiveScavengers[i]->GoToTruck();
+		}
+		return;
+	}
+
+	//dont do anything if we aren't near a ruin
+	if(!OverlappingRuin)
+	{
+		LogError("Not near ruin, door will remain shut");
+		return;
+	}
+
+	//dont do anything if there are no resources
+	if (OverlappingRuin->GetResourceAmount() <= 0)
+	{
+		return;
+	}
+
+	//open the door
+	bIsDoorOpen = true;
+	LogError("Door Opened");
+	ElapsedScavengerExitTime = ScavengerExitTime;
+}
+
+
 //when damage is dealt to us
 void AVehicle::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
@@ -753,6 +832,7 @@ void AVehicle::OnVehicleBeginOverlap(UPrimitiveComponent* OverlappedComponent, A
 			return;
 		}
 		VehicularGameMode->SetRuinOverlap(OverlappingRuin);
+
 	}
 }
 
@@ -778,6 +858,8 @@ void AVehicle::OnVehicleEndOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 			return;
 		}
 		VehicularGameMode->SetRuinOverlap(nullptr);
+
+		
 	}
 	
 	
@@ -804,18 +886,9 @@ void AVehicle::ExtractOneUnit()
 	OverlappingRuin->TakeOneResource();
 
 	//increment count based on resource type
-	switch (OverlappingRuin->GetResourceType())
-	{
-	case EResourceType::COMMON:
-		IncrementCommonLootCount();
-		break;
-	case EResourceType::UNCOMMON:
-		IncrementUncommonLootCount();
-		break;
-	case EResourceType::RARE:
-		IncrementRareLootCount();
-		break;
-	}
+	IncrementLootCount(OverlappingRuin->GetResourceType());
+
+	
 
 	//did we take everything?
 	if(OverlappingRuin->GetResourceAmount() <= 0)
@@ -951,6 +1024,23 @@ bool AVehicle::IsHandbrakeActive() const
 	return bHandbrakeActive;
 }
 
+void AVehicle::IncrementLootCount(EResourceType GivenType)
+{
+	switch (GivenType)
+	{
+	case EResourceType::COMMON:
+		IncrementCommonLootCount();
+		break;
+	case EResourceType::UNCOMMON:
+		IncrementUncommonLootCount();
+		break;
+	case EResourceType::RARE:
+		IncrementRareLootCount();
+		break;
+	}
+}
+
+
 void AVehicle::IncrementCommonLootCount()
 {
 	SetCommonLootCount(CommonLootCount + 1);
@@ -973,9 +1063,9 @@ float AVehicle::GetElapsedExtractionTime() const
 
 float AVehicle::GetTotalExtractionTime() const
 {
-	if(!OverlappingRuin)
+	if(OverlappingRuin == nullptr)
 	{
-		return 0.0f;
+		return 1.0f;
 	}
 
 	switch (OverlappingRuin->GetResourceType())
@@ -988,7 +1078,51 @@ float AVehicle::GetTotalExtractionTime() const
 		return ExtractionTimePerRare;
 	}
 
-	return 0.0f;
+	return 3.0f;
 }
 
 
+FVector AVehicle::GetDoorLocation() const
+{
+	return DoorLocation->GetComponentLocation();
+}
+
+void AVehicle::SpawnScavengers(const float DeltaTime)
+{
+	ElapsedScavengerExitTime += DeltaTime;
+
+	//has enough time passed for a scavenger to spawn?
+	if (ElapsedScavengerExitTime > ScavengerExitTime)
+	{
+		//spawn a scavenger and decrease one from the count
+
+		ElapsedScavengerExitTime = 0.0f;
+
+		const FVector DoorVector = DoorLocation->GetComponentLocation();
+		const FRotator MyRotation = GetActorRotation();
+
+		AActor* MyScavyActor = GetWorld()->SpawnActor(ScavengerClass, &DoorVector, &MyRotation);
+		AScavengerPawn* MyScavy = Cast<AScavengerPawn>(MyScavyActor);
+		if (!MyScavy)
+		{
+			LogError("failed to get scavenger class from spawned instance");
+			return;
+		}
+
+		MyScavy->SetRuin(OverlappingRuin);
+		MyScavy->SetVehicle(this);
+		MyScavy->GoToRuin();
+
+		ActiveScavengers.Add(MyScavy);
+		ScavengerCount--;
+	}
+}
+
+
+void AVehicle::ReturnScavenger(AScavengerPawn* Scavenger)
+{
+	ActiveScavengers.Remove(Scavenger);
+	ScavengerCount++;
+	Scavenger->Destroy();
+	LogError("killed");
+}

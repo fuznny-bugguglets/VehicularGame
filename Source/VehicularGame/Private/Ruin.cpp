@@ -7,7 +7,7 @@
 #include "Components/SphereComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
-void ARuin::LogError(const FString& ErrorMessage)
+void ARuin::LogError(const FString& ErrorMessage) const
 {
 	//if we have the engine pointer, we print to the screen
 	if(GEngine)
@@ -33,6 +33,7 @@ ARuin::ARuin()
 	RuinMeshRare = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ruin Mesh Rare"));
 	ExtractionRingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Extraction Ring Mesh"));
 	SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("Extraction Radius"));
+	RuinEnteranceLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Ruin Enterance Location"));
 
 	//setup attachments
 	RuinMeshCommon->SetupAttachment(RootComponent);
@@ -40,6 +41,7 @@ ARuin::ARuin()
 	RuinMeshRare->SetupAttachment(RuinMeshCommon);
 	ExtractionRingMesh->SetupAttachment(RuinMeshCommon);
 	SphereCollider->SetupAttachment(RuinMeshCommon);
+	RuinEnteranceLocation->SetupAttachment(RuinMeshCommon);
 
 	
 	
@@ -147,13 +149,16 @@ int32 ARuin::GetResourceAmount() const
 }
 
 //lowers the resource count by one
-void ARuin::TakeOneResource()
+EResourceType ARuin::TakeOneResource()
 {
 	//lowers resource by one
 	ResourceAmount--;
 
 	//runs a check to see if we have resources left
 	UpdateBubble();
+
+	//returns the type of resource taken
+	return ResourceType;
 }
 
 //returns the type of resource this ruin has
@@ -166,4 +171,29 @@ EResourceType ARuin::GetResourceType() const
 int32 ARuin::GetInitialResourceAmount() const
 {
 	return StartingResourceAmount;
+}
+
+FVector ARuin::GetEnteranceLocation() const
+{
+	if(!RuinEnteranceLocation)
+	{
+		LogError("failed to access ruin enterance location");
+		return FVector(0.0f);
+	}
+	return RuinEnteranceLocation->GetComponentLocation();
+}
+
+float ARuin::GetExtractionTime() const
+{
+	switch (ResourceType)
+	{
+	case EResourceType::COMMON:
+		return ExtractionTimePerCommon;
+	case EResourceType::UNCOMMON:
+		return ExtractionTimePerCommon;
+	case EResourceType::RARE:
+		return ExtractionTimePerCommon;
+	}
+
+	return 999.0f;
 }
