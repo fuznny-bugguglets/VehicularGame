@@ -34,6 +34,9 @@ public:
     void UpdateCurrentNoise(float Noise);
     void UpdateCurrentDifficulty(float Difficulty);
 
+    void PauseEnemySpawning();
+    void ResumeEnemySpawning();
+
     FVector CreateEnemies(AVehicularGameState* VehicularGameState = nullptr, AActor* PlayerPawn = nullptr);
 
 protected:

@@ -51,6 +51,26 @@ void UDevToolsWidget::ForceSpawnEnemyWave()
 	
 }
 
+void UDevToolsWidget::PauseEnemyWaves()
+{
+	if (!VehicularGameMode)
+	{
+		return;
+	}
+
+	VehicularGameMode->PauseEnemySpawning();
+}
+
+void UDevToolsWidget::ResumeEnemyWaves()
+{
+	if (!VehicularGameMode)
+	{
+		return;
+	}
+
+	VehicularGameMode->ResumeEnemySpawning();
+}
+
 void UDevToolsWidget::InfiniteHealth()
 {
 	if (!Vehicle)
@@ -100,6 +120,26 @@ void UDevToolsWidget::DecreaseDifficulty()
 	}
 
 	VehicularGameState->DecrementDifficulty();
+}
+
+void UDevToolsWidget::IncreaseHealth()
+{
+	if (!Vehicle)
+	{
+		return;
+	}
+
+	Vehicle->IncrementHealth();
+}
+
+void UDevToolsWidget::DecreaseHealth()
+{
+	if (!Vehicle)
+	{
+		return;
+	}
+
+	Vehicle->DecrementHealth();
 }
 
 

@@ -23,7 +23,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ForceSpawnEnemyWave();
-
+	UFUNCTION(BlueprintCallable) 
+	void PauseEnemyWaves();
+	UFUNCTION(BlueprintCallable)
+	void ResumeEnemyWaves();
+	
 	UFUNCTION(BlueprintCallable)
 	void InfiniteHealth();
 
@@ -32,9 +36,13 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void IncreaseDifficulty();
-
 	UFUNCTION(BlueprintCallable)
 	void DecreaseDifficulty();
+
+	UFUNCTION(BlueprintCallable)
+	void IncreaseHealth();
+	UFUNCTION(BlueprintCallable)
+	void DecreaseHealth();
 
 protected:
 	virtual void NativeConstruct() override;

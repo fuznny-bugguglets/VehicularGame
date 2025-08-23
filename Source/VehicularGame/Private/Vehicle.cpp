@@ -1132,3 +1132,14 @@ void AVehicle::ReturnScavenger(AScavengerPawn* Scavenger)
 	Scavenger->Destroy();
 	LogError("killed");
 }
+
+void AVehicle::IncrementHealth()
+{
+	Health += 5;
+}
+
+void AVehicle::DecrementHealth()
+{
+	Health -= 5;
+}
+

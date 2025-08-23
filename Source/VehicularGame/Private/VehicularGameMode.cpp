@@ -302,3 +302,13 @@ FVector AVehicularGameMode::CreateEnemies(AVehicularGameState* VehicularGameStat
 }
 
 
+void AVehicularGameMode::PauseEnemySpawning()
+{
+	GetWorldTimerManager().PauseTimer(SpawnWaveTimerHandle);
+}
+
+void AVehicularGameMode::ResumeEnemySpawning()
+{
+	GetWorldTimerManager().UnPauseTimer(SpawnWaveTimerHandle);
+}
+
