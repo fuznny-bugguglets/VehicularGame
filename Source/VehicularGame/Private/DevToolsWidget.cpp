@@ -8,19 +8,11 @@
 #include "VehicularGameState.h"
 #include "Kismet/GameplayStatics.h"
 
-void UDevToolsWidget::Setup()
-{
-	
-}
-
-
 void UDevToolsWidget::NativeConstruct()
 {
 	VehicularGameMode = Cast<AVehicularGameMode>(UGameplayStatics::GetGameMode(this));
 	VehicularGameState = Cast<AVehicularGameState>(UGameplayStatics::GetGameState(this));
 	Vehicle = Cast<AVehicle>(UGameplayStatics::GetPlayerPawn(this, 0));
-
-	AddCommonResourcesButton->OnClicked.AddDynamic(this, &UDevToolsWidget::OnAddCommonResource);
 }
 
 
@@ -151,7 +143,3 @@ void UDevToolsWidget::DecreaseHealth()
 }
 
 
-void UDevToolsWidget::OnAddCommonResource()
-{
-	
-}
