@@ -86,6 +86,12 @@ void AEnemyCharacter::BeginPlay()
         return;
     }
 
+    if (AttackPlayerConcurrency == nullptr)
+    {
+        LogError("no attack player concurrency set in enemy");
+        return;
+    }
+
     GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AEnemyCharacter::OnOverlap);
     GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &AEnemyCharacter::OnHit);
 
@@ -369,7 +375,8 @@ void AEnemyCharacter::HitByPlayer()
         UGameplayStatics::ApplyDamage(VehicleRef, DamageToPlayer, GetController(), this, DamageType);
 
         //play attack damage sound
-        UGameplayStatics::PlaySound2D(this, AttackPlayerSound);
+        UGameplayStatics::PlaySound2D(this, AttackPlayerSound, 1, 1,
+            0, AttackPlayerConcurrency);
         
         //launch ourselves away from the vehicle
         LaunchCharacter(PushVector, false, false);

@@ -73,6 +73,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
 	USoundBase* AttackPlayerSound;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	USoundConcurrency* AttackPlayerConcurrency = nullptr;
+
 	float TargetSpeed = 0.0f;
 	float RollingAverageTargetSpeed = 0.0f;
 
