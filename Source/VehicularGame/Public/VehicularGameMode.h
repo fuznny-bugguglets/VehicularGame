@@ -5,6 +5,7 @@
 #include "EnemyWaveData.h"
 #include "VehicularGameMode.generated.h"
 
+class AVehicularGameState;
 class UMainHUD;
 class AEnemyCharacter;
 class ARuin;
@@ -32,6 +33,11 @@ public:
 
     void UpdateCurrentNoise(float Noise);
     void UpdateCurrentDifficulty(float Difficulty);
+
+    void PauseEnemySpawning();
+    void ResumeEnemySpawning();
+
+    FVector CreateEnemies(AVehicularGameState* VehicularGameState = nullptr, AActor* PlayerPawn = nullptr);
 
 protected:
     virtual void BeginPlay() override;

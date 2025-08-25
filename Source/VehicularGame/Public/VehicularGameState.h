@@ -23,6 +23,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Game State")
 	void UpdateDifficulty(float VibrationLevel, float DeltaTime);
 
+	//currently just dev commands
+	void IncrementDifficulty();
+	void DecrementDifficulty();
+
 	//gets additional max speed
 	UFUNCTION()
 	float GetAdditionalMaxSpeed() const;
@@ -57,4 +61,5 @@ private:
 
 	UPROPERTY()
 	AVehicularGameMode* VehicularGameMode = nullptr;
+	
 };

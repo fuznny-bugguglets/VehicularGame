@@ -1014,6 +1014,12 @@ float AVehicle::GetMaxHealth() const
 	return MaxHealth;
 }
 
+void AVehicle::SetHealth(int32 NewHealth)
+{
+	Health = NewHealth;
+}
+
+
 EEngineState AVehicle::GetEngineState() const
 {
 	return CurrentEngineState;
@@ -1126,3 +1132,14 @@ void AVehicle::ReturnScavenger(AScavengerPawn* Scavenger)
 	Scavenger->Destroy();
 	LogError("killed");
 }
+
+void AVehicle::IncrementHealth()
+{
+	Health += 5;
+}
+
+void AVehicle::DecrementHealth()
+{
+	Health -= 5;
+}
+

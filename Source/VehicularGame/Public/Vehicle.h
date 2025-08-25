@@ -74,6 +74,10 @@ public:
 
 	float GetHealth() const;
 	float GetMaxHealth() const;
+	void SetHealth(int32 NewHealth);
+
+	void IncrementHealth();
+	void DecrementHealth();
 
 	bool IsHandbrakeActive() const;
 
@@ -145,6 +149,9 @@ private:
 	//the max health we can have
 	UPROPERTY(EditDefaultsOnly, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	int32 MaxHealth = 1;
+
+	//our current health
+	int32 Health = 1;
 	
 	//
 	UPROPERTY(EditDefaultsOnly, Category = "Difficulty", meta = (AllowPrivateAccess = "true"))
@@ -231,8 +238,7 @@ private:
 	//what our current steering angle is
 	float CurrentSteerAngle = 0.0f;
 
-	//our current health
-	int32 Health = 1;
+	
 	
 
 	//whether the handbreak is currently on or off
