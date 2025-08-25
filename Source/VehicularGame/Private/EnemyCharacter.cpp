@@ -86,6 +86,7 @@ void AEnemyCharacter::BeginPlay()
         return;
     }
 
+    GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AEnemyCharacter::OnOverlap);
     GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &AEnemyCharacter::OnHit);
 
 
@@ -303,7 +304,7 @@ void AEnemyCharacter::PathfindToPoint()
         const FVector InterpProjectionPoint(XInterp, YInterp, ZInterp);
 
         FNavLocation OutLocation;
-        const FVector Extent(500.f);
+        const FVector Extent(5000.f);
 
         //honestly no idea. john did this
         //pretty sure it tries to go to some interpolated point
@@ -316,7 +317,7 @@ void AEnemyCharacter::PathfindToPoint()
         {
             AIController->MoveToLocation(OutLocation, 1.0f);
         }
-        //and if all else fails, fuck it, just raw dog direct to the player
+        //and if all else fails, fuck it, move as close as you can to the player
         else
         {
             AIController->MoveToActor(VehicleRef, 1.0f);
@@ -377,7 +378,7 @@ void AEnemyCharacter::HitByPlayer()
      
 }
 
-
+//old code that used to use collisions. now uses overlaps
 void AEnemyCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
     UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
@@ -388,6 +389,16 @@ void AEnemyCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActo
     }
     
 }
+
+void AEnemyCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+    //is it the vehicle
+    if(Cast<AVehicle>(OtherActor))
+    {
+        HitByPlayer();
+    }
+}
+
 
 void AEnemyCharacter::Landed(const FHitResult& Hit)
 {
