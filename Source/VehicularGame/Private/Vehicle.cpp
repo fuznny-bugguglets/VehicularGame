@@ -112,10 +112,16 @@ void AVehicle::BeginPlay()
 		LogError(TEXT("No Engine Sound set in Vehicle"));
 		return;
 	}
-	EngineSoundInstance = UGameplayStatics::CreateSound2D(this, EngineSound);
-
-	//sets the volume of the sound
+	EngineSoundInstance = CreateSound2DNoDestroy(EngineSound);
+	//play engine sounds
+	if(EngineSoundInstance == nullptr)
+	{
+		LogError(TEXT("failed to spawn an engine sound instance"));
+		return;
+	}
 	SetEngineSoundValues();
+	EngineSoundInstance->Play();
+	
 
 	//get the turret from the child actor
 	Turret = Cast<ATurret>(TurretChildActorComponent->GetChildActor());
@@ -140,6 +146,10 @@ void AVehicle::BeginPlay()
 	}
 
 	ActiveScavengers.Empty();
+
+
+	
+	
 }
 
 // Called every frame
@@ -326,7 +336,7 @@ void AVehicle::SetEngineSoundValues()
 	//check that the sound instance is in the world and kicking
 	if(EngineSoundInstance == nullptr)
 	{
-		EngineSoundInstance = UGameplayStatics::CreateSound2D(this, EngineSound);
+		EngineSoundInstance = CreateSound2DNoDestroy(EngineSound);
 	}
 
 	
@@ -398,6 +408,9 @@ void AVehicle::OnMove(const FInputActionValue& Value)
 
 	//input for the torque curve, scaled between current speed and max
 	float TorqueCurveInput = Speed / MyMaxSpeed;
+
+	//float curve being reference for torque output only exists between -1 (max reverse) and 1 (max forward)
+	TorqueCurveInput = FMath::Clamp(TorqueCurveInput, -1.0f, 1.0f);
 
 	//get the torque based on our input
 	if(TorqueCurve == nullptr)
@@ -607,7 +620,7 @@ void AVehicle::OnEngineShiftUpOnGoing(const FInputActionValue& Value)
 		//turn on engine
 		if(EngineSoundInstance == nullptr)
 		{
-			EngineSoundInstance = UGameplayStatics::CreateSound2D(this, EngineSound);
+			EngineSoundInstance = CreateSound2DNoDestroy(EngineSound);
 		}
 		
 		SetEngineSoundValues();
@@ -1143,3 +1156,9 @@ void AVehicle::DecrementHealth()
 	Health -= 5;
 }
 
+UAudioComponent* AVehicle::CreateSound2DNoDestroy(USoundBase* Sound)
+{
+	return UGameplayStatics::CreateSound2D(this, Sound,
+		1.0f, 1.0f, 0.0, nullptr,
+		false, false);
+}

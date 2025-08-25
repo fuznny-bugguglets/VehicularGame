@@ -75,7 +75,9 @@ void ATurret::BeginPlay()
 		return;
 	}
 
-	BulletSoundInstance = UGameplayStatics::CreateSound2D(this, BulletSoundFile);
+	BulletSoundInstance = UGameplayStatics::CreateSound2D(this, BulletSoundFile,
+	1.0f, 1.0f, 0.0, nullptr,
+	false, false);
 	if(BulletSoundInstance == nullptr)
 	{
 		LogError("failed to create an instance of the bullet sound");
@@ -176,14 +178,14 @@ void ATurret::FireHeld()
 		//play the sound
 		if(BulletSoundInstance == nullptr)
 		{
-			LogError("the bullet sound doesnt exist anymore! what the fuck!!!!");
-			LogError("creating a new audio instance");
 			if(BulletSoundFile == nullptr)
 			{
 				LogError("nevermind, there is no bullet audio file. give the turret a sound to play");
 				return;
 			}
-			BulletSoundInstance = UGameplayStatics::CreateSound2D(this, BulletSoundFile);
+			BulletSoundInstance = UGameplayStatics::CreateSound2D(this, BulletSoundFile,
+			1.0f, 1.0f, 0.0, nullptr,
+	false, false);
 		}
 		BulletSoundInstance->Play();
 	}

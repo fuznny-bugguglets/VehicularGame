@@ -26,6 +26,8 @@ public:
 protected:
 	virtual void BeginPlay() override; // Called when the game starts or when spawned
 
+	virtual void Landed(const FHitResult& Hit) override;
+
 public:
 	virtual void Tick(float DeltaTime) override; // Called every frame
 
@@ -71,6 +73,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
 	USoundBase* AttackPlayerSound;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	USoundConcurrency* AttackPlayerConcurrency = nullptr;
+
 	float TargetSpeed = 0.0f;
 	float RollingAverageTargetSpeed = 0.0f;
 
@@ -80,12 +85,16 @@ private:
 
 	void UpdateSpeed(float DeltaTime);
 	void RotateToGround(float DeltaTime);
-	void PathfindToPoint(float DeltaTime);
+	void PathfindToPoint();
 	void HitByPlayer();
 
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit );
+
+	UFUNCTION()
+	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
 	void LogError(const FString& ErrorMessage);
 };

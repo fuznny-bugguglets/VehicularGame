@@ -86,6 +86,13 @@ void AEnemyCharacter::BeginPlay()
         return;
     }
 
+    if (AttackPlayerConcurrency == nullptr)
+    {
+        LogError("no attack player concurrency set in enemy");
+        return;
+    }
+
+    GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AEnemyCharacter::OnOverlap);
     GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &AEnemyCharacter::OnHit);
 
 
@@ -98,7 +105,18 @@ void AEnemyCharacter::Tick(float DeltaTime)
 
     UpdateSpeed(DeltaTime);
     RotateToGround(DeltaTime);
-    PathfindToPoint(DeltaTime);
+    
+    if(VehicleRef == nullptr)
+    {
+        LogError("failed to get a reference to the player in enemy character");
+        return;
+    }
+    //is it time to update?
+    TimeSinceLastNavUpdate += DeltaTime;
+    if(TimeSinceLastNavUpdate > (GetDistanceTo(VehicleRef) * NavUpdateDistanceScaleFactor) / 10000.0f)
+    {
+        PathfindToPoint();
+    }
 }
 
 float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
@@ -237,20 +255,9 @@ void AEnemyCharacter::RotateToGround(float DeltaTime)
     
 }
 
-void AEnemyCharacter::PathfindToPoint(float DeltaTime)
+void AEnemyCharacter::PathfindToPoint()
 {
-    if(VehicleRef == nullptr)
-    {
-        LogError("failed to get a reference to the player in enemy character");
-        return;
-    }
-    
-    TimeSinceLastNavUpdate += DeltaTime;
-    
-    //is it time to update?
-    if(TimeSinceLastNavUpdate > (GetDistanceTo(VehicleRef) * NavUpdateDistanceScaleFactor) / 10000.0f)
-    {
-        TimeSinceLastNavUpdate = 0.0f;
+    TimeSinceLastNavUpdate = 0.0f;
 
         if(IsDead())
         {
@@ -303,7 +310,7 @@ void AEnemyCharacter::PathfindToPoint(float DeltaTime)
         const FVector InterpProjectionPoint(XInterp, YInterp, ZInterp);
 
         FNavLocation OutLocation;
-        const FVector Extent(500.f);
+        const FVector Extent(5000.f);
 
         //honestly no idea. john did this
         //pretty sure it tries to go to some interpolated point
@@ -316,7 +323,7 @@ void AEnemyCharacter::PathfindToPoint(float DeltaTime)
         {
             AIController->MoveToLocation(OutLocation, 1.0f);
         }
-        //and if all else fails, fuck it, just raw dog direct to the player
+        //and if all else fails, fuck it, move as close as you can to the player
         else
         {
             AIController->MoveToActor(VehicleRef, 1.0f);
@@ -324,7 +331,6 @@ void AEnemyCharacter::PathfindToPoint(float DeltaTime)
         
 
         
-    }
 }
 
 void AEnemyCharacter::HitByPlayer()
@@ -369,7 +375,8 @@ void AEnemyCharacter::HitByPlayer()
         UGameplayStatics::ApplyDamage(VehicleRef, DamageToPlayer, GetController(), this, DamageType);
 
         //play attack damage sound
-        UGameplayStatics::PlaySound2D(this, AttackPlayerSound);
+        UGameplayStatics::PlaySound2D(this, AttackPlayerSound, 1, 1,
+            0, AttackPlayerConcurrency);
         
         //launch ourselves away from the vehicle
         LaunchCharacter(PushVector, false, false);
@@ -378,7 +385,7 @@ void AEnemyCharacter::HitByPlayer()
      
 }
 
-
+//old code that used to use collisions. now uses overlaps
 void AEnemyCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
     UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
@@ -388,4 +395,22 @@ void AEnemyCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActo
         HitByPlayer();
     }
     
+}
+
+void AEnemyCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+    //is it the vehicle
+    if(Cast<AVehicle>(OtherActor))
+    {
+        HitByPlayer();
+    }
+}
+
+
+void AEnemyCharacter::Landed(const FHitResult& Hit)
+{
+    Super::Landed(Hit);
+
+    //when we land on the ground, pathfind to point
+    PathfindToPoint();
 }
