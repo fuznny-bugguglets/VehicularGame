@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Button.h"
 #include "DevToolsWidget.generated.h"
 
 class AVehicularGameState;
@@ -18,6 +19,8 @@ class VEHICULARGAME_API UDevToolsWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	void Setup();
+
 	UFUNCTION(BlueprintCallable)
 	void GiveInfiniteResources();
 
@@ -44,8 +47,27 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DecreaseHealth();
 
+	//adding resources
+	UFUNCTION()
+	void OnAddCommonResource();
+
+	UFUNCTION()
+	void OnAddUncommonResource();
+
+	UFUNCTION()
+	void OnAddRareResource();
+
 protected:
+	//buttons
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UButton> AddCommonResourcesButton;
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UButton> AddUncommonResourcesButton;
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UButton> AddRareResourcesButton;
+
 	virtual void NativeConstruct() override;
+
 
 private:
 	UPROPERTY()
