@@ -112,7 +112,7 @@ void AVehicle::BeginPlay()
 		LogError(TEXT("No Engine Sound set in Vehicle"));
 		return;
 	}
-	EngineSoundInstance = UGameplayStatics::CreateSound2D(this, EngineSound);
+	EngineSoundInstance = CreateSound2DNoDestroy(EngineSound);
 	//play engine sounds
 	if(EngineSoundInstance == nullptr)
 	{
@@ -336,7 +336,7 @@ void AVehicle::SetEngineSoundValues()
 	//check that the sound instance is in the world and kicking
 	if(EngineSoundInstance == nullptr)
 	{
-		EngineSoundInstance = UGameplayStatics::CreateSound2D(this, EngineSound);
+		EngineSoundInstance = CreateSound2DNoDestroy(EngineSound);
 	}
 
 	
@@ -620,7 +620,7 @@ void AVehicle::OnEngineShiftUpOnGoing(const FInputActionValue& Value)
 		//turn on engine
 		if(EngineSoundInstance == nullptr)
 		{
-			EngineSoundInstance = UGameplayStatics::CreateSound2D(this, EngineSound);
+			EngineSoundInstance = CreateSound2DNoDestroy(EngineSound);
 		}
 		
 		SetEngineSoundValues();
@@ -1156,3 +1156,9 @@ void AVehicle::DecrementHealth()
 	Health -= 5;
 }
 
+UAudioComponent* AVehicle::CreateSound2DNoDestroy(USoundBase* Sound)
+{
+	return UGameplayStatics::CreateSound2D(this, Sound,
+		1.0f, 1.0f, 0.0, nullptr,
+		false, false);
+}

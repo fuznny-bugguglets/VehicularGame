@@ -385,5 +385,8 @@ private:
 
 	void SpawnScavengers(const float DeltaTime);
 
+
+	//wrapper for CreateSound2D that doesn't auto destroy
+	UAudioComponent* CreateSound2DNoDestroy(USoundBase* Sound);
 	void LogError(const FString& ErrorMessage);
 };
