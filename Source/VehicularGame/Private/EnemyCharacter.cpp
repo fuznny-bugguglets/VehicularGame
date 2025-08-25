@@ -98,7 +98,18 @@ void AEnemyCharacter::Tick(float DeltaTime)
 
     UpdateSpeed(DeltaTime);
     RotateToGround(DeltaTime);
-    PathfindToPoint(DeltaTime);
+    
+    if(VehicleRef == nullptr)
+    {
+        LogError("failed to get a reference to the player in enemy character");
+        return;
+    }
+    //is it time to update?
+    TimeSinceLastNavUpdate += DeltaTime;
+    if(TimeSinceLastNavUpdate > (GetDistanceTo(VehicleRef) * NavUpdateDistanceScaleFactor) / 10000.0f)
+    {
+        PathfindToPoint();
+    }
 }
 
 float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
@@ -237,20 +248,9 @@ void AEnemyCharacter::RotateToGround(float DeltaTime)
     
 }
 
-void AEnemyCharacter::PathfindToPoint(float DeltaTime)
+void AEnemyCharacter::PathfindToPoint()
 {
-    if(VehicleRef == nullptr)
-    {
-        LogError("failed to get a reference to the player in enemy character");
-        return;
-    }
-    
-    TimeSinceLastNavUpdate += DeltaTime;
-    
-    //is it time to update?
-    if(TimeSinceLastNavUpdate > (GetDistanceTo(VehicleRef) * NavUpdateDistanceScaleFactor) / 10000.0f)
-    {
-        TimeSinceLastNavUpdate = 0.0f;
+    TimeSinceLastNavUpdate = 0.0f;
 
         if(IsDead())
         {
@@ -324,7 +324,6 @@ void AEnemyCharacter::PathfindToPoint(float DeltaTime)
         
 
         
-    }
 }
 
 void AEnemyCharacter::HitByPlayer()
@@ -388,4 +387,12 @@ void AEnemyCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActo
         HitByPlayer();
     }
     
+}
+
+void AEnemyCharacter::Landed(const FHitResult& Hit)
+{
+    Super::Landed(Hit);
+
+    //when we land on the ground, pathfind to point
+    PathfindToPoint();
 }

@@ -26,6 +26,8 @@ public:
 protected:
 	virtual void BeginPlay() override; // Called when the game starts or when spawned
 
+	virtual void Landed(const FHitResult& Hit) override;
+
 public:
 	virtual void Tick(float DeltaTime) override; // Called every frame
 
@@ -80,7 +82,7 @@ private:
 
 	void UpdateSpeed(float DeltaTime);
 	void RotateToGround(float DeltaTime);
-	void PathfindToPoint(float DeltaTime);
+	void PathfindToPoint();
 	void HitByPlayer();
 
 	UFUNCTION()
