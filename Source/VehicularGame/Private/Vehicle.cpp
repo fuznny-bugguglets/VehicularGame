@@ -409,6 +409,9 @@ void AVehicle::OnMove(const FInputActionValue& Value)
 	//input for the torque curve, scaled between current speed and max
 	float TorqueCurveInput = Speed / MyMaxSpeed;
 
+	//float curve being reference for torque output only exists between -1 (max reverse) and 1 (max forward)
+	TorqueCurveInput = FMath::Clamp(TorqueCurveInput, -1.0f, 1.0f);
+
 	//get the torque based on our input
 	if(TorqueCurve == nullptr)
 	{
