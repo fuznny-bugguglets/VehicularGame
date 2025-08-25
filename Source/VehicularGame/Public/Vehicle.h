@@ -289,7 +289,7 @@ private:
 	USceneComponent* DoorLocation;
 
 	//current state of the engine
-	EEngineState CurrentEngineState = EEngineState::OFF;
+	EEngineState CurrentEngineState = EEngineState::CRUISE;
 
 	//how long we have held down engine shift
 	float EngineUpTimestamp = 0.0f;

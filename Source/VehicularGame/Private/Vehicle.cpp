@@ -113,9 +113,15 @@ void AVehicle::BeginPlay()
 		return;
 	}
 	EngineSoundInstance = UGameplayStatics::CreateSound2D(this, EngineSound);
-
-	//sets the volume of the sound
+	//play engine sounds
+	if(EngineSoundInstance == nullptr)
+	{
+		LogError(TEXT("failed to spawn an engine sound instance"));
+		return;
+	}
 	SetEngineSoundValues();
+	EngineSoundInstance->Play();
+	
 
 	//get the turret from the child actor
 	Turret = Cast<ATurret>(TurretChildActorComponent->GetChildActor());
@@ -140,6 +146,10 @@ void AVehicle::BeginPlay()
 	}
 
 	ActiveScavengers.Empty();
+
+
+	
+	
 }
 
 // Called every frame
