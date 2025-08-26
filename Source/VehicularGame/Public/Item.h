@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ruin.h"
 #include "Item.generated.h"
 
 USTRUCT(BlueprintType)
@@ -22,10 +23,14 @@ struct FItem
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Weight;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EResourceType Tier;
+
 	FItem()
 	{
 		Value = 0;
 		Weight = 0.0f;
+		Tier = EResourceType::NULLRESOURCE;
 	}
 };
 
@@ -39,11 +44,13 @@ class VEHICULARGAME_API UItemManager : public UObject
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)
-	void InitalizeItems();
+	void SetupItemsFromStruct();
 
 	UFUNCTION(BlueprintCallable)
 	void AddItem(const FItem& NewItem);
 
 private:
+
+	//used to store
 	TArray<FItem> Items;
 };
