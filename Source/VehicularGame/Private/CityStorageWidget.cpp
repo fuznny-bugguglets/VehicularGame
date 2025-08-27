@@ -7,4 +7,6 @@
 void UCityStorageWidget::NativeConstruct()
 {
 	UInventorySubsystem* InventorySystem = GetGameInstance()->GetSubsystem<UInventorySubsystem>();
+
+	//InventorySystem->
 }
