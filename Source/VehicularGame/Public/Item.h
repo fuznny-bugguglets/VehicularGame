@@ -32,6 +32,11 @@ struct FItem : public FTableRowBase
 		Weight = 0.0f;
 		Tier = EResourceType::NULLRESOURCE;
 	}
+
+	bool operator==(const FItem& Other) const
+	{
+		return false;
+	}
 };
 
 /**
@@ -43,6 +48,9 @@ class VEHICULARGAME_API UItemManager : public UObject
 	GENERATED_BODY()
 
 public:
+	static FItem& GetItemFromIndex(const uint8 Index);
+	static uint8 GetIndexFromItem(const FItem& Item);
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetupItemsFromDataTable();
 
@@ -51,6 +59,6 @@ public:
 
 private:
 
-	//used to store
-	TArray<FItem> Items;
+	//used to store all existent items
+	static TArray<FItem> Items;
 };
