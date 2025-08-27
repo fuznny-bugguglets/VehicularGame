@@ -18,13 +18,13 @@ class VEHICULARGAME_API UInventorySubsystem : public UGameInstanceSubsystem
 public:
 	UInventorySubsystem();
 
+	const TMap<uint8, uint32>& GetCityStorage() const;
+
 	//takes in an item (by index or type) and adds it to the inventory
 	void AddItemToCityStorage(uint8 ItemIndex);
 	void AddItemToCityStorage(FItem& InItem);
 	void AddItemToCityStorage(uint8 ItemIndex, int32 Amount);
 	void AddItemToCityStorage(FItem& InItem, int32 Amount);
-
-	int32 GetCityStorageUniqueItemCount() const;
 
 private:
 	//maps the item index to the amount of the item

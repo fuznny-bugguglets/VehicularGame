@@ -6,10 +6,14 @@
 UInventorySubsystem::UInventorySubsystem()
 {
 	CityStorage.Empty();
-	AddItemToCityStorage(0, 3);
-	AddItemToCityStorage(1, 3);
-	AddItemToCityStorage(3, 3);
-	AddItemToCityStorage(5, 3);
+	AddItemToCityStorage(0, 10);
+	AddItemToCityStorage(1, 10);
+	AddItemToCityStorage(2, 10);
+	AddItemToCityStorage(3, 10);
+	AddItemToCityStorage(4, 10);
+	AddItemToCityStorage(5, 10);
+	AddItemToCityStorage(6, 10);
+	//AddItemToCityStorage(5, 3);
 
 }
 
@@ -21,6 +25,7 @@ void UInventorySubsystem::AddItemToCityStorage(uint8 ItemIndex)
 		//increment the count
 		CityStorage[ItemIndex]++;
 	}
+	else
 	{
 		//create the item in the inventory and give the player 1
 		CityStorage.Emplace(ItemIndex, 1);
@@ -49,7 +54,7 @@ void UInventorySubsystem::AddItemToCityStorage(FItem& InItem, int32 Amount)
 }
 
 
-int32 UInventorySubsystem::GetCityStorageUniqueItemCount() const
+const TMap<uint8, uint32>& UInventorySubsystem::GetCityStorage() const
 {
-	return CityStorage.Num();
+	return CityStorage;
 }

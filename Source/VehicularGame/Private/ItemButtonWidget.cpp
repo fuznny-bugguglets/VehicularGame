@@ -3,18 +3,18 @@
 
 #include "ItemButtonWidget.h"
 
-void UItemButtonWidget::SetText(FText& InMainText, FText& InSubText)
+void UItemButtonWidget::SetText(const FText& InMainText, const FText& InSubText)
 {
 	SetMainText(InMainText);
 	SetSubText(InSubText);
 }
 
-void UItemButtonWidget::SetMainText(FText& InText)
+void UItemButtonWidget::SetMainText(const FText& InText)
 {
 	MainText->SetText(InText);
 }
 
-void UItemButtonWidget::SetSubText(FText& InText)
+void UItemButtonWidget::SetSubText(const FText& InText)
 {
 	SubText->SetText(InText);
 }

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "ItemButtonWidget.h"
+#include "Components/ScrollBox.h"
 #include "VerticalScrollAreaWidget.generated.h"
 
 /**
@@ -16,12 +17,14 @@ class VEHICULARGAME_API UVerticalScrollAreaWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
+	virtual void NativeConstruct() override;
+	
 	UFUNCTION(BlueprintCallable)
-	void AddItemBlock(FText& MainText, FText& SubText);
+	void AddItemBlock(const FText& MainText, const FText& SubText);
 
 protected:
-	UPROPERTY(meta = (BindWidget, AllowPrivateAccess = "true"))
-	class UScrollBox* ScrollBox;
+	UPROPERTY(meta = (BindWidget))
+	UScrollBox* ScrollyBox = nullptr;
 
 private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))

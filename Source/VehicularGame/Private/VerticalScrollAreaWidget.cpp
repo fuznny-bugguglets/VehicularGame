@@ -2,10 +2,15 @@
 
 
 #include "VerticalScrollAreaWidget.h"
-#include "Components/ScrollBox.h"
 #include "InventorySubsystem.h"
 
-void UVerticalScrollAreaWidget::AddItemBlock(FText& MainText, FText& SubText)
+void UVerticalScrollAreaWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
+}
+
+
+void UVerticalScrollAreaWidget::AddItemBlock(const FText& MainText, const FText& SubText)
 {
 	if (!ItemButtonWidgetClass)
 	{
@@ -13,14 +18,16 @@ void UVerticalScrollAreaWidget::AddItemBlock(FText& MainText, FText& SubText)
 	}
 
 	UItemButtonWidget* NewButton = CreateWidget<UItemButtonWidget>(GetWorld(), ItemButtonWidgetClass);
-	if (!NewButton)
+	if (NewButton == nullptr)
 	{
 		return;
 	}
 
-	ScrollBox->AddChild(NewButton);
-
 	NewButton->SetText(MainText, SubText);
 
+	if (ScrollyBox)
+	{
+		ScrollyBox->AddChild(NewButton);
+	}
 	
 }

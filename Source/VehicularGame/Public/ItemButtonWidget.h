@@ -16,9 +16,9 @@ class VEHICULARGAME_API UItemButtonWidget : public UUserWidget
 	GENERATED_BODY()  
 
 public:
-	void SetText(FText& InMainText, FText& InSubText);
-	void SetMainText(FText& InText);
-	void SetSubText(FText& InText);
+	void SetText(const FText& InMainText, const FText& InSubText);
+	void SetMainText(const FText& InText);
+	void SetSubText(const FText& InText);
 
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget, AllowPrivateAccess = "true"))
