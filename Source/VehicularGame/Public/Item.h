@@ -7,7 +7,7 @@
 #include "Item.generated.h"
 
 USTRUCT(BlueprintType)
-struct FItem
+struct FItem : public FTableRowBase
 {
 	GENERATED_BODY()
 
@@ -44,7 +44,7 @@ class VEHICULARGAME_API UItemManager : public UObject
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)
-	void SetupItemsFromStruct();
+	void SetupItemsFromDataTable();
 
 	UFUNCTION(BlueprintCallable)
 	void AddItem(const FItem& NewItem);
