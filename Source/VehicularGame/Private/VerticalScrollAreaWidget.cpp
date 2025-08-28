@@ -24,6 +24,8 @@ void UVerticalScrollAreaWidget::AddItemBlock(const FText& MainText, const FText&
 	}
 
 	NewButton->SetText(MainText, SubText);
+	NewButton->SetVerticalScrollArea(this);
+	NewButton->SetItemID()
 
 	if (ScrollyBox)
 	{

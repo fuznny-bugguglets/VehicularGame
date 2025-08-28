@@ -3,6 +3,17 @@
 
 #include "ItemButtonWidget.h"
 
+void UItemButtonWidget::SetItemID(uint8 InID)
+{
+	MyItemID = InID;
+}
+
+void UItemButtonWidget::SetVerticalScrollArea(UVerticalScrollAreaWidget* InWidg)
+{
+	VerticalScrollArea = InWidg;
+}
+
+
 void UItemButtonWidget::SetText(const FText& InMainText, const FText& InSubText)
 {
 	SetMainText(InMainText);
