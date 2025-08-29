@@ -5,8 +5,8 @@
 
 #include "CityWidget.h"
 #include "RelicInformationPanel.h"
-#include "VerticalScrollAreaWidget.h"
 
+//default constructor, sets up clilck delegate
 void UItemButtonWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -19,12 +19,14 @@ void UItemButtonWidget::NativeConstruct()
 	Button->OnClicked.AddDynamic(this, &UItemButtonWidget::OnButtonClicked);
 }
 
+//called by vertical scroll area widget when created
 void UItemButtonWidget::Setup(UCityWidget* InCity)
 {
 	CityWidget = InCity;
 }
 
-
+//called when the user clicks on the button
+//displays information about this item on the relic information panel
 void UItemButtonWidget::OnButtonClicked()
 {
 	if (CityWidget)
@@ -33,14 +35,6 @@ void UItemButtonWidget::OnButtonClicked()
 		{
 			CityWidget->GetRelicInformationPanel()->DisplayItemInformation(MyItemID);
 		}
-		else
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, TEXT("No relic info widget"));
-		}
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, TEXT("No city widget"));
 	}
 	
 }

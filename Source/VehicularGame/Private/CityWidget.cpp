@@ -20,12 +20,11 @@ void UCityWidget::NativeConstruct()
 	}
 }
 
+//returns child widgets
 UCityStorageWidget* UCityWidget::GetCityStorage() const
 {
 	return CityStorage;
 }
-
-
 URelicInformationPanel* UCityWidget::GetRelicInformationPanel() const
 {
 	return RelicInformationPanel;

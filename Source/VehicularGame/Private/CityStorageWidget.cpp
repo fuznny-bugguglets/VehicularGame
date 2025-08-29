@@ -15,6 +15,7 @@ void UCityStorageWidget::Setup(UCityWidget* InCity)
 	
 	UInventorySubsystem* InventorySystem = GetGameInstance()->GetSubsystem<UInventorySubsystem>();
 
+	//spawns an item block for each unique item in the ventory 
 	for (auto& Element : InventorySystem->GetCityStorage())
 	{
 		//city storage maps item indexes to its count
