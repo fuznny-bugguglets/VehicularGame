@@ -10,6 +10,7 @@
 #include "VerticalScrollAreaWidget.generated.h"
 
 
+class UCityWidget;
 class UItemButtonWidget;
 /**
  * 
@@ -22,20 +23,23 @@ class VEHICULARGAME_API UVerticalScrollAreaWidget : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 	
-	UFUNCTION(BlueprintCallable)
-	void AddItemBlock(const FText& MainText, const FText& SubText);
+	UFUNCTION()
+	virtual void Setup(UCityWidget* InCity);
+	
+	UFUNCTION()
+	void AddItemBlock(const uint8 ID, const FText& MainText, const FText& SubText);
+
 
 protected:
 	//where the item buttons will appear
 	UPROPERTY(meta = (BindWidget))
 	UScrollBox* ScrollyBox = nullptr;
-
 	
-	
-
-private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UItemButtonWidget> ItemButtonWidgetClass;
+
+	UPROPERTY()
+	UCityWidget* CityWidget = nullptr;
 
 	
 };

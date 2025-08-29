@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "RelicInformationPanel.generated.h"
 
+class UCityWidget;
 class UButton;
 class UTextBlock;
 /**
@@ -16,6 +17,15 @@ class VEHICULARGAME_API URelicInformationPanel : public UUserWidget
 {
 	GENERATED_BODY()
 
+public:
+	virtual void NativeConstruct() override;
+	
+	UFUNCTION()
+	void Setup(UCityWidget* InCity);
+
+	void DisplayItemInformation(uint8 ID);
+	
+	
 protected:
 	//where the information will appear
 	UPROPERTY(meta = (BindWidget))
@@ -28,4 +38,7 @@ protected:
 	UButton* InteractionButton = nullptr;
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* InteractionButtonMainText = nullptr;
+
+	UPROPERTY()
+	UCityWidget* CityWidget = nullptr;
 };

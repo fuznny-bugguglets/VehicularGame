@@ -7,6 +7,11 @@
 void UCityStorageWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+}
+
+void UCityStorageWidget::Setup(UCityWidget* InCity)
+{
+	Super::Setup(InCity);
 	
 	UInventorySubsystem* InventorySystem = GetGameInstance()->GetSubsystem<UInventorySubsystem>();
 
@@ -24,8 +29,10 @@ void UCityStorageWidget::NativeConstruct()
 		FText Subtext = FText::FromString(SubtextString);
 		
 		AddItemBlock(
+			Element.Key,
 			Main,
 			Subtext
 			);
 	}
 }
+

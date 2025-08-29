@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "CityWidget.generated.h"
 
+class UCityStorageWidget;
+class URelicInformationPanel;
 /**
  * 
  */
@@ -13,5 +15,20 @@ UCLASS()
 class VEHICULARGAME_API UCityWidget : public UUserWidget
 {
 	GENERATED_BODY()
+
+public:
+	//calls setup functions on children widgets
+	virtual void NativeConstruct() override;
+
+	//returns child widgets
+	UCityStorageWidget* GetCityStorage() const;
+	URelicInformationPanel* GetRelicInformationPanel() const;
+
+protected:
+	//child widgets
+	UPROPERTY(meta = (BindWidget))
+	UCityStorageWidget* CityStorage = nullptr;
+	UPROPERTY(meta = (BindWidget))
+	URelicInformationPanel* RelicInformationPanel = nullptr;
 	
 };

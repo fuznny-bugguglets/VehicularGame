@@ -13,7 +13,8 @@ UCLASS()
 class VEHICULARGAME_API UCityStorageWidget : public UVerticalScrollAreaWidget
 {
 	GENERATED_BODY()
-
 public:
 	virtual void NativeConstruct() override;
+
+	virtual void Setup(UCityWidget* InCity) override;
 };

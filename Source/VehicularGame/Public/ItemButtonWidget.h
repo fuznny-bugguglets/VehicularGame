@@ -8,7 +8,7 @@
 #include "Components/TextBlock.h"
 #include "ItemButtonWidget.generated.h"
 
-class UVerticalScrollAreaWidget;
+class UCityWidget;
 /**
  * 
  */
@@ -18,8 +18,12 @@ class VEHICULARGAME_API UItemButtonWidget : public UUserWidget
 	GENERATED_BODY()  
 
 public:
+	virtual void NativeConstruct() override;
+	
+	UFUNCTION()
+	void Setup(UCityWidget* InCity);
+	
 	void SetItemID(uint8 InID);
-	void SetVerticalScrollArea(UVerticalScrollAreaWidget* InWidg);
 	void SetText(const FText& InMainText, const FText& InSubText);
 	void SetMainText(const FText& InText);
 	void SetSubText(const FText& InText);
@@ -34,9 +38,12 @@ protected:
 	UTextBlock* SubText = nullptr;
 
 	UPROPERTY()
-	UVerticalScrollAreaWidget* VerticalScrollArea = nullptr;
+	UCityWidget* CityWidget = nullptr;
 
 	UPROPERTY()
 	uint8 MyItemID = 255;
+
+	UFUNCTION()
+	void OnButtonClicked();
 	
 };

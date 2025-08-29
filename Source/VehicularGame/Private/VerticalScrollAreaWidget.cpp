@@ -3,15 +3,19 @@
 
 #include "VerticalScrollAreaWidget.h"
 #include "ItemButtonWidget.h"
-#include "InventorySubsystem.h"
 
 void UVerticalScrollAreaWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 }
 
+void UVerticalScrollAreaWidget::Setup(UCityWidget* InCity)
+{
+	CityWidget = InCity;
+}
 
-void UVerticalScrollAreaWidget::AddItemBlock(const FText& MainText, const FText& SubText)
+
+void UVerticalScrollAreaWidget::AddItemBlock(const uint8 ID, const FText& MainText, const FText& SubText)
 {
 	if (!ItemButtonWidgetClass)
 	{
@@ -24,9 +28,9 @@ void UVerticalScrollAreaWidget::AddItemBlock(const FText& MainText, const FText&
 		return;
 	}
 
+	NewButton->Setup(CityWidget);
 	NewButton->SetText(MainText, SubText);
-	NewButton->SetVerticalScrollArea(this);
-	//NewButton->SetItemID()
+	NewButton->SetItemID(ID);
 
 	if (ScrollyBox)
 	{
@@ -34,3 +38,4 @@ void UVerticalScrollAreaWidget::AddItemBlock(const FText& MainText, const FText&
 	}
 	
 }
+
