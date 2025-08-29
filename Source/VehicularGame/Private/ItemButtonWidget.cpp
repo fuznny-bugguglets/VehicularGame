@@ -2,6 +2,7 @@
 
 
 #include "ItemButtonWidget.h"
+#include "VerticalScrollAreaWidget.h"
 
 void UItemButtonWidget::SetItemID(uint8 InID)
 {

@@ -2,6 +2,7 @@
 
 
 #include "VerticalScrollAreaWidget.h"
+#include "ItemButtonWidget.h"
 #include "InventorySubsystem.h"
 
 void UVerticalScrollAreaWidget::NativeConstruct()
@@ -25,7 +26,7 @@ void UVerticalScrollAreaWidget::AddItemBlock(const FText& MainText, const FText&
 
 	NewButton->SetText(MainText, SubText);
 	NewButton->SetVerticalScrollArea(this);
-	NewButton->SetItemID()
+	//NewButton->SetItemID()
 
 	if (ScrollyBox)
 	{

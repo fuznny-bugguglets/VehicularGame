@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "VerticalScrollAreaWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "ItemButtonWidget.generated.h"
 
+class UVerticalScrollAreaWidget;
 /**
  * 
  */
