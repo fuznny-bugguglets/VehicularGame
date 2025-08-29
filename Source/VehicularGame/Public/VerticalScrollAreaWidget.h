@@ -7,7 +7,6 @@
 #include "Components/ScrollBox.h"
 #include "VerticalScrollAreaWidget.generated.h"
 
-
 class UCityWidget;
 class UItemButtonWidget;
 /**
@@ -28,7 +27,9 @@ public:
 
 	//creates a new button inside the scroll area (called by subclasses)
 	UFUNCTION()
-	void AddItemBlock(const uint8 ID, const FText& MainText, const FText& SubText);
+	virtual void AddItemBlock(const uint8 ID, const FText& MainText, const FText& SubText);
+
+	
 
 
 protected:
@@ -43,6 +44,10 @@ protected:
 	//a reference to the city widget (used to communicate between other widgets)
 	UPROPERTY()
 	UCityWidget* CityWidget = nullptr;
+
+	//all of the buttons made
+	UPROPERTY()
+	TArray<UItemButtonWidget*> Buttons;
 
 	
 };

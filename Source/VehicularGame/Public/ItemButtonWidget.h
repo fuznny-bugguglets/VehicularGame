@@ -22,8 +22,11 @@ public:
 	
 	UFUNCTION()
 	void Setup(UCityWidget* InCity);
+
+	uint8 GetItemID() const;
 	
 	void SetItemID(uint8 InID);
+	void SetBuySellType(bool bShouldSell);
 	void SetText(const FText& InMainText, const FText& InSubText);
 	void SetMainText(const FText& InText);
 	void SetSubText(const FText& InText);
@@ -42,6 +45,9 @@ protected:
 
 	UPROPERTY()
 	uint8 MyItemID = 255;
+
+	UPROPERTY()
+	bool bSell = false;
 
 	UFUNCTION()
 	void OnButtonClicked();

@@ -4,7 +4,9 @@
 #include "CityWidget.h"
 
 #include "CityStorageWidget.h"
+#include "InventorySubsystem.h"
 #include "RelicInformationPanel.h"
+#include "VehicularGameInstance.h"
 
 //setup its child widgets
 void UCityWidget::NativeConstruct()
@@ -29,4 +31,17 @@ URelicInformationPanel* UCityWidget::GetRelicInformationPanel() const
 {
 	return RelicInformationPanel;
 }
+
+void UCityWidget::RemoveItem(const uint8 ID)
+{
+	Cast<UVehicularGameInstance>(GetGameInstance())->GetSubsystem<UInventorySubsystem>()->RemoveItemFromCityStorage(ID);
+	
+	if (!CityStorage)
+	{
+		return;
+	}
+
+	CityStorage->UpdateButton(ID);
+}
+
 

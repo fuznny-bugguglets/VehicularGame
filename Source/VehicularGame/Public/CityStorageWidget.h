@@ -17,4 +17,12 @@ public:
 	virtual void NativeConstruct() override;
 
 	virtual void Setup(UCityWidget* InCity) override;
+
+	virtual void AddItemBlock(const uint8 ID, const FText& MainText, const FText& SubText) override;
+
+	//update the display text of each button
+	UFUNCTION()
+	void UpdateButtons();
+	void UpdateButton(UItemButtonWidget* Button);
+	void UpdateButton(uint8 ItemID);
 };

@@ -53,6 +53,44 @@ void UInventorySubsystem::AddItemToCityStorage(FItem& InItem, int32 Amount)
 	}
 }
 
+void UInventorySubsystem::RemoveItemFromCityStorage(uint8 ItemIndex)
+{
+	//does the item exist?
+	if (CityStorage.Contains(ItemIndex))
+	{
+		//decrement the count
+		CityStorage[ItemIndex]--;
+
+		//do we have any items left?
+		if (CityStorage[ItemIndex] <= 0)
+		{
+			//delete it from city storage
+			CityStorage.Remove(ItemIndex);
+		}
+	}
+}
+
+void UInventorySubsystem::RemoveItemFromCityStorage(FItem& InItem)
+{
+	RemoveItemFromCityStorage(UItemManager::GetIndexFromItem(InItem));
+}
+
+void UInventorySubsystem::RemoveItemFromCityStorage(uint8 ItemIndex, int32 Amount)
+{
+	for (int32 i = 0; i < Amount; i++)
+	{
+		RemoveItemFromCityStorage(ItemIndex);
+	}
+}
+
+void UInventorySubsystem::RemoveItemFromCityStorage(FItem& InItem, int32 Amount)
+{
+	for (int32 i = 0; i < Amount; i++)
+	{
+		RemoveItemFromCityStorage(InItem);
+	}
+}
+
 
 const TMap<uint8, uint32>& UInventorySubsystem::GetCityStorage() const
 {

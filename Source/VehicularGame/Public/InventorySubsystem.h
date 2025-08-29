@@ -26,6 +26,12 @@ public:
 	void AddItemToCityStorage(uint8 ItemIndex, int32 Amount);
 	void AddItemToCityStorage(FItem& InItem, int32 Amount);
 
+	//takes in an item (by index or type) and remove it from the inventory
+	void RemoveItemFromCityStorage(uint8 ItemIndex);
+	void RemoveItemFromCityStorage(FItem& InItem);
+	void RemoveItemFromCityStorage(uint8 ItemIndex, int32 Amount);
+	void RemoveItemFromCityStorage(FItem& InItem, int32 Amount);
+
 private:
 	//maps the item index to the amount of the item
 	TMap<uint8, uint32> CityStorage;

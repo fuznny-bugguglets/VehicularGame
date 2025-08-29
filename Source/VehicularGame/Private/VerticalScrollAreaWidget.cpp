@@ -39,6 +39,10 @@ void UVerticalScrollAreaWidget::AddItemBlock(const uint8 ID, const FText& MainTe
 	{
 		ScrollyBox->AddChild(NewButton);
 	}
+
+	Buttons.Add(NewButton);
 	
 }
+
+
 

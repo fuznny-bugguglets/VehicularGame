@@ -24,6 +24,8 @@ public:
 	UCityStorageWidget* GetCityStorage() const;
 	URelicInformationPanel* GetRelicInformationPanel() const;
 
+	void RemoveItem(const uint8 ID);
+
 protected:
 	//child widgets
 	UPROPERTY(meta = (BindWidget))

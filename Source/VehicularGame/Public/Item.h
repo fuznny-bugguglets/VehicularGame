@@ -51,9 +51,10 @@ public:
 	static FItem& GetItemFromIndex(const uint8 Index);
 	static uint8 GetIndexFromItem(const FItem& Item);
 
+	//setup in game instance
+	//logic handled in blueprints to grab items from datatable
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetupItemsFromDataTable();
-
 	UFUNCTION(BlueprintCallable)
 	void AddItem(const FItem& NewItem);
 

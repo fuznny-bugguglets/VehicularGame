@@ -23,7 +23,8 @@ public:
 	UFUNCTION()
 	void Setup(UCityWidget* InCity);
 
-	void DisplayItemInformation(uint8 ID);
+	void DisplayItemInformation(uint8 ID, bool bShouldSell);
+	void DisplayNothing();
 	
 	
 protected:
@@ -41,4 +42,14 @@ protected:
 
 	UPROPERTY()
 	UCityWidget* CityWidget = nullptr;
+
+	//whether the item is being sold or bought
+	UPROPERTY()
+	bool bShouldSell = false;
+
+	UPROPERTY()
+	uint8 ItemID = 255;
+
+	UFUNCTION()
+	void OnButtonClick();
 };

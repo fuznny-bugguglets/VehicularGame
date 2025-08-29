@@ -33,7 +33,7 @@ void UItemButtonWidget::OnButtonClicked()
 	{
 		if (CityWidget->GetRelicInformationPanel())
 		{
-			CityWidget->GetRelicInformationPanel()->DisplayItemInformation(MyItemID);
+			CityWidget->GetRelicInformationPanel()->DisplayItemInformation(MyItemID, bSell);
 		}
 	}
 	
@@ -62,4 +62,12 @@ void UItemButtonWidget::SetSubText(const FText& InText)
 	SubText->SetText(InText);
 }
 
+void UItemButtonWidget::SetBuySellType(bool bShouldSell)
+{
+	bSell = bShouldSell;
+}
 
+uint8 UItemButtonWidget::GetItemID() const
+{
+	return MyItemID;
+}

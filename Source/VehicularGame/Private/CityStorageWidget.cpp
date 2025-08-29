@@ -2,7 +2,12 @@
 
 
 #include "CityStorageWidget.h"
+
+#include "CityWidget.h"
 #include "InventorySubsystem.h"
+#include "ItemButtonWidget.h"
+#include "RelicInformationPanel.h"
+#include "VehicularGameInstance.h"
 
 void UCityStorageWidget::NativeConstruct()
 {
@@ -34,6 +39,88 @@ void UCityStorageWidget::Setup(UCityWidget* InCity)
 			Main,
 			Subtext
 			);
+	}
+}
+
+void UCityStorageWidget::AddItemBlock(const uint8 ID, const FText& MainText, const FText& SubText)
+{
+	Super::AddItemBlock(ID, MainText, SubText);
+
+	for (auto Button : Buttons)
+	{
+		if (Button)
+		{
+			//we are the storage
+			//any items here should be sold
+			Button->SetBuySellType(true);
+		}
+	}
+}
+
+void UCityStorageWidget::UpdateButtons()
+{
+	for (auto Button : Buttons)
+	{
+		if (!Button)
+		{
+			continue;
+		}
+		
+		UpdateButton(Button);
+	}
+}
+
+void UCityStorageWidget::UpdateButton(UItemButtonWidget* Button)
+{
+	if (!Button)
+	{
+		return;
+	}
+	
+	const uint8 ItemID = Button->GetItemID();
+
+	//does the item exist?
+	if (GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetCityStorage().Contains(ItemID))
+	{
+		int32 Count = GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetCityStorage()[ItemID];
+		//do we have any of the item?
+		if (Count > 0)
+		{
+			FString SubtextString("x");
+			SubtextString.Append(FString::FromInt(Count));
+			FText Subtext = FText::FromString(SubtextString);
+			
+			Button->SetSubText(Subtext);
+
+			return;
+		}
+	}
+
+	//delete it
+	Buttons.Remove(Button);
+	Button->RemoveFromParent();
+	Button = nullptr;
+
+	//set information text to be nothing
+	CityWidget->GetRelicInformationPanel()->DisplayNothing();
+}
+
+void UCityStorageWidget::UpdateButton(uint8 ItemID)
+{
+	
+	for (auto Button : Buttons)
+	{
+		if (!Button)
+		{
+			continue;
+		}
+		
+		//is this the button we are looking for?
+		if (Button->GetItemID() == ItemID)
+		{
+			UpdateButton(Button);
+			return;
+		}
 	}
 }
 
