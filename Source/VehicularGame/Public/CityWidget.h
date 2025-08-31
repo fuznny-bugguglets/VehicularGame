@@ -26,7 +26,8 @@ public:
 	UShopWidget* GetShop() const;
 	URelicInformationPanel* GetRelicInformationPanel() const;
 
-	void RemoveItem(const uint8 ID);
+	void SellItem(const uint8 ID);
+	void BuyItem(const uint8 ID);
 
 protected:
 	//child widgets

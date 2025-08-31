@@ -44,7 +44,7 @@ URelicInformationPanel* UCityWidget::GetRelicInformationPanel() const
 	return RelicInformationPanel;
 }
 
-void UCityWidget::RemoveItem(const uint8 ID)
+void UCityWidget::SellItem(const uint8 ID)
 {
 	Cast<UVehicularGameInstance>(GetGameInstance())->GetSubsystem<UInventorySubsystem>()->RemoveItemFromCityStorage(ID);
 	
@@ -56,4 +56,17 @@ void UCityWidget::RemoveItem(const uint8 ID)
 	CityStorage->UpdateButton(ID);
 }
 
+void UCityWidget::BuyItem(const uint8 ID)
+{
+	Cast<UVehicularGameInstance>(GetGameInstance())->GetSubsystem<UInventorySubsystem>()->RemoveItemFromShop(ID);
+	Cast<UVehicularGameInstance>(GetGameInstance())->GetSubsystem<UInventorySubsystem>()->AddItemToCityStorage(ID);
+	
+	if (!CityStorage)
+	{
+		return;
+	}
+
+	CityStorage->UpdateButton(ID);
+	Shop->UpdateButton(ID);
+}
 

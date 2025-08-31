@@ -21,6 +21,8 @@ void URelicInformationPanel::NativeConstruct()
 void URelicInformationPanel::Setup(UCityWidget* InCity)
 {
 	CityWidget = InCity;
+
+	DisplayNothing();
 }
 
 void URelicInformationPanel::DisplayItemInformation(uint8 ID, bool bInShouldSell)
@@ -29,16 +31,29 @@ void URelicInformationPanel::DisplayItemInformation(uint8 ID, bool bInShouldSell
 	
 	FItem& Item = UItemManager::GetItemFromIndex(ItemID);
 
+	InteractionButton->SetVisibility(ESlateVisibility::Visible);
+	
 	MainText->SetText(Item.Name);
 	SubText->SetText(Item.Description);
 
 	bShouldSell = bInShouldSell;
+
+	if (bShouldSell)
+	{
+		InteractionButtonMainText->SetText(FText::FromString("Sell"));
+	}
+	else
+	{
+		InteractionButtonMainText->SetText(FText::FromString("Buy"));
+	}
 }
 
 void URelicInformationPanel::DisplayNothing()
 {
 	MainText->SetText(FText::GetEmpty());
 	SubText->SetText(FText::GetEmpty());
+	InteractionButtonMainText->SetText(FText::GetEmpty());
+	InteractionButton->SetVisibility(ESlateVisibility::Hidden);
 }
 
 
@@ -47,11 +62,10 @@ void URelicInformationPanel::OnButtonClick()
 	//sell or buy item
 	if (bShouldSell)
 	{
-		CityWidget->RemoveItem(ItemID);
+		CityWidget->SellItem(ItemID);
 	}
 	else
 	{
-		//TO DO
-		//CityWidget->AddItem(ItemID);
+		CityWidget->BuyItem(ItemID);
 	}
 }
