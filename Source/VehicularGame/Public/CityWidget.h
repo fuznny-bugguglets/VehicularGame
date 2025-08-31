@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Button.h"
 #include "CityWidget.generated.h"
 
 class UShopWidget;
@@ -37,5 +38,11 @@ protected:
 	UShopWidget* Shop = nullptr;
 	UPROPERTY(meta = (BindWidget))
 	URelicInformationPanel* RelicInformationPanel = nullptr;
+	UPROPERTY(meta = (BindWidget))
+	UButton* ExitButton = nullptr;
+
+private:
+	UFUNCTION()
+	void OnExitButton();
 	
 };

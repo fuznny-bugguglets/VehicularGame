@@ -8,6 +8,7 @@
 #include "InventorySubsystem.h"
 #include "RelicInformationPanel.h"
 #include "VehicularGameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 //setup its child widgets
 void UCityWidget::NativeConstruct()
@@ -26,6 +27,8 @@ void UCityWidget::NativeConstruct()
 	{
 		RelicInformationPanel->Setup(this);
 	}
+
+	ExitButton->OnClicked.AddDynamic(this, &UCityWidget::OnExitButton);
 }
 
 //returns child widgets
@@ -68,5 +71,10 @@ void UCityWidget::BuyItem(const uint8 ID)
 
 	CityStorage->UpdateButton(ID);
 	Shop->UpdateButton(ID);
+}
+
+void UCityWidget::OnExitButton()
+{
+	UGameplayStatics::OpenLevel(this, TEXT("Main"));
 }
 
