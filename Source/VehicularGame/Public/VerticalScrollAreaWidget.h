@@ -29,6 +29,14 @@ public:
 	UFUNCTION()
 	virtual void AddItemBlock(const uint8 ID, const FText& MainText, const FText& SubText);
 
+	//update the display text of each button
+	UFUNCTION()
+	void UpdateButtons();
+	//overriden in children
+	virtual void UpdateButton(UItemButtonWidget* Button);
+	//converts id into button and runs other overload
+	virtual void UpdateButton(uint8 ItemID);
+
 	
 
 

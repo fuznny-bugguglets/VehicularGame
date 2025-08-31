@@ -44,5 +44,44 @@ void UVerticalScrollAreaWidget::AddItemBlock(const uint8 ID, const FText& MainTe
 	
 }
 
+void UVerticalScrollAreaWidget::UpdateButtons()
+{
+	for (auto Button : Buttons)
+	{
+		if (!Button)
+		{
+			continue;
+		}
+		
+		UpdateButton(Button);
+	}
+}
+
+void UVerticalScrollAreaWidget::UpdateButton(uint8 ItemID)
+{
+	for (auto Button : Buttons)
+	{
+		if (!Button)
+		{
+			continue;
+		}
+		
+		//is this the button we are looking for?
+		if (Button->GetItemID() == ItemID)
+		{
+			UpdateButton(Button);
+			return;
+		}
+	}
+}
+
+void UVerticalScrollAreaWidget::UpdateButton(UItemButtonWidget* Button)
+{
+	//pure virtual function
+	//but they don't exist in unreal
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("UpdateButton in VerticalScrollAreaWidget should not of run"));
+	return;
+}
+
 
 

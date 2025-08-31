@@ -57,18 +57,6 @@ void UCityStorageWidget::AddItemBlock(const uint8 ID, const FText& MainText, con
 	}
 }
 
-void UCityStorageWidget::UpdateButtons()
-{
-	for (auto Button : Buttons)
-	{
-		if (!Button)
-		{
-			continue;
-		}
-		
-		UpdateButton(Button);
-	}
-}
 
 void UCityStorageWidget::UpdateButton(UItemButtonWidget* Button)
 {
@@ -107,20 +95,7 @@ void UCityStorageWidget::UpdateButton(UItemButtonWidget* Button)
 
 void UCityStorageWidget::UpdateButton(uint8 ItemID)
 {
-	
-	for (auto Button : Buttons)
-	{
-		if (!Button)
-		{
-			continue;
-		}
-		
-		//is this the button we are looking for?
-		if (Button->GetItemID() == ItemID)
-		{
-			UpdateButton(Button);
-			return;
-		}
-	}
+	Super::UpdateButton(ItemID);
 }
+
 

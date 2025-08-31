@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "VerticalScrollAreaWidget.h"
-#include "CityStorageWidget.generated.h"
+#include "ShopWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class VEHICULARGAME_API UCityStorageWidget : public UVerticalScrollAreaWidget
+class VEHICULARGAME_API UShopWidget : public UVerticalScrollAreaWidget
 {
 	GENERATED_BODY()
 public:

@@ -4,6 +4,7 @@
 #include "CityWidget.h"
 
 #include "CityStorageWidget.h"
+#include "ShopWidget.h"
 #include "InventorySubsystem.h"
 #include "RelicInformationPanel.h"
 #include "VehicularGameInstance.h"
@@ -14,6 +15,11 @@ void UCityWidget::NativeConstruct()
 	if (CityStorage)
 	{
 		CityStorage->Setup(this);
+	}
+
+	if (Shop)
+	{
+		Shop->Setup(this);
 	}
 
 	if (RelicInformationPanel)
@@ -27,6 +33,12 @@ UCityStorageWidget* UCityWidget::GetCityStorage() const
 {
 	return CityStorage;
 }
+
+UShopWidget* UCityWidget::GetShop() const
+{
+	return Shop;
+}
+
 URelicInformationPanel* UCityWidget::GetRelicInformationPanel() const
 {
 	return RelicInformationPanel;

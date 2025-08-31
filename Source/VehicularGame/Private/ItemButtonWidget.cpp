@@ -48,17 +48,29 @@ void UItemButtonWidget::SetItemID(uint8 InID)
 
 void UItemButtonWidget::SetText(const FText& InMainText, const FText& InSubText)
 {
+	//
+
 	SetMainText(InMainText);
 	SetSubText(InSubText);
 }
 
 void UItemButtonWidget::SetMainText(const FText& InText)
 {
+	if(!MainText)
+	{
+		return;
+	}
+
 	MainText->SetText(InText);
 }
 
 void UItemButtonWidget::SetSubText(const FText& InText)
 {
+	if(!SubText)
+	{
+		return;
+	}
+
 	SubText->SetText(InText);
 }
 
