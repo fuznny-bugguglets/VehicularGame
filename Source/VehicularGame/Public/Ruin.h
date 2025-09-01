@@ -14,6 +14,7 @@ enum class EResourceType : uint8
 	COMMON UMETA(DisplayName = "Common"),
 	UNCOMMON UMETA(DisplayName = "Uncommon"),
 	RARE UMETA(DisplayName = "Rare"),
+	MISSION UMETA(DisplayName = "Mission"),
 	NULLRESOURCE UMETA(DisplayName = "Null")
 };
 

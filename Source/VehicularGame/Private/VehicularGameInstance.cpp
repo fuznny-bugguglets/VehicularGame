@@ -15,6 +15,12 @@ void UVehicularGameInstance::Init()
 {
 	Super::Init();
 	LoadGameData();
+
+	ItemManager = NewObject<UItemManager>(GetTransientPackage(), ItemManagerClass);
+	if (ItemManager)
+	{
+		ItemManager->SetupItemsFromDataTable();
+	}
 }
 
 void UVehicularGameInstance::LoadGameData()

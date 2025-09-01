@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Item.h"
 #include "Engine/GameInstance.h"
 #include "VehicularGameInstance.generated.h"
 
@@ -64,4 +65,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Classes", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AActor> RuinClass;
+
+	UPROPERTY(EditAnywhere, Category = "Classes", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UItemManager> ItemManagerClass;
+
+	UPROPERTY()
+	UItemManager* ItemManager = nullptr;
 };
