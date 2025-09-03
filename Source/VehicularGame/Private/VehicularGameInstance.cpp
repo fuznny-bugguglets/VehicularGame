@@ -21,6 +21,13 @@ void UVehicularGameInstance::Init()
 	{
 		ItemManager->SetupItemsFromDataTable();
 	}
+
+	CrewManager = NewObject<UCrewManager>(GetTransientPackage(), CrewManagerClass);
+	if (CrewManager)
+	{
+		CrewManager->SetupCrewFromDataTable();
+	}
+
 }
 
 void UVehicularGameInstance::LoadGameData()

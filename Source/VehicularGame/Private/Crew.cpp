@@ -3,4 +3,10 @@
 
 #include "Crew.h"
 
+TArray<FCrew> UCrewManager::Crew;
+
+void UCrewManager::AddCrew(const FCrew& NewCrew)
+{
+	Crew.Emplace(NewCrew);
+}
 

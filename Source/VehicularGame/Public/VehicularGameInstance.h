@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Crew.h"
 #include "Item.h"
 #include "Engine/GameInstance.h"
 #include "VehicularGameInstance.generated.h"
@@ -71,4 +72,10 @@ private:
 
 	UPROPERTY()
 	UItemManager* ItemManager = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Classes", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UCrewManager> CrewManagerClass;
+
+	UPROPERTY()
+	UCrewManager* CrewManager = nullptr;
 };

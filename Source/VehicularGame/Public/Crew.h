@@ -6,25 +6,13 @@
 #include "Crew.generated.h"
 
 UENUM()
-enum EUpgradeType
+enum class EAttributeName : uint8
 {
-	TurretFireRate,
-	TurretDamage,
-	VehicleMoveSpeed
+	SharpShooter,
+	Marathoner,
+	Storyteller,
+	Grumpy
 
-};
-
-USTRUCT(BlueprintType)
-struct FCrewAttribute : public FTableRowBase
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText Name;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Percentage; 
-	
 };
 
 USTRUCT(BlueprintType)
@@ -40,6 +28,9 @@ struct FCrew : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 Cost;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<EAttributeName> Attributes;
 	
 };
 
@@ -50,5 +41,17 @@ UCLASS(Blueprintable, BlueprintType)
 class VEHICULARGAME_API UCrewManager : public UObject
 {
 	GENERATED_BODY()
+public:
 
+	//setup in game instance
+	//logic handled in blueprints to grab crew from data table
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetupCrewFromDataTable();
+
+	UFUNCTION(BlueprintCallable)
+	void AddCrew(const FCrew& NewCrew);
+
+private:
+	//used to store all types of crew
+	static TArray<FCrew> Crew;
 };
