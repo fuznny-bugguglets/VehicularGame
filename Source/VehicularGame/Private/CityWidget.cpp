@@ -4,10 +4,12 @@
 #include "CityWidget.h"
 
 #include "CityStorageWidget.h"
+#include "CrewHireWidget.h"
 #include "ShopWidget.h"
 #include "InventorySubsystem.h"
 #include "RelicInformationPanel.h"
 #include "VehicularGameInstance.h"
+#include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
 
 //setup its child widgets
@@ -26,6 +28,16 @@ void UCityWidget::NativeConstruct()
 	if (RelicInformationPanel)
 	{
 		RelicInformationPanel->Setup(this);
+	}
+
+	if (CrewHire)
+	{
+		CrewHire->Setup(this);
+	}
+
+	if (MoneyText)
+	{
+		UpdateMoney();
 	}
 
 	ExitButton->OnClicked.AddDynamic(this, &UCityWidget::OnExitButton);
@@ -51,7 +63,8 @@ URelicInformationPanel* UCityWidget::GetRelicInformationPanel() const
 
 void UCityWidget::SellItem(const uint8 ID)
 {
-	Cast<UVehicularGameInstance>(GetGameInstance())->GetSubsystem<UInventorySubsystem>()->RemoveItemFromCityStorage(ID);
+	GetInventorySubsystem()->RemoveItemFromCityStorage(ID);
+	GetInventorySubsystem()->AddMoney(UItemManager::GetItemFromIndex(ID).SellPrice);
 	
 	if (!CityStorage)
 	{
@@ -59,35 +72,39 @@ void UCityWidget::SellItem(const uint8 ID)
 	}
 
 	CityStorage->UpdateButton(ID);
+	UpdateMoney();
 }
 
 void UCityWidget::BuyItem(const uint8 ID)
 {
-	Cast<UVehicularGameInstance>(GetGameInstance())->GetSubsystem<UInventorySubsystem>()->RemoveItemFromShop(ID);
-	Cast<UVehicularGameInstance>(GetGameInstance())->GetSubsystem<UInventorySubsystem>()->AddItemToCityStorage(ID);
-	
-	if (!CityStorage)
+	//can we afford it?
+	if (GetInventorySubsystem()->GetMoney() >= UItemManager::GetItemFromIndex(ID).BuyPrice)
 	{
-		return;
+		//changes inventory data
+		GetInventorySubsystem()->RemoveItemFromShop(ID);
+		GetInventorySubsystem()->AddItemToCityStorage(ID);
+		GetInventorySubsystem()->RemoveMoney(UItemManager::GetItemFromIndex(ID).BuyPrice);
+
+		//updates UI
+		if (!CityStorage)
+		{
+			return;
+		}
+
+		if (CityStorage->DoesItemBlockExist(ID))
+		{
+			CityStorage->UpdateButton(ID);
+		}
+		else
+		{
+			CityStorage->CreateItemBlock(ID);
+		}
+
+		Shop->UpdateButton(ID);
+		UpdateMoney();
 	}
 
-	if (CityStorage->DoesItemBlockExist(ID))
-	{
-		CityStorage->UpdateButton(ID);
-	}
-	else
-	{
-		CityStorage->CreateItemBlock(ID);
-	}
 	
-	if (Shop->DoesItemBlockExist(ID))
-	{
-		Shop->UpdateButton(ID);
-	}
-	else
-	{
-		Shop->CreateItemBlock(ID);
-	}
 
 }
 
@@ -118,3 +135,22 @@ void UCityWidget::OnCrewButton()
 	WidgetSwitcher->SetActiveWidgetIndex(1);
 }
 
+UInventorySubsystem* UCityWidget::GetInventorySubsystem()
+{
+	if (Inventory)
+	{
+		return Inventory;
+	}
+
+	Inventory = Cast<UVehicularGameInstance>(GetGameInstance())->GetSubsystem<UInventorySubsystem>();
+	return Inventory;
+}
+
+void UCityWidget::UpdateMoney()
+{
+	const int32 Money = GetInventorySubsystem()->GetMoney();
+
+	FString MoneyString = "$";
+	MoneyString.AppendInt(Money);
+	MoneyText->SetText(FText::FromString(MoneyString));
+}

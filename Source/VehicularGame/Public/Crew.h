@@ -31,6 +31,14 @@ struct FCrew : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<EAttributeName> Attributes;
+
+	bool operator==(const FCrew& Other) const
+	{
+		FString MyStringName = this->Name.ToString();
+		FString TheirStringName = Other.Name.ToString();
+
+		return MyStringName == TheirStringName;
+	}
 	
 };
 
@@ -42,6 +50,10 @@ class VEHICULARGAME_API UCrewManager : public UObject
 {
 	GENERATED_BODY()
 public:
+
+	static FCrew& GetCrewFromIndex(const uint8 Index);
+	static uint8 GetIndexFromCrew(const FCrew& InCrew);
+
 
 	//setup in game instance
 	//logic handled in blueprints to grab crew from data table

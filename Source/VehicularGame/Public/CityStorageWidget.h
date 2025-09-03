@@ -20,8 +20,6 @@ public:
 
 	virtual void AddItemBlock(const uint8 ID, const FText& MainText, const FText& SubText) override;
 	virtual void CreateItemBlock(uint8 ID) override;
-
-	virtual bool DoesItemBlockExist(uint8 ID) override;
 	
 	virtual void UpdateButton(UItemButtonWidget* Button) override;
 	virtual void UpdateButton(uint8 ItemID) override;

@@ -3,9 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
-#include "Components/Button.h"
-#include "Components/TextBlock.h"
+#include "SuperButtonWidget.h"
 #include "ItemButtonWidget.generated.h"
 
 class UCityWidget;
@@ -13,15 +11,12 @@ class UCityWidget;
  * 
  */
 UCLASS()
-class VEHICULARGAME_API UItemButtonWidget : public UUserWidget
+class VEHICULARGAME_API UItemButtonWidget : public USuperButtonWidget
 {
 	GENERATED_BODY()  
 
 public:
 	virtual void NativeConstruct() override;
-	
-	UFUNCTION()
-	void Setup(UCityWidget* InCity);
 
 	uint8 GetItemID() const;
 	
@@ -39,9 +34,6 @@ protected:
 	UTextBlock* MainText = nullptr;
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget, AllowPrivateAccess = "true"))
 	UTextBlock* SubText = nullptr;
-
-	UPROPERTY()
-	UCityWidget* CityWidget = nullptr;
 
 	UPROPERTY()
 	uint8 MyItemID = 255;

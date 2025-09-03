@@ -19,11 +19,6 @@ void UItemButtonWidget::NativeConstruct()
 	Button->OnClicked.AddDynamic(this, &UItemButtonWidget::OnButtonClicked);
 }
 
-//called by vertical scroll area widget when created
-void UItemButtonWidget::Setup(UCityWidget* InCity)
-{
-	CityWidget = InCity;
-}
 
 //called when the user clicks on the button
 //displays information about this item on the relic information panel

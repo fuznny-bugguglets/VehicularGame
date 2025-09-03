@@ -117,19 +117,3 @@ void UCityStorageWidget::CreateItemBlock(uint8 ID)
 	);
 }
 
-bool UCityStorageWidget::DoesItemBlockExist(uint8 ID)
-{
-	for (auto Button : Buttons)
-	{
-		if (Button)
-		{
-			//does the item match the ID
-			if (Button->GetItemID() == ID)
-			{
-				return true;
-			}
-		}
-	}
-
-	return false;
-}

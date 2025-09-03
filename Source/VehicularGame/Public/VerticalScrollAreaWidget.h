@@ -7,6 +7,7 @@
 #include "Components/ScrollBox.h"
 #include "VerticalScrollAreaWidget.generated.h"
 
+class UInventorySubsystem;
 class UCityWidget;
 class UItemButtonWidget;
 /**
@@ -33,7 +34,7 @@ public:
 	virtual void CreateItemBlock(uint8 ID);
 
 	UFUNCTION()
-	virtual bool DoesItemBlockExist(uint8 ID);
+	bool DoesItemBlockExist(uint8 ID);
 	 
 	//update the display text of each button
 	UFUNCTION()
@@ -63,5 +64,12 @@ protected:
 	UPROPERTY()
 	TArray<UItemButtonWidget*> Buttons;
 
+
+
+	UInventorySubsystem* GetInventory();
+
+private:
+	UPROPERTY()
+	UInventorySubsystem* Inventory;
 	
 };

@@ -3,10 +3,29 @@
 
 #include "CrewHireWidget.h"
 
+#include "Crew.h"
+#include "InventorySubsystem.h"
+
 void UCrewHireWidget::Setup(UCityWidget* InCity)
 {
 	Super::Setup(InCity);
 
+	//spawns a block for each hirable crew
+	for (const auto CrewID : GetInventory()->GetHirableCrew())
+	{
+		FCrew& Crew = UCrewManager::GetCrewFromIndex(CrewID);
 
+		FText Main = Crew.Name;
+
+		FString SubtextString("$");
+		SubtextString.AppendInt(Crew.Cost);
+		FText Subtext = FText::FromString(SubtextString);
+
+		AddItemBlock(
+			CrewID,
+			Main,
+			Subtext
+		);
+	}
 }
 

@@ -22,26 +22,7 @@ void UShopWidget::Setup(UCityWidget* InCity)
 	//spawns an item block for each unique item in the ventory 
 	for (auto& Element : InventorySystem->GetShop())
 	{
-		//shop maps item indexes to its count
-		FItem& Item = UItemManager::GetItemFromIndex(Element.Key);
-		
-		//get the items name from its item index
-		FText Main = Item.Name;
-
-		//get the price of the item
-		//note: Element.Value relates to Key and Value (itemID and Count)
-		//here, we are fetching the Item.Value: the price of an item
-		//const int32 Value = Item.Value;
-		const int32 Value = 420;
-		FString SubtextString("$");
-		SubtextString.Append(FString::FromInt(Value));
-		FText Subtext = FText::FromString(SubtextString);
-		
-		AddItemBlock(
-			Element.Key,
-			Main,
-			Subtext
-			);
+		CreateItemBlock(Element.Key);
 	}
 }
 
@@ -76,7 +57,7 @@ void UShopWidget::UpdateButton(UItemButtonWidget* Button)
 		//do we have any of the item?
 		if (Count > 0)
 		{
-			const int32 Value = UItemManager::GetItemFromIndex(ItemID).Value;
+			const int32 Value = UItemManager::GetItemFromIndex(ItemID).BuyPrice;
 			FString SubtextString("$");
 			SubtextString.Append(FString::FromInt(Value));
 			FText Subtext = FText::FromString(SubtextString);
@@ -99,4 +80,28 @@ void UShopWidget::UpdateButton(UItemButtonWidget* Button)
 void UShopWidget::UpdateButton(uint8 ItemID)
 {
 	Super::UpdateButton(ItemID);
+}
+
+void UShopWidget::CreateItemBlock(uint8 ID)
+{
+	//shop maps item indexes to its count
+	FItem& Item = UItemManager::GetItemFromIndex(ID);
+
+	//get the items name from its item index
+	FText Main = Item.Name;
+
+	//get the price of the item
+	//note: Element.Value relates to Key and Value (itemID and Count)
+	//here, we are fetching the Item.Value: the price of an item
+	//const int32 Value = Item.Value;
+	const int32 Value = Item.BuyPrice;
+	FString SubtextString("$");
+	SubtextString.Append(FString::FromInt(Value));
+	FText Subtext = FText::FromString(SubtextString);
+
+	AddItemBlock(
+		ID,
+		Main,
+		Subtext
+	);
 }

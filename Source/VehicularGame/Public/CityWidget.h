@@ -8,9 +8,12 @@
 #include "Components/WidgetSwitcher.h"
 #include "CityWidget.generated.h"
 
+class UTextBlock;
 class UShopWidget;
 class UCityStorageWidget;
 class URelicInformationPanel;
+class UInventorySubsystem;
+class UCrewHireWidget;
 /**
  * 
  */
@@ -43,6 +46,9 @@ protected:
 	URelicInformationPanel* RelicInformationPanel = nullptr;
 
 	UPROPERTY(meta = (BindWidget))
+	UCrewHireWidget* CrewHire = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
 	UWidgetSwitcher* WidgetSwitcher = nullptr;
 
 	UPROPERTY(meta = (BindWidget))
@@ -54,6 +60,10 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	UButton* ExitButton = nullptr;
 
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* MoneyText = nullptr;
+
+
 private:
 	UFUNCTION()
 	void OnExitButton();
@@ -63,5 +73,13 @@ private:
 
 	UFUNCTION()
 	void OnCrewButton();
+
+	UFUNCTION()
+	UInventorySubsystem* GetInventorySubsystem();
+
+	void UpdateMoney();
+
+	UPROPERTY()
+	UInventorySubsystem* Inventory = nullptr;
 	
 };

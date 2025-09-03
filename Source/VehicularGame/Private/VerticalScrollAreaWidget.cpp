@@ -2,6 +2,8 @@
 
 
 #include "VerticalScrollAreaWidget.h"
+
+#include "InventorySubsystem.h"
 #include "ItemButtonWidget.h"
 
 //default constructor
@@ -94,8 +96,27 @@ void UVerticalScrollAreaWidget::CreateItemBlock(uint8 ID)
 
 bool UVerticalScrollAreaWidget::DoesItemBlockExist(uint8 ID)
 {
-	//pure virtual function
-	//but they don't exist in unreal
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("DoesItemBlockExist in VerticalScrollAreaWidget should not of run"));
+	for (auto Button : Buttons)
+	{
+		if (Button)
+		{
+			//does the item match the ID
+			if (Button->GetItemID() == ID)
+			{
+				return true;
+			}
+		}
+	}
+
 	return false;
+}
+
+UInventorySubsystem* UVerticalScrollAreaWidget::GetInventory()
+{
+	if (!Inventory)
+	{
+		Inventory = Cast<UInventorySubsystem>(GetGameInstance()->GetSubsystem<UInventorySubsystem>());
+	}
+
+	return Inventory;
 }

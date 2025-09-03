@@ -5,6 +5,14 @@
 
 UInventorySubsystem::UInventorySubsystem()
 {
+	//sets hired crew inventory to default
+	for (int32 i = 0; i < 6; i++)
+	{
+		HiredCrew[i] = 255;
+	}
+
+	//temp testing things you can delete later
+
 	CityStorage.Empty();
 	AddItemToCityStorage(0, 10);
 	AddItemToCityStorage(1, 10);
@@ -17,6 +25,9 @@ UInventorySubsystem::UInventorySubsystem()
 	Shop.Empty();
 	AddItemToShop(0);
 	AddItemToShop(1);
+
+	HirableCrew.Empty();
+	AddCrewForHire(0);
 
 }
 
@@ -179,3 +190,44 @@ const TMap<uint8, uint32>& UInventorySubsystem::GetShop() const
 {
 	return Shop;
 }
+
+const int32 UInventorySubsystem::GetMoney() const
+{
+	return Money;
+}
+
+void UInventorySubsystem::SetMoney(int32 NewMoney)
+{
+	Money = NewMoney;
+}
+
+void UInventorySubsystem::AddMoney(int32 NewMoney)
+{
+	Money += NewMoney;
+}
+
+void UInventorySubsystem::RemoveMoney(int32 NewMoney)
+{
+	Money -= NewMoney;
+}
+
+const TArray<uint8> UInventorySubsystem::GetHirableCrew() const
+{
+	return HirableCrew;
+}
+
+const uint8* UInventorySubsystem::GetHiredCrew() const
+{
+	return HiredCrew;
+}
+
+void UInventorySubsystem::AddCrewForHire(uint8 CrewIndex)
+{
+	HirableCrew.Emplace(CrewIndex);
+}
+
+void UInventorySubsystem::AddCrewForHire(FCrew& CrewRef)
+{
+	AddCrewForHire(UCrewManager::GetIndexFromCrew(CrewRef));
+}
+

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Item.h"
+#include "Crew.h"
 #include "InventorySubsystem.generated.h"
 
 /**
@@ -20,6 +21,14 @@ public:
 
 	const TMap<uint8, uint32>& GetCityStorage() const;
 	const TMap<uint8, uint32>& GetShop() const;
+
+	const TArray<uint8> GetHirableCrew() const;
+	const uint8* GetHiredCrew() const;
+
+	const int32 GetMoney() const;
+	void SetMoney(int32 NewMoney);
+	void AddMoney(int32 NewMoney);
+	void RemoveMoney(int32 NewMoney);
 
 	//takes in an item (by index or type) and adds it to the inventory
 	void AddItemToCityStorage(uint8 ItemIndex);
@@ -45,11 +54,18 @@ public:
 	void RemoveItemFromShop(uint8 ItemIndex, int32 Amount);
 	void RemoveItemFromShop(FItem& InItem, int32 Amount);
 
+	//takes in a crewmember (by index or type) and allows them to be hired
+	void AddCrewForHire(uint8 CrewIndex);
+	void AddCrewForHire(FCrew& CrewRef);
+
 private:
+	int32 Money = 0;
+
 	//maps the item index to the amount of the item
 	TMap<uint8, uint32> CityStorage;
 	TMap<uint8, uint32> Shop;
 
-
-	
+	//int is crewmate index
+	TArray<uint8> HirableCrew;
+	uint8 HiredCrew[6]; //inventory size of 6
 };
