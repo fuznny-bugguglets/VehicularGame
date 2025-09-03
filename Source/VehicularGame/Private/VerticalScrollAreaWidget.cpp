@@ -59,6 +59,7 @@ void UVerticalScrollAreaWidget::UpdateButtons()
 
 void UVerticalScrollAreaWidget::UpdateButton(uint8 ItemID)
 {
+	//looks for the buttons
 	for (auto Button : Buttons)
 	{
 		if (!Button)
@@ -83,5 +84,18 @@ void UVerticalScrollAreaWidget::UpdateButton(UItemButtonWidget* Button)
 	return;
 }
 
+void UVerticalScrollAreaWidget::CreateItemBlock(uint8 ID) 
+{
+	//pure virtual function
+	//but they don't exist in unreal
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("CreateItemBlock in VerticalScrollAreaWidget should not of run"));
+	return;
+}
 
-
+bool UVerticalScrollAreaWidget::DoesItemBlockExist(uint8 ID)
+{
+	//pure virtual function
+	//but they don't exist in unreal
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("DoesItemBlockExist in VerticalScrollAreaWidget should not of run"));
+	return false;
+}

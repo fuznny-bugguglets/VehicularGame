@@ -29,6 +29,12 @@ public:
 	UFUNCTION()
 	virtual void AddItemBlock(const uint8 ID, const FText& MainText, const FText& SubText);
 
+	UFUNCTION()
+	virtual void CreateItemBlock(uint8 ID);
+
+	UFUNCTION()
+	virtual bool DoesItemBlockExist(uint8 ID);
+	 
 	//update the display text of each button
 	UFUNCTION()
 	void UpdateButtons();

@@ -99,3 +99,37 @@ void UCityStorageWidget::UpdateButton(uint8 ItemID)
 }
 
 
+void UCityStorageWidget::CreateItemBlock(uint8 ID)
+{
+	//get the items name from its item index
+	FText Main = UItemManager::GetItemFromIndex(ID).Name;
+
+	//sets it to 1
+	const int32 Count = 1;
+	FString SubtextString("x");
+	SubtextString.Append(FString::FromInt(Count));
+	FText Subtext = FText::FromString(SubtextString);
+
+	AddItemBlock(
+		ID,
+		Main,
+		Subtext
+	);
+}
+
+bool UCityStorageWidget::DoesItemBlockExist(uint8 ID)
+{
+	for (auto Button : Buttons)
+	{
+		if (Button)
+		{
+			//does the item match the ID
+			if (Button->GetItemID() == ID)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}

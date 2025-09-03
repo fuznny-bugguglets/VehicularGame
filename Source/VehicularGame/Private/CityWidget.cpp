@@ -71,8 +71,24 @@ void UCityWidget::BuyItem(const uint8 ID)
 		return;
 	}
 
-	CityStorage->UpdateButton(ID);
-	Shop->UpdateButton(ID);
+	if (CityStorage->DoesItemBlockExist(ID))
+	{
+		CityStorage->UpdateButton(ID);
+	}
+	else
+	{
+		CityStorage->CreateItemBlock(ID);
+	}
+	
+	if (Shop->DoesItemBlockExist(ID))
+	{
+		Shop->UpdateButton(ID);
+	}
+	else
+	{
+		Shop->CreateItemBlock(ID);
+	}
+
 }
 
 void UCityWidget::OnExitButton()
