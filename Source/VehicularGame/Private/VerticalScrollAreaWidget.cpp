@@ -21,21 +21,23 @@ void UVerticalScrollAreaWidget::Setup(UCityWidget* InCity)
 //creates a new button inside the scroll (called by subclasses)
 void UVerticalScrollAreaWidget::AddItemBlock(const uint8 ID, const FText& MainText, const FText& SubText)
 {
-	if (!ItemButtonWidgetClass)
+	if (!ButtonWidgetClass)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, TEXT("no button widget"));
 		return;
 	}
 
-	UItemButtonWidget* NewButton = CreateWidget<UItemButtonWidget>(GetWorld(), ItemButtonWidgetClass);
+	USuperButtonWidget* NewButton = CreateWidget<USuperButtonWidget>(GetWorld(), ButtonWidgetClass);
 	if (!NewButton)
 	{
+		
 		return;
 	}
 
 	//setup button with information ID and text to display
 	NewButton->Setup(CityWidget);
 	NewButton->SetText(MainText, SubText);
-	NewButton->SetItemID(ID);
+	NewButton->SetID(ID); 
 
 	if (ScrollyBox)
 	{
@@ -70,7 +72,7 @@ void UVerticalScrollAreaWidget::UpdateButton(uint8 ItemID)
 		}
 		
 		//is this the button we are looking for?
-		if (Button->GetItemID() == ItemID)
+		if (Button->GetID() == ItemID)
 		{
 			UpdateButton(Button);
 			return;
@@ -78,7 +80,7 @@ void UVerticalScrollAreaWidget::UpdateButton(uint8 ItemID)
 	}
 }
 
-void UVerticalScrollAreaWidget::UpdateButton(UItemButtonWidget* Button)
+void UVerticalScrollAreaWidget::UpdateButton(USuperButtonWidget* Button)
 {
 	//pure virtual function
 	//but they don't exist in unreal
@@ -101,7 +103,7 @@ bool UVerticalScrollAreaWidget::DoesItemBlockExist(uint8 ID)
 		if (Button)
 		{
 			//does the item match the ID
-			if (Button->GetItemID() == ID)
+			if (Button->GetID() == ID)
 			{
 				return true;
 			}

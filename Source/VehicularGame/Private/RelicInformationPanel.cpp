@@ -15,15 +15,10 @@ void URelicInformationPanel::NativeConstruct()
 	Super::NativeConstruct();
 
 	InteractionButton->OnClicked.AddDynamic(this, &URelicInformationPanel::OnButtonClick);
-}
-
-
-void URelicInformationPanel::Setup(UCityWidget* InCity)
-{
-	CityWidget = InCity;
 
 	DisplayNothing();
 }
+
 
 void URelicInformationPanel::DisplayItemInformation(uint8 ID, bool bInShouldSell)
 {

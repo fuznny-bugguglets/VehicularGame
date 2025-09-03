@@ -28,45 +28,10 @@ void UItemButtonWidget::OnButtonClicked()
 	{
 		if (CityWidget->GetRelicInformationPanel())
 		{
-			CityWidget->GetRelicInformationPanel()->DisplayItemInformation(MyItemID, bSell);
+			CityWidget->GetRelicInformationPanel()->DisplayItemInformation(ButtonID, bSell);
 		}
 	}
 	
-}
-
-
-void UItemButtonWidget::SetItemID(uint8 InID)
-{
-	MyItemID = InID;
-}
-
-
-void UItemButtonWidget::SetText(const FText& InMainText, const FText& InSubText)
-{
-	//
-
-	SetMainText(InMainText);
-	SetSubText(InSubText);
-}
-
-void UItemButtonWidget::SetMainText(const FText& InText)
-{
-	if(!MainText)
-	{
-		return;
-	}
-
-	MainText->SetText(InText);
-}
-
-void UItemButtonWidget::SetSubText(const FText& InText)
-{
-	if(!SubText)
-	{
-		return;
-	}
-
-	SubText->SetText(InText);
 }
 
 void UItemButtonWidget::SetBuySellType(bool bShouldSell)
@@ -74,7 +39,3 @@ void UItemButtonWidget::SetBuySellType(bool bShouldSell)
 	bSell = bShouldSell;
 }
 
-uint8 UItemButtonWidget::GetItemID() const
-{
-	return MyItemID;
-}

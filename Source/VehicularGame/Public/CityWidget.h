@@ -8,6 +8,7 @@
 #include "Components/WidgetSwitcher.h"
 #include "CityWidget.generated.h"
 
+class UCrewInformationPanel;
 class UTextBlock;
 class UShopWidget;
 class UCityStorageWidget;
@@ -30,6 +31,7 @@ public:
 	UCityStorageWidget* GetCityStorage() const;
 	UShopWidget* GetShop() const;
 	URelicInformationPanel* GetRelicInformationPanel() const;
+	UCrewInformationPanel* GetCrewInformationPanel() const;
 
 	void SellItem(const uint8 ID);
 	void BuyItem(const uint8 ID);
@@ -47,6 +49,9 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	UCrewHireWidget* CrewHire = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UCrewInformationPanel* CrewInformationPanel = nullptr;
 
 	UPROPERTY(meta = (BindWidget))
 	UWidgetSwitcher* WidgetSwitcher = nullptr;

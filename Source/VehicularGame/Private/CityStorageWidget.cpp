@@ -52,20 +52,26 @@ void UCityStorageWidget::AddItemBlock(const uint8 ID, const FText& MainText, con
 		{
 			//we are the storage
 			//any items here should be sold
-			Button->SetBuySellType(true);
+
+			UItemButtonWidget* ItemButtonWidget = Cast<UItemButtonWidget>(Button);
+			if (ItemButtonWidget)
+			{
+				ItemButtonWidget->SetBuySellType(true);
+			}
+			
 		}
 	}
 }
 
 
-void UCityStorageWidget::UpdateButton(UItemButtonWidget* Button)
+void UCityStorageWidget::UpdateButton(USuperButtonWidget* Button)
 {
 	if (!Button)
 	{
 		return;
 	}
 	
-	const uint8 ItemID = Button->GetItemID();
+	const uint8 ItemID = Button->GetID();
 
 	//does the item exist?
 	if (GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetCityStorage().Contains(ItemID))

@@ -9,7 +9,7 @@
 void UCrewHireWidget::Setup(UCityWidget* InCity)
 {
 	Super::Setup(InCity);
-
+	
 	//spawns a block for each hirable crew
 	for (const auto CrewID : GetInventory()->GetHirableCrew())
 	{

@@ -28,6 +28,8 @@ UInventorySubsystem::UInventorySubsystem()
 
 	HirableCrew.Empty();
 	AddCrewForHire(0);
+	AddCrewForHire(1);
+	AddCrewForHire(2);
 
 }
 

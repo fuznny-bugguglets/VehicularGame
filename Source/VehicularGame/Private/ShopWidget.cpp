@@ -36,19 +36,23 @@ void UShopWidget::AddItemBlock(const uint8 ID, const FText& MainText, const FTex
 		{
 			//we are the shio
 			//any items here should be bought by the player
-			Button->SetBuySellType(false);
+			UItemButtonWidget* ItemButtonWidget = Cast<UItemButtonWidget>(Button);
+			if (ItemButtonWidget)
+			{
+				ItemButtonWidget->SetBuySellType(false);
+			}
 		}
 	}
 }
 
-void UShopWidget::UpdateButton(UItemButtonWidget* Button)
+void UShopWidget::UpdateButton(USuperButtonWidget* Button)
 {
 	if (!Button)
 	{
 		return;
 	}
 	
-	const uint8 ItemID = Button->GetItemID();
+	const uint8 ItemID = Button->GetID();
 
 	//does the item exist?
 	if (GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetShop().Contains(ItemID))

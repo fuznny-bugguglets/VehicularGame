@@ -154,3 +154,8 @@ void UCityWidget::UpdateMoney()
 	MoneyString.AppendInt(Money);
 	MoneyText->SetText(FText::FromString(MoneyString));
 }
+
+UCrewInformationPanel* UCityWidget::GetCrewInformationPanel() const
+{
+	return CrewInformationPanel;
+}
