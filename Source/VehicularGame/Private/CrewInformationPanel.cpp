@@ -48,6 +48,13 @@ void UCrewInformationPanel::OnButtonClicked()
 {
 	if (CityWidget)
 	{
-		CityWidget->HireCrewMember(CrewID);
+		if (bIsHired)
+		{
+			CityWidget->LayOffCrewMember(CrewID);
+		}
+		else
+		{
+			CityWidget->HireCrewMember(CrewID);
+		}
 	}
 }

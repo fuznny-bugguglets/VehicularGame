@@ -38,6 +38,7 @@ public:
 	void BuyItem(const uint8 ID);
 
 	void HireCrewMember(const uint8 ID);
+	void LayOffCrewMember(const uint8 ID);
 
 protected:
 	//child widgets

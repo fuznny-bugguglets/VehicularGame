@@ -37,6 +37,11 @@ void UCityWidget::NativeConstruct()
 		CrewHire->Setup(this);
 	}
 
+	if (EquippedCrew)
+	{
+		EquippedCrew->Setup(this);
+	}
+
 	if (CrewInformationPanel)
 	{
 		CrewInformationPanel->Setup(this);
@@ -200,4 +205,23 @@ void UCityWidget::HireCrewMember(const uint8 ID)
 		CrewInformationPanel->HideDisplay();
 		
 	}
+}
+
+void UCityWidget::LayOffCrewMember(const uint8 ID)
+{
+	//change inventory data
+	GetInventorySubsystem()->RemoveHiredCrew(ID);
+	
+	//update UI
+	if (!EquippedCrew)
+	{
+		return;
+	}
+	EquippedCrew->UpdateSlots();
+
+	if (!CrewInformationPanel)
+	{
+		return;
+	}
+	CrewInformationPanel->HideDisplay();
 }

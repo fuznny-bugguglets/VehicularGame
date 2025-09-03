@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "CrewEquippedWidget.generated.h"
 
+class UCityWidget;
 class UHiredCrewButton;
 /**
  * 
@@ -17,7 +18,7 @@ class VEHICULARGAME_API UCrewEquippedWidget : public UUserWidget
 
 public:
 	virtual void NativeConstruct() override;
-	
+	void Setup(UCityWidget* InCity);
 	void UpdateSlots();
 	
 protected:
@@ -36,4 +37,7 @@ protected:
 
 	UPROPERTY()
 	TArray<UHiredCrewButton*> Slots;
+
+	UPROPERTY()
+	UCityWidget* CityWidget;
 };

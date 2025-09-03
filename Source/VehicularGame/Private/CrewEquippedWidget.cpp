@@ -20,22 +20,32 @@ void UCrewEquippedWidget::NativeConstruct()
 	UpdateSlots();
 }
 
+void UCrewEquippedWidget::Setup(UCityWidget* InCity)
+{
+	CityWidget = InCity;
+	for (auto ThisSlot : Slots)
+	{
+		ThisSlot->Setup(InCity);
+	}
+}
+
 
 void UCrewEquippedWidget::UpdateSlots()
 {
 	UInventorySubsystem* Inventory = GetGameInstance()->GetSubsystem<UInventorySubsystem>();
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Updating"));
+	
 	for (int32 i = 0; i < 6; i++)
 	{
 		//is the equipped null
 		if (Inventory->GetHiredCrew()[i] == 255)
 		{
 			Slots[i]->SetMainText(FText::GetEmpty());
+			Slots[i]->SetID(255);
 			continue;
 		}
 		
 		Slots[i]->SetMainText(UCrewManager::GetCrewFromIndex(Inventory->GetHiredCrew()[i]).Name);
+		Slots[i]->SetID(Inventory->GetHiredCrew()[i]);
 	}
 	
 }
