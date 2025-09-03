@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
+#include "Components/WidgetSwitcher.h"
 #include "CityWidget.generated.h"
 
 class UShopWidget;
@@ -34,15 +35,33 @@ protected:
 	//child widgets
 	UPROPERTY(meta = (BindWidget))
 	UCityStorageWidget* CityStorage = nullptr;
+
 	UPROPERTY(meta = (BindWidget))
 	UShopWidget* Shop = nullptr;
+
 	UPROPERTY(meta = (BindWidget))
 	URelicInformationPanel* RelicInformationPanel = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UWidgetSwitcher* WidgetSwitcher = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* RelicsButton = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* CrewButton = nullptr;
+
 	UPROPERTY(meta = (BindWidget))
 	UButton* ExitButton = nullptr;
 
 private:
 	UFUNCTION()
 	void OnExitButton();
+
+	UFUNCTION()
+	void OnRelicsButton();
+
+	UFUNCTION()
+	void OnCrewButton();
 	
 };

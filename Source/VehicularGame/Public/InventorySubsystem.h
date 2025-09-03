@@ -49,5 +49,7 @@ private:
 	//maps the item index to the amount of the item
 	TMap<uint8, uint32> CityStorage;
 	TMap<uint8, uint32> Shop;
+
+
 	
 };

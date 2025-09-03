@@ -29,6 +29,8 @@ void UCityWidget::NativeConstruct()
 	}
 
 	ExitButton->OnClicked.AddDynamic(this, &UCityWidget::OnExitButton);
+	RelicsButton->OnClicked.AddDynamic(this, &UCityWidget::OnRelicsButton);
+	CrewButton->OnClicked.AddDynamic(this, &UCityWidget::OnCrewButton);
 }
 
 //returns child widgets
@@ -76,5 +78,27 @@ void UCityWidget::BuyItem(const uint8 ID)
 void UCityWidget::OnExitButton()
 {
 	UGameplayStatics::OpenLevel(this, TEXT("Main"));
+}
+
+void UCityWidget::OnRelicsButton()
+{
+	if (!WidgetSwitcher)
+	{
+		return;
+	}
+
+	//displays the relics screen
+	WidgetSwitcher->SetActiveWidgetIndex(0);
+}
+
+void UCityWidget::OnCrewButton()
+{
+	if (!WidgetSwitcher)
+	{
+		return;
+	}
+
+	//displays the crew screen
+	WidgetSwitcher->SetActiveWidgetIndex(1);
 }
 
