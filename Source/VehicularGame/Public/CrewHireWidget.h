@@ -16,4 +16,6 @@ class VEHICULARGAME_API UCrewHireWidget : public UVerticalScrollAreaWidget
 
 public:
 	virtual void Setup(UCityWidget* InCity) override;
+
+	virtual void UpdateButton(uint8 ItemID) override;
 };

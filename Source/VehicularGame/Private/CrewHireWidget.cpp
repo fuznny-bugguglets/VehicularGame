@@ -5,6 +5,7 @@
 
 #include "Crew.h"
 #include "InventorySubsystem.h"
+#include "SuperButtonWidget.h"
 
 void UCrewHireWidget::Setup(UCityWidget* InCity)
 {
@@ -29,3 +30,25 @@ void UCrewHireWidget::Setup(UCityWidget* InCity)
 	}
 }
 
+void UCrewHireWidget::UpdateButton(uint8 CrewID)
+{
+	//should the button disappear?
+	//i.e. is it not in the array
+	if (!GetInventory()->GetHirableCrew().Contains(CrewID))
+	{
+		//search for the button we care about
+		for (auto Button : Buttons)
+		{
+			//is this it?
+			if (Button->GetID() == CrewID)
+			{
+				//delete it
+				Buttons.Remove(Button);
+				Button->RemoveFromParent();
+				Button = nullptr;
+			}
+		}
+	}
+	
+	
+}

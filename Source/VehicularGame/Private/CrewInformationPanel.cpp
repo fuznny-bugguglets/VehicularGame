@@ -37,7 +37,6 @@ void UCrewInformationPanel::DisplayCrewInformation(uint8 ID, bool _bIsHired)
 
 void UCrewInformationPanel::OnButtonClicked()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Orange, TEXT("button clicked"));
 	if (CityWidget)
 	{
 		CityWidget->HireCrewMember(CrewID);

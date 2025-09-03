@@ -38,7 +38,6 @@ void UCityWidget::NativeConstruct()
 
 	if (CrewInformationPanel)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, TEXT("crew info setup"));
 		CrewInformationPanel->Setup(this);
 	}
 
@@ -169,11 +168,9 @@ UCrewInformationPanel* UCityWidget::GetCrewInformationPanel() const
 
 void UCityWidget::HireCrewMember(const uint8 ID)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Yellow, TEXT("hiriing"));
 	//do we have enough
 	if (GetInventorySubsystem()->GetMoney() >= UCrewManager::GetCrewFromIndex(ID).Cost)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, TEXT("enough money"));
 		//change inventory data
 		GetInventorySubsystem()->RemoveCrewForHire(ID);
 		GetInventorySubsystem()->AddHiredCrew(ID);
@@ -187,7 +184,7 @@ void UCityWidget::HireCrewMember(const uint8 ID)
 			return;
 		}
 
-		//CrewHire->
+		CrewHire->UpdateButton(ID);
 		
 	}
 }
