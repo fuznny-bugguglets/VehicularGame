@@ -18,6 +18,7 @@ public:
 	virtual void NativeConstruct() override;
 
 	void DisplayCrewInformation(uint8 ID, bool _bIsHired);
+	void HideDisplay();
 
 protected:
 	uint8 CrewID = 255; 

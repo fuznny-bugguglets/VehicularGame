@@ -4,6 +4,7 @@
 #include "CityWidget.h"
 
 #include "CityStorageWidget.h"
+#include "CrewEquippedWidget.h"
 #include "CrewHireWidget.h"
 #include "CrewInformationPanel.h"
 #include "ShopWidget.h"
@@ -183,8 +184,20 @@ void UCityWidget::HireCrewMember(const uint8 ID)
 		{
 			return;
 		}
-
 		CrewHire->UpdateButton(ID);
+
+		if (!EquippedCrew)
+		{
+			return;
+		}
+		EquippedCrew->UpdateSlots();
+
+		if (!CrewInformationPanel)
+		{
+			return;
+		}
+
+		CrewInformationPanel->HideDisplay();
 		
 	}
 }

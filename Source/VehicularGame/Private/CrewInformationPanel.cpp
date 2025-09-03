@@ -35,6 +35,15 @@ void UCrewInformationPanel::DisplayCrewInformation(uint8 ID, bool _bIsHired)
 	}
 }
 
+void UCrewInformationPanel::HideDisplay()
+{
+	InteractionButton->SetVisibility(ESlateVisibility::Hidden);
+	MainText->SetText(FText::GetEmpty());
+	SubText->SetText(FText::GetEmpty());
+	InteractionButtonMainText->SetText(FText::GetEmpty());
+}
+
+
 void UCrewInformationPanel::OnButtonClicked()
 {
 	if (CityWidget)

@@ -8,6 +8,7 @@
 #include "Components/WidgetSwitcher.h"
 #include "CityWidget.generated.h"
 
+class UCrewEquippedWidget;
 class UCrewInformationPanel;
 class UTextBlock;
 class UShopWidget;
@@ -51,6 +52,9 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	UCrewHireWidget* CrewHire = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UCrewEquippedWidget* EquippedCrew = nullptr;
 
 	UPROPERTY(meta = (BindWidget))
 	UCrewInformationPanel* CrewInformationPanel = nullptr;
