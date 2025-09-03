@@ -23,4 +23,7 @@ protected:
 	uint8 CrewID = 255; 
 
 	bool bIsHired = false;
+
+	UFUNCTION()
+	void OnButtonClicked();
 };

@@ -9,6 +9,8 @@
 void UCrewInformationPanel::NativeConstruct()
 {
 	Super::NativeConstruct();
+
+	InteractionButton->OnClicked.AddDynamic(this, &UCrewInformationPanel::OnButtonClicked);
 }
 
 void UCrewInformationPanel::DisplayCrewInformation(uint8 ID, bool _bIsHired)
@@ -30,5 +32,14 @@ void UCrewInformationPanel::DisplayCrewInformation(uint8 ID, bool _bIsHired)
 	else
 	{
 		InteractionButtonMainText->SetText(FText::FromString("Hire"));
+	}
+}
+
+void UCrewInformationPanel::OnButtonClicked()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Orange, TEXT("button clicked"));
+	if (CityWidget)
+	{
+		CityWidget->HireCrewMember(CrewID);
 	}
 }

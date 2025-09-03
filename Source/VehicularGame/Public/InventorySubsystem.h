@@ -53,10 +53,16 @@ public:
 	void RemoveItemFromShop(FItem& InItem);
 	void RemoveItemFromShop(uint8 ItemIndex, int32 Amount);
 	void RemoveItemFromShop(FItem& InItem, int32 Amount);
-
-	//takes in a crewmember (by index or type) and allows them to be hired
+	
 	void AddCrewForHire(uint8 CrewIndex);
 	void AddCrewForHire(FCrew& CrewRef);
+	void RemoveCrewForHire(uint8 CrewIndex);
+	void RemoveCrewForHire(FCrew& CrewRef);
+
+	void AddHiredCrew(uint8 CrewIndex);
+	void AddHiredCrew(FCrew& CrewRef);
+	void RemoveHiredCrew(uint8 CrewIndex);
+	void RemoveHiredCrew(FCrew& CrewRef);
 
 private:
 	int32 Money = 0;

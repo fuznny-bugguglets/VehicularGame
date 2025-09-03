@@ -233,3 +233,50 @@ void UInventorySubsystem::AddCrewForHire(FCrew& CrewRef)
 	AddCrewForHire(UCrewManager::GetIndexFromCrew(CrewRef));
 }
 
+void UInventorySubsystem::RemoveCrewForHire(uint8 CrewIndex)
+{
+	HirableCrew.Remove(CrewIndex);
+}
+
+void UInventorySubsystem::RemoveCrewForHire(FCrew& CrewRef)
+{
+	RemoveCrewForHire(UCrewManager::GetIndexFromCrew(CrewRef));
+}
+
+void UInventorySubsystem::AddHiredCrew(uint8 CrewIndex)
+{
+	for (int32 i = 0; i < 6; i++)
+	{
+		//if it is null
+		if (HiredCrew[i] == 255)
+		{
+			HiredCrew[i] = CrewIndex;
+			return;
+		}
+	}
+}
+
+
+void UInventorySubsystem::AddHiredCrew(FCrew& CrewRef)
+{
+	AddHiredCrew(UCrewManager::GetIndexFromCrew(CrewRef));
+}
+
+void UInventorySubsystem::RemoveHiredCrew(uint8 CrewIndex)
+{
+	for (int32 i = 0; i < 6; i++)
+	{
+		if (HiredCrew[i] == CrewIndex)
+		{
+			//set to null
+			HiredCrew[i] = 255;
+			return;
+		}
+	}
+}
+
+void UInventorySubsystem::RemoveHiredCrew(FCrew& CrewRef)
+{
+	RemoveHiredCrew(UCrewManager::GetIndexFromCrew(CrewRef));
+}
+

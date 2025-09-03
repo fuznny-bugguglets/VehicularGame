@@ -5,6 +5,7 @@
 
 #include "CityStorageWidget.h"
 #include "CrewHireWidget.h"
+#include "CrewInformationPanel.h"
 #include "ShopWidget.h"
 #include "InventorySubsystem.h"
 #include "RelicInformationPanel.h"
@@ -33,6 +34,12 @@ void UCityWidget::NativeConstruct()
 	if (CrewHire)
 	{
 		CrewHire->Setup(this);
+	}
+
+	if (CrewInformationPanel)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, TEXT("crew info setup"));
+		CrewInformationPanel->Setup(this);
 	}
 
 	if (MoneyText)
@@ -158,4 +165,29 @@ void UCityWidget::UpdateMoney()
 UCrewInformationPanel* UCityWidget::GetCrewInformationPanel() const
 {
 	return CrewInformationPanel;
+}
+
+void UCityWidget::HireCrewMember(const uint8 ID)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Yellow, TEXT("hiriing"));
+	//do we have enough
+	if (GetInventorySubsystem()->GetMoney() >= UCrewManager::GetCrewFromIndex(ID).Cost)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Green, TEXT("enough money"));
+		//change inventory data
+		GetInventorySubsystem()->RemoveCrewForHire(ID);
+		GetInventorySubsystem()->AddHiredCrew(ID);
+		GetInventorySubsystem()->RemoveMoney(UCrewManager::GetCrewFromIndex(ID).Cost);
+
+		UpdateMoney();
+		
+		//update UI
+		if (!CrewHire)
+		{
+			return;
+		}
+
+		//CrewHire->
+		
+	}
 }
