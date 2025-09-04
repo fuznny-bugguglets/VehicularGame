@@ -4,28 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "SuperButtonWidget.h"
-#include "ItemButtonWidget.generated.h"
+#include "CrewButtonWidget.generated.h"
 
-class UCityWidget;
 /**
  * 
  */
 UCLASS()
-class VEHICULARGAME_API UItemButtonWidget : public USuperButtonWidget
+class VEHICULARGAME_API UCrewButtonWidget : public USuperButtonWidget
 {
-	GENERATED_BODY()  
+	GENERATED_BODY()
 
 public:
 	virtual void NativeConstruct() override;
-	
-	void SetBuySellType(bool bShouldSell);
 
 protected:
-
-	UPROPERTY()
-	bool bSell = false;
-
 	UFUNCTION()
 	void OnButtonClicked();
-	
 };

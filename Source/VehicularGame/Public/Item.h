@@ -18,7 +18,10 @@ struct FItem : public FTableRowBase
 	FText Description;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 Value;
+	int32 BuyPrice;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 SellPrice;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Weight;
@@ -28,7 +31,8 @@ struct FItem : public FTableRowBase
 
 	FItem()
 	{
-		Value = 0;
+		BuyPrice = 0;
+		SellPrice = 0;
 		Weight = 0.0f;
 		Tier = EResourceType::NULLRESOURCE;
 	}

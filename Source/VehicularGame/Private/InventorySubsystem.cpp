@@ -5,6 +5,14 @@
 
 UInventorySubsystem::UInventorySubsystem()
 {
+	//sets hired crew inventory to default
+	for (int32 i = 0; i < 6; i++)
+	{
+		HiredCrew[i] = 255;
+	}
+
+	//temp testing things you can delete later
+
 	CityStorage.Empty();
 	AddItemToCityStorage(0, 10);
 	AddItemToCityStorage(1, 10);
@@ -17,6 +25,11 @@ UInventorySubsystem::UInventorySubsystem()
 	Shop.Empty();
 	AddItemToShop(0);
 	AddItemToShop(1);
+
+	HirableCrew.Empty();
+	AddCrewForHire(0);
+	AddCrewForHire(1);
+	AddCrewForHire(2);
 
 }
 
@@ -179,3 +192,91 @@ const TMap<uint8, uint32>& UInventorySubsystem::GetShop() const
 {
 	return Shop;
 }
+
+const int32 UInventorySubsystem::GetMoney() const
+{
+	return Money;
+}
+
+void UInventorySubsystem::SetMoney(int32 NewMoney)
+{
+	Money = NewMoney;
+}
+
+void UInventorySubsystem::AddMoney(int32 NewMoney)
+{
+	Money += NewMoney;
+}
+
+void UInventorySubsystem::RemoveMoney(int32 NewMoney)
+{
+	Money -= NewMoney;
+}
+
+const TArray<uint8> UInventorySubsystem::GetHirableCrew() const
+{
+	return HirableCrew;
+}
+
+const uint8* UInventorySubsystem::GetHiredCrew() const
+{
+	return HiredCrew;
+}
+
+void UInventorySubsystem::AddCrewForHire(uint8 CrewIndex)
+{
+	HirableCrew.Emplace(CrewIndex);
+}
+
+void UInventorySubsystem::AddCrewForHire(FCrew& CrewRef)
+{
+	AddCrewForHire(UCrewManager::GetIndexFromCrew(CrewRef));
+}
+
+void UInventorySubsystem::RemoveCrewForHire(uint8 CrewIndex)
+{
+	HirableCrew.Remove(CrewIndex);
+}
+
+void UInventorySubsystem::RemoveCrewForHire(FCrew& CrewRef)
+{
+	RemoveCrewForHire(UCrewManager::GetIndexFromCrew(CrewRef));
+}
+
+void UInventorySubsystem::AddHiredCrew(uint8 CrewIndex)
+{
+	for (int32 i = 0; i < 6; i++)
+	{
+		//if it is null
+		if (HiredCrew[i] == 255)
+		{
+			HiredCrew[i] = CrewIndex;
+			return;
+		}
+	}
+}
+
+
+void UInventorySubsystem::AddHiredCrew(FCrew& CrewRef)
+{
+	AddHiredCrew(UCrewManager::GetIndexFromCrew(CrewRef));
+}
+
+void UInventorySubsystem::RemoveHiredCrew(uint8 CrewIndex)
+{
+	for (int32 i = 0; i < 6; i++)
+	{
+		if (HiredCrew[i] == CrewIndex)
+		{
+			//set to null
+			HiredCrew[i] = 255;
+			return;
+		}
+	}
+}
+
+void UInventorySubsystem::RemoveHiredCrew(FCrew& CrewRef)
+{
+	RemoveHiredCrew(UCrewManager::GetIndexFromCrew(CrewRef));
+}
+

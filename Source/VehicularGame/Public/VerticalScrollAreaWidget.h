@@ -7,6 +7,8 @@
 #include "Components/ScrollBox.h"
 #include "VerticalScrollAreaWidget.generated.h"
 
+class USuperButtonWidget;
+class UInventorySubsystem;
 class UCityWidget;
 class UItemButtonWidget;
 /**
@@ -29,11 +31,17 @@ public:
 	UFUNCTION()
 	virtual void AddItemBlock(const uint8 ID, const FText& MainText, const FText& SubText);
 
+	UFUNCTION()
+	virtual void CreateItemBlock(uint8 ID);
+
+	UFUNCTION()
+	bool DoesItemBlockExist(uint8 ID);
+	 
 	//update the display text of each button
 	UFUNCTION()
 	void UpdateButtons();
 	//overriden in children
-	virtual void UpdateButton(UItemButtonWidget* Button);
+	virtual void UpdateButton(USuperButtonWidget* Button);
 	//converts id into button and runs other overload
 	virtual void UpdateButton(uint8 ItemID);
 
@@ -47,7 +55,7 @@ protected:
 
 	//the class of button to be created
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<UItemButtonWidget> ItemButtonWidgetClass;
+	TSubclassOf<USuperButtonWidget> ButtonWidgetClass;
 
 	//a reference to the city widget (used to communicate between other widgets)
 	UPROPERTY()
@@ -55,7 +63,14 @@ protected:
 
 	//all of the buttons made
 	UPROPERTY()
-	TArray<UItemButtonWidget*> Buttons;
+	TArray<USuperButtonWidget*> Buttons; 
 
+
+
+	UInventorySubsystem* GetInventory();
+
+private:
+	UPROPERTY()
+	UInventorySubsystem* Inventory;
 	
 };
