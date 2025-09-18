@@ -4,19 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "ResourceTypes.h"
 #include "Ruin.generated.h"
 
 class USphereComponent;
 
-UENUM(BlueprintType)
-enum class EResourceType : uint8
-{
-	COMMON UMETA(DisplayName = "Common"),
-	UNCOMMON UMETA(DisplayName = "Uncommon"),
-	RARE UMETA(DisplayName = "Rare"),
-	MISSION UMETA(DisplayName = "Mission"),
-	NULLRESOURCE UMETA(DisplayName = "Null")
-};
+
 
 UCLASS()
 class VEHICULARGAME_API ARuin : public AActor
@@ -63,7 +56,7 @@ protected:
 
 	//the type of resource this is
 	UPROPERTY(EditInstanceOnly, Category = "Resource Type", meta = (AllowPrivateAccess = "true"))
-	EResourceType ResourceType = EResourceType::COMMON;
+	EResourceType ResourceType = EResourceType::A;
 
 	//materials
 	UPROPERTY(EditDefaultsOnly, Category = "Ring Materials", meta = (AllowPrivateAccess = "true"))
@@ -94,12 +87,8 @@ private:
 
 
 	//how long extractions take
-	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
-	float ExtractionTimePerCommon = 8.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
-	float ExtractionTimePerUncommon = 12.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
-	float ExtractionTimePerRare = 16.0f;
+	UPROPERTY(EditAnywhere, Category = "Extractions", meta = (AllowPrivateAccess = "true"))
+	float ExtractionTimePerRelic = 8.0f;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

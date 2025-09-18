@@ -64,7 +64,8 @@ void ARuin::BeginPlay()
 	RuinMeshCommon->SetVisibility(false);
 	RuinMeshUncommon->SetVisibility(false);
 	RuinMeshRare->SetVisibility(false);
-	
+
+	/*
 	//set meshes based on type
 	switch (ResourceType)
 	{
@@ -83,6 +84,10 @@ void ARuin::BeginPlay()
 		RuinMeshRare->SetVisibility(true);
 		break;
 	}
+	*/
+	//temp
+	ExtractionRingMesh->SetMaterial(0, CommonMaterial);
+	RuinMeshCommon->SetVisibility(true);
 
 	//make sure the game instance is real
 	if(!GetGameInstance())
@@ -177,7 +182,7 @@ FVector ARuin::GetEnteranceLocation() const
 {
 	if(!RuinEnteranceLocation)
 	{
-		LogError("failed to access ruin enterance location");
+		LogError("failed to access ruin entrance location");
 		return FVector(0.0f);
 	}
 	return RuinEnteranceLocation->GetComponentLocation();
@@ -185,15 +190,5 @@ FVector ARuin::GetEnteranceLocation() const
 
 float ARuin::GetExtractionTime() const
 {
-	switch (ResourceType)
-	{
-	case EResourceType::COMMON:
-		return ExtractionTimePerCommon;
-	case EResourceType::UNCOMMON:
-		return ExtractionTimePerCommon;
-	case EResourceType::RARE:
-		return ExtractionTimePerCommon;
-	}
-
-	return 999.0f;
+	return ExtractionTimePerRelic;
 }

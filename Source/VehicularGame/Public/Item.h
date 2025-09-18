@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Ruin.h"
+#include "ResourceTypes.h"
 #include "Item.generated.h"
 
 USTRUCT(BlueprintType)
