@@ -27,14 +27,18 @@ struct FItem : public FTableRowBase
 	float Weight;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EResourceType Tier;
+	EResourceType Type;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EResourceTier Tier;
 
 	FItem()
 	{
 		BuyPrice = 0;
 		SellPrice = 0;
 		Weight = 0.0f;
-		Tier = EResourceType::NULLRESOURCE;
+		Type = EResourceType::NULLRESOURCE;
+		Tier = EResourceTier::NULLTier;
 	}
 
 	bool operator==(const FItem& Other) const
