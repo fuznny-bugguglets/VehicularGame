@@ -66,8 +66,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	float GetElapsedExtractionTime() const;
-	UFUNCTION(BlueprintCallable)
-	float GetTotalExtractionTime() const;
 
 	//returns the current speed of the player
 	float GetSpeed() const;
@@ -135,16 +133,9 @@ private:
 	UPROPERTY()
 	TArray<AScavengerPawn*> ActiveScavengers;
 
+	//reference to the blueprint for the scavenger to spawn
 	UPROPERTY(EditDefaultsOnly, Category = "Scavengers", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AScavengerPawn> ScavengerClass = nullptr;
-	
-	//how long extractions take
-	UPROPERTY(EditDefaultsOnly, Category = "Depricated (Do Not Use)", meta = (AllowPrivateAccess = "true"))
-	float ExtractionTimePerCommon = 8.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Depricated (Do Not Use)", meta = (AllowPrivateAccess = "true"))
-	float ExtractionTimePerUncommon = 12.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Depricated (Do Not Use)", meta = (AllowPrivateAccess = "true"))
-	float ExtractionTimePerRare = 16.0f;
 
 	//the max health we can have
 	UPROPERTY(EditDefaultsOnly, Category = "Health", meta = (AllowPrivateAccess = "true"))
@@ -378,7 +369,6 @@ private:
 
 	//Updates the difficulty depending on the noise being produced
 	void UpdateDifficulty(float DeltaTime);
-	void UpdateExtractionProgress(float DeltaTime);
 	void ExtractOneUnit();
 	void UpdateWorldSpeed(float DeltaTime);
 	void UpdateTimeSinceLastHit(float DeltaTime);

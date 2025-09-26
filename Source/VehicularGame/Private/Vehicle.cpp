@@ -161,7 +161,6 @@ void AVehicle::Tick(float DeltaTime)
 	UpdateEngineStateOnReverse();
 	SteerWheels(DeltaTime);
 	UpdateDifficulty(DeltaTime);
-	UpdateExtractionProgress(DeltaTime);
 	UpdateWorldSpeed(DeltaTime);
 	UpdateTimeSinceLastHit(DeltaTime);
 	SetEngineSoundValues();
@@ -916,60 +915,6 @@ void AVehicle::ExtractOneUnit()
 	}
 }
 
-void AVehicle::UpdateExtractionProgress(float DeltaTime)
-{
-	//if the handbrake isnt active, do nothing
-	if(!bHandbrakeActive)
-	{
-		ExtractionTime = 0.0f;
-		return;
-	}
-
-	//if we arent overlapping with a ruin, do nothing
-	if(OverlappingRuin == nullptr)
-	{
-		ExtractionTime = 0.0f;
-		return;
-	}
-
-	//if the ruin doesnt have resources, do nothing
-	if(OverlappingRuin->GetResourceAmount() <= 0)
-	{
-		ExtractionTime = 0.0f;
-		return;
-	}
-
-	//increment extraction time
-	ExtractionTime += DeltaTime;
-
-	//can we extract the resource? if we can, extract!
-	switch (OverlappingRuin->GetResourceType())
-	{
-	case EResourceType::COMMON:
-		if(ExtractionTimePerCommon < ExtractionTime)
-		{
-			ExtractOneUnit();
-		}
-		break;
-		
-	case EResourceType::UNCOMMON:
-		if(ExtractionTimePerUncommon < ExtractionTime)
-		{
-			ExtractOneUnit();
-		}
-		break;
-		
-	case EResourceType::RARE:
-		if(ExtractionTimePerRare < ExtractionTime)
-		{
-			ExtractOneUnit();
-		}
-		break;
-	}
-
-	
-}
-
 void AVehicle::UpdateWorldSpeed(float DeltaTime)
 {
 	//get the direction vector from last position to current posiiton
@@ -1045,18 +990,7 @@ bool AVehicle::IsHandbrakeActive() const
 
 void AVehicle::IncrementLootCount(EResourceType GivenType)
 {
-	switch (GivenType)
-	{
-	case EResourceType::COMMON:
-		IncrementCommonLootCount();
-		break;
-	case EResourceType::UNCOMMON:
-		IncrementUncommonLootCount();
-		break;
-	case EResourceType::RARE:
-		IncrementRareLootCount();
-		break;
-	}
+	LogError("loot was meant to be added. TO DO!");
 }
 
 
@@ -1078,26 +1012,6 @@ void AVehicle::IncrementRareLootCount()
 float AVehicle::GetElapsedExtractionTime() const
 {
 	return ExtractionTime;
-}
-
-float AVehicle::GetTotalExtractionTime() const
-{
-	if(OverlappingRuin == nullptr)
-	{
-		return 1.0f;
-	}
-
-	switch (OverlappingRuin->GetResourceType())
-	{
-	case EResourceType::COMMON:
-		return ExtractionTimePerCommon;
-	case EResourceType::UNCOMMON:
-		return ExtractionTimePerUncommon;
-	case EResourceType::RARE:
-		return ExtractionTimePerRare;
-	}
-
-	return 3.0f;
 }
 
 
