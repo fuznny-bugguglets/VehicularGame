@@ -16,17 +16,18 @@ UInventorySubsystem::UInventorySubsystem()
 	PlayerInventory.Empty();
 
 	CityStorage.Empty();
-	AddItemToCityStorage(0, 10);
-	AddItemToCityStorage(1, 10);
-	AddItemToCityStorage(2, 10);
-	AddItemToCityStorage(3, 10);
-	AddItemToCityStorage(4, 10);
-	AddItemToCityStorage(5, 10);
-	AddItemToCityStorage(6, 10);
+	//AddItemToCityStorage(0, 10);
+	//AddItemToCityStorage(1, 10);
+	//AddItemToCityStorage(2, 10);
+	//AddItemToCityStorage(3, 10);
+	//AddItemToCityStorage(4, 10);
+	//AddItemToCityStorage(5, 10);
+	//AddItemToCityStorage(6, 10);
 	
 	Shop.Empty();
-	AddItemToShop(0);
 	AddItemToShop(1);
+	AddItemToShop(2);
+	AddItemToShop(4);
 
 	HirableCrew.Empty();
 	AddCrewForHire(0);

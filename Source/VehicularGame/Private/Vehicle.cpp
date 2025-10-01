@@ -995,6 +995,12 @@ bool AVehicle::IsHandbrakeActive() const
 
 void AVehicle::IncrementLootCount(uint32 GivenResource)
 {
+	//is it valid?
+	if (GivenResource > 900)
+	{
+		return;
+	}
+
 	UE_LOG(LogTemp, Display, TEXT("got an item with %i"), GivenResource);
 	GetGameInstance()->GetSubsystem<UInventorySubsystem>()->AddItemToPlayerInventory(GivenResource);
 }
