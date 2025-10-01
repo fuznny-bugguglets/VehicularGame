@@ -13,6 +13,8 @@ UInventorySubsystem::UInventorySubsystem()
 
 	//temp testing things you can delete later
 
+	PlayerInventory.Empty();
+
 	CityStorage.Empty();
 	AddItemToCityStorage(0, 10);
 	AddItemToCityStorage(1, 10);
@@ -280,3 +282,34 @@ void UInventorySubsystem::RemoveHiredCrew(FCrew& CrewRef)
 	RemoveHiredCrew(UCrewManager::GetIndexFromCrew(CrewRef));
 }
 
+void UInventorySubsystem::AddItemToPlayerInventory(uint8 ItemIndex)
+{
+	//does the item already exist?
+	if (PlayerInventory.Contains(ItemIndex))
+	{
+		//increment the count
+		PlayerInventory[ItemIndex]++;
+	}
+	else
+	{
+		//create the item in the inventory and give the player 1
+		PlayerInventory.Emplace(ItemIndex, 1);
+	}
+}
+
+void UInventorySubsystem::MoveFromPlayerInventoryToCityStorage()
+{
+	for (auto ItemPiece : PlayerInventory)
+	{
+		if (CityStorage.Contains(ItemPiece.Key))
+		{
+			CityStorage[ItemPiece.Key] += ItemPiece.Value;
+		}
+		else
+		{
+			CityStorage.Emplace(ItemPiece.Key, ItemPiece.Value);
+		}
+	}
+
+	PlayerInventory.Empty();
+}

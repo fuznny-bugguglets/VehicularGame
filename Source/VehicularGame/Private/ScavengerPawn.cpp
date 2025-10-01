@@ -147,7 +147,7 @@ void AScavengerPawn::DoTravelToTruck()
 
 		//give the resource to the truck
 		MyVehicle->IncrementLootCount(HeldResource);
-		HeldResource = EResourceType::NULLRESOURCE;
+		HeldResource = 9999;
 
 
 		//is there a ruin?
