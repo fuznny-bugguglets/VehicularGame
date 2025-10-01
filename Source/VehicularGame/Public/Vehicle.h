@@ -59,7 +59,7 @@ public:
 	void SetUncommonLootCount(int32 NewValue);
 	void SetRareLootCount(int32 NewValue);
 
-	void IncrementLootCount(EResourceType GivenType);
+	void IncrementLootCount(uint32 GivenType);
 	void IncrementCommonLootCount();
 	void IncrementUncommonLootCount();
 	void IncrementRareLootCount();

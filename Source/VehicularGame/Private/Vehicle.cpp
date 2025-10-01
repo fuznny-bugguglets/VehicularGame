@@ -2,9 +2,14 @@
 
 
 #include "Vehicle.h"
+
+#include <Engine/GameInstance.h>
+
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "CustomWheelComponent.h"
+#include "InventorySubsystem.h"
+#include "Item.h"
 #include "VehicularGameState.h"
 #include "Turret.h"
 #include "Ruin.h"
@@ -898,7 +903,7 @@ void AVehicle::ExtractOneUnit()
 	OverlappingRuin->TakeOneResource();
 
 	//increment count based on resource type
-	IncrementLootCount(OverlappingRuin->GetResourceType());
+	//IncrementLootCount(OverlappingRuin->GetResourceType());
 
 	
 
@@ -988,9 +993,16 @@ bool AVehicle::IsHandbrakeActive() const
 	return bHandbrakeActive;
 }
 
-void AVehicle::IncrementLootCount(EResourceType GivenType)
+void AVehicle::IncrementLootCount(uint32 GivenResource)
 {
-	LogError("loot was meant to be added. TO DO!");
+	//is it valid?
+	if (GivenResource > 900)
+	{
+		return;
+	}
+
+	UE_LOG(LogTemp, Display, TEXT("got an item with %i"), GivenResource);
+	GetGameInstance()->GetSubsystem<UInventorySubsystem>()->AddItemToPlayerInventory(GivenResource);
 }
 
 

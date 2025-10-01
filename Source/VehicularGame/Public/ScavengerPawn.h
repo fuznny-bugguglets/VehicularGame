@@ -72,7 +72,7 @@ private:
 	EScavengerBehaviourState CurrentBehaviour = EScavengerBehaviourState::IDLE;
 
 	//what resource i am holdingh
-	EResourceType HeldResource = EResourceType::NULLRESOURCE;
+	uint32 HeldResource = 9999;
 
 	//time i have been scavenging
 	float ElapsedScavengeTime = 0.0f;

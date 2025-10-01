@@ -123,12 +123,21 @@ void ARuin::BeginPlay()
 
 		//old blueprint code that is probably dead
 		UpdateBubble();
+
+		//fill us up with resources
+		Resources.Empty();
+		for (int32 i = 0; i < ResourceAmount; i++)
+		{
+			Resources.Add(0);
+		}
 	}
 	else
 	{
 		//set the resource amount found in the data
 		ResourceAmount = *DataResourceAmount;
 	}
+
+	
 	
 }
 
@@ -154,7 +163,7 @@ int32 ARuin::GetResourceAmount() const
 }
 
 //lowers the resource count by one
-EResourceType ARuin::TakeOneResource()
+uint32 ARuin::TakeOneResource()
 {
 	//lowers resource by one
 	ResourceAmount--;
@@ -163,7 +172,7 @@ EResourceType ARuin::TakeOneResource()
 	UpdateBubble();
 
 	//returns the type of resource taken
-	return ResourceType;
+	return Resources[ResourceAmount];
 }
 
 //returns the type of resource this ruin has

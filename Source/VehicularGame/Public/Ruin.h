@@ -28,7 +28,7 @@ public:
 	int32 GetInitialResourceAmount() const;
 
 	//lowers the resource count by one
-	EResourceType TakeOneResource();
+	uint32 TakeOneResource();
 
 	//returns the type of resource this ruin contains
 	EResourceType GetResourceType() const;
@@ -53,6 +53,9 @@ protected:
 
 	//how much the ruin currently as
 	int32 ResourceAmount = 0;
+
+	//the resources inside of this ruin
+	TArray<uint32> Resources;
 
 	//the type of resource this is
 	UPROPERTY(EditInstanceOnly, Category = "Resource Type", meta = (AllowPrivateAccess = "true"))

@@ -17,6 +17,8 @@
 //setup its child widgets
 void UCityWidget::NativeConstruct()
 {
+	GetInventorySubsystem()->MoveFromPlayerInventoryToCityStorage();
+
 	if (CityStorage)
 	{
 		CityStorage->Setup(this);

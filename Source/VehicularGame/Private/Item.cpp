@@ -23,3 +23,4 @@ uint8 UItemManager::GetIndexFromItem(const FItem& Item)
 
 	return OutIndex;
 }
+

@@ -30,6 +30,11 @@ public:
 	void AddMoney(int32 NewMoney);
 	void RemoveMoney(int32 NewMoney);
 
+	void MoveFromPlayerInventoryToCityStorage();
+
+	//adds item to current inventory
+	void AddItemToPlayerInventory(uint8 ItemIndex);
+
 	//takes in an item (by index or type) and adds it to the inventory
 	void AddItemToCityStorage(uint8 ItemIndex);
 	void AddItemToCityStorage(FItem& InItem);
@@ -68,6 +73,7 @@ private:
 	int32 Money = 0;
 
 	//maps the item index to the amount of the item
+	TMap<uint8, uint32> PlayerInventory;
 	TMap<uint8, uint32> CityStorage;
 	TMap<uint8, uint32> Shop;
 
