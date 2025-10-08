@@ -9,6 +9,16 @@
 
 class USphereComponent;
 
+UENUM(BlueprintType)
+enum class ERuinType : uint8 {
+	Tier1,
+	Tier2,
+	TypeA,
+	TypeB,
+	TypeC,
+	TypeD,
+	TypeE
+};
 
 
 UCLASS()
@@ -48,8 +58,12 @@ protected:
 	void UpdateBubble();
 	
 	//how much the ruin starts with
-	UPROPERTY(EditInstanceOnly, meta = (AllowPrivateAccess = "true"))
-	int32 StartingResourceAmount = 1;
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
+	int32 StartingResourceAmountMin = 5;
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
+	int32 StartingResourceAmountMax = 10;
+
+	int32 InitialResourceAmount = 0;
 
 	//how much the ruin currently as
 	int32 ResourceAmount = 0;
@@ -59,7 +73,7 @@ protected:
 
 	//the type of resource this is
 	UPROPERTY(EditInstanceOnly, Category = "Resource Type", meta = (AllowPrivateAccess = "true"))
-	EResourceType ResourceType = EResourceType::A;
+	ERuinType RuinType = ERuinType::Tier1;
 
 	//materials
 	UPROPERTY(EditDefaultsOnly, Category = "Ring Materials", meta = (AllowPrivateAccess = "true"))
@@ -87,7 +101,7 @@ protected:
 
 private:
 	void LogError(const FString& ErrorMessage) const;
-
+	void FillUpRestOfType(int thisRandomNumber);
 
 	//how long extractions take
 	UPROPERTY(EditAnywhere, Category = "Extractions", meta = (AllowPrivateAccess = "true"))

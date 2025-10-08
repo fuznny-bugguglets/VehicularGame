@@ -55,6 +55,24 @@ ARuin::ARuin()
 	
 }
 
+void ARuin::FillUpRestOfType(int thisRandNumber)
+{
+	int32 probability = FMath::RandRange(0, 23);
+
+	if (probability <= 10)
+	{
+		Resources.Add(0 + (thisRandNumber * 3));
+	}
+	else if (probability <= 18)
+	{
+		Resources.Add(1 + (thisRandNumber * 3));
+	}
+	else
+	{
+		Resources.Add(2 + (thisRandNumber * 3));
+	}
+}
+
 // Called when the game starts or when spawned
 void ARuin::BeginPlay()
 {
@@ -119,16 +137,419 @@ void ARuin::BeginPlay()
 	if(DataResourceAmount == nullptr)
 	{
 		//set the resource amount to the default
-		ResourceAmount = StartingResourceAmount;
+		ResourceAmount = FMath::RandRange(StartingResourceAmountMin, StartingResourceAmountMax);
+		InitialResourceAmount = ResourceAmount;
 
 		//old blueprint code that is probably dead
 		UpdateBubble();
 
 		//fill us up with resources
 		Resources.Empty();
-		for (int32 i = 0; i < ResourceAmount; i++)
+
+		//generate a list with 0-4
+		TArray<int32> tempNumbers;
+		for (int32 i = 0; i < 5; i++)
 		{
-			Resources.Add(0);
+			tempNumbers.Add(i);
+		}
+
+		TArray<int32> selectedNumbers;
+
+		int32 randomTypeProbability = FMath::RandRange(0, 53);
+
+		switch (RuinType)
+		{
+		case ERuinType::Tier1:
+			//pick 3 random numbers from that list (acts as relic types ABCDE)
+			
+			for (int32 i = 0; i < 3; i++)
+			{
+				int32 randIndex = FMath::RandRange(0, tempNumbers.Num() - 1);
+				int32 randNumber = tempNumbers[randIndex];
+				tempNumbers.Remove(randNumber);
+				selectedNumbers.Add(randNumber);
+			}
+
+			//fill up the resources
+			for (int32 i = 0; i < ResourceAmount; i++)
+			{
+				int32 thisRandIndex = FMath::RandRange(0, selectedNumbers.Num() - 1);
+				int32 thisRandNumber = selectedNumbers[thisRandIndex];
+				int32 probability = FMath::RandRange(0, 33);
+
+				if (probability <= 25)
+				{
+					Resources.Add(0 + (thisRandNumber * 3));
+				}
+				else if (probability <= 32)
+				{
+					Resources.Add(1 + (thisRandNumber * 3));
+				}
+				else
+				{
+					Resources.Add(2 + (thisRandNumber * 3));
+				}
+			}
+			break;
+
+		case ERuinType::Tier2:
+			//pick 3 random numbers from that list (acts as relic types ABCDE)
+			for (int32 i = 0; i < 3; i++)
+			{
+				int32 randIndex = FMath::RandRange(0, tempNumbers.Num() - 1);
+				int32 randNumber = tempNumbers[randIndex];
+				tempNumbers.Remove(randNumber);
+				selectedNumbers.Add(randNumber);
+			}
+
+			//fill up the resources
+			for (int32 i = 0; i < ResourceAmount; i++)
+			{
+				int32 thisRandIndex = FMath::RandRange(0, selectedNumbers.Num() - 1);
+				int32 thisRandNumber = selectedNumbers[thisRandIndex];
+				int32 probability = FMath::RandRange(0, 33);
+
+				if (probability <= 10)
+				{
+					Resources.Add(0 + (thisRandNumber * 3));
+				}
+				else if (probability <= 30)
+				{
+					Resources.Add(1 + (thisRandNumber * 3));
+				}
+				else
+				{
+					Resources.Add(2 + (thisRandNumber * 3));
+				}
+			}
+			break;
+
+		case ERuinType::TypeA:
+			//add a random tiered type A relic
+			
+			if (randomTypeProbability <= 15)
+			{
+				Resources.Add(0);
+			}
+			else if (randomTypeProbability <= 33)
+			{
+				Resources.Add(1);
+			}
+			else
+			{
+				Resources.Add(2);
+			}
+
+			//remove A from the pool
+			tempNumbers.Remove(0);
+
+			//add it to our selected numbers
+			selectedNumbers.Add(0);
+
+			//populate it with 2 more
+			for (int32 i = 0; i < 2; i++)
+			{
+				int32 randIndex = FMath::RandRange(0, tempNumbers.Num() - 1);
+				int32 randNumber = tempNumbers[randIndex];
+				tempNumbers.Remove(randNumber);
+				selectedNumbers.Add(randNumber);
+			}
+
+			//fill up the resources
+			for (int32 i = 0; i < ResourceAmount - 1; i++)
+			{
+				int32 thisRandIndex = FMath::RandRange(0, selectedNumbers.Num() - 1);
+				int32 thisRandNumber = selectedNumbers[thisRandIndex];
+				
+
+				//is this 'A'
+				if (thisRandNumber == 0)
+				{
+					int32 probability = FMath::RandRange(0, 53);
+
+					if (probability <= 15)
+					{
+						Resources.Add(0);
+					}
+					else if (probability <= 33)
+					{
+						Resources.Add(1);
+					}
+					else
+					{
+						Resources.Add(2);
+					}
+				}
+
+				//otherwise
+				else
+				{
+					FillUpRestOfType(thisRandNumber);
+				}
+			}
+			break;
+
+		case ERuinType::TypeB:
+			//add a random tiered type A relic
+			
+			if (randomTypeProbability <= 15)
+			{
+				Resources.Add(3);
+			}
+			else if (randomTypeProbability <= 33)
+			{
+				Resources.Add(4);
+			}
+			else
+			{
+				Resources.Add(5);
+			}
+
+			//remove B from the pool
+			tempNumbers.Remove(1);
+
+			//add it to our selected numbers
+			selectedNumbers.Add(1);
+
+			//populate it with 2 more
+			for (int32 i = 0; i < 2; i++)
+			{
+				int32 randIndex = FMath::RandRange(0, tempNumbers.Num() - 1);
+				int32 randNumber = tempNumbers[randIndex];
+				tempNumbers.Remove(randNumber);
+				selectedNumbers.Add(randNumber);
+			}
+
+			//fill up the resources
+			for (int32 i = 0; i < ResourceAmount - 1; i++)
+			{
+				int32 thisRandIndex = FMath::RandRange(0, selectedNumbers.Num() - 1);
+				int32 thisRandNumber = selectedNumbers[thisRandIndex];
+
+
+				//is this 'B'
+				if (thisRandNumber == 1)
+				{
+					int32 probability = FMath::RandRange(0, 53);
+
+					if (probability <= 15)
+					{
+						Resources.Add(0);
+					}
+					else if (probability <= 33)
+					{
+						Resources.Add(1);
+					}
+					else
+					{
+						Resources.Add(2);
+					}
+				}
+
+				//otherwise
+				else
+				{
+					FillUpRestOfType(thisRandNumber);
+				}
+			}
+			break;
+
+		case ERuinType::TypeC:
+			//add a random C type relic
+			if (randomTypeProbability <= 15)
+			{
+				Resources.Add(6);
+			}
+			else if (randomTypeProbability <= 33)
+			{
+				Resources.Add(7);
+			}
+			else
+			{
+				Resources.Add(8);
+			}
+
+			//remove C from the pool
+			tempNumbers.Remove(2);
+
+			//add it to our selected numbers
+			selectedNumbers.Add(2);
+
+			//populate it with 2 more
+			for (int32 i = 0; i < 2; i++)
+			{
+				int32 randIndex = FMath::RandRange(0, tempNumbers.Num() - 1);
+				int32 randNumber = tempNumbers[randIndex];
+				tempNumbers.Remove(randNumber);
+				selectedNumbers.Add(randNumber);
+			}
+
+			//fill up the resources
+			for (int32 i = 0; i < ResourceAmount - 1; i++)
+			{
+				int32 thisRandIndex = FMath::RandRange(0, selectedNumbers.Num() - 1);
+				int32 thisRandNumber = selectedNumbers[thisRandIndex];
+
+
+				//is this 'C'
+				if (thisRandNumber == 2)
+				{
+					int32 probability = FMath::RandRange(0, 53);
+
+					if (probability <= 15)
+					{
+						Resources.Add(0);
+					}
+					else if (probability <= 33)
+					{
+						Resources.Add(1);
+					}
+					else
+					{
+						Resources.Add(2);
+					}
+				}
+
+				//otherwise
+				else
+				{
+					FillUpRestOfType(thisRandNumber);
+				}
+			}
+			break;
+
+		case ERuinType::TypeD:
+			//add a random tiered type D relic
+
+			if (randomTypeProbability <= 15)
+			{
+				Resources.Add(9);
+			}
+			else if (randomTypeProbability <= 33)
+			{
+				Resources.Add(10);
+			}
+			else
+			{
+				Resources.Add(11);
+			}
+
+			//remove D from the pool
+			tempNumbers.Remove(3);
+
+			//add it to our selected numbers
+			selectedNumbers.Add(3);
+
+			//populate it with 2 more
+			for (int32 i = 0; i < 2; i++)
+			{
+				int32 randIndex = FMath::RandRange(0, tempNumbers.Num() - 1);
+				int32 randNumber = tempNumbers[randIndex];
+				tempNumbers.Remove(randNumber);
+				selectedNumbers.Add(randNumber);
+			}
+
+			//fill up the resources
+			for (int32 i = 0; i < ResourceAmount - 1; i++)
+			{
+				int32 thisRandIndex = FMath::RandRange(0, selectedNumbers.Num() - 1);
+				int32 thisRandNumber = selectedNumbers[thisRandIndex];
+
+
+				//is this 'D'
+				if (thisRandNumber == 3)
+				{
+					int32 probability = FMath::RandRange(0, 53);
+
+					if (probability <= 15)
+					{
+						Resources.Add(0);
+					}
+					else if (probability <= 33)
+					{
+						Resources.Add(1);
+					}
+					else
+					{
+						Resources.Add(2);
+					}
+				}
+
+				//otherwise
+				else
+				{
+					FillUpRestOfType(thisRandNumber);
+				}
+			}
+			break;
+
+		case ERuinType::TypeE:
+			//add a random tiered type E relic
+
+			if (randomTypeProbability <= 15)
+			{
+				Resources.Add(12);
+			}
+			else if (randomTypeProbability <= 33)
+			{
+				Resources.Add(13);
+			}
+			else
+			{
+				Resources.Add(14);
+			}
+
+			//remove E from the pool
+			tempNumbers.Remove(4);
+
+			//add it to our selected numbers
+			selectedNumbers.Add(4);
+
+			//populate it with 2 more
+			for (int32 i = 0; i < 2; i++)
+			{
+				int32 randIndex = FMath::RandRange(0, tempNumbers.Num() - 1);
+				int32 randNumber = tempNumbers[randIndex];
+				tempNumbers.Remove(randNumber);
+				selectedNumbers.Add(randNumber);
+			}
+
+			//fill up the resources
+			for (int32 i = 0; i < ResourceAmount - 1; i++)
+			{
+				int32 thisRandIndex = FMath::RandRange(0, selectedNumbers.Num() - 1);
+				int32 thisRandNumber = selectedNumbers[thisRandIndex];
+
+
+				//is this 'E'
+				if (thisRandNumber == 4)
+				{
+					int32 probability = FMath::RandRange(0, 53);
+
+					if (probability <= 15)
+					{
+						Resources.Add(0);
+					}
+					else if (probability <= 33)
+					{
+						Resources.Add(1);
+					}
+					else
+					{
+						Resources.Add(2);
+					}
+				}
+
+				//otherwise
+				else
+				{
+					FillUpRestOfType(thisRandNumber);
+				}
+			}
+			break;
+
+		default:
+			break;
 		}
 	}
 	else
@@ -178,13 +599,13 @@ uint32 ARuin::TakeOneResource()
 //returns the type of resource this ruin has
 EResourceType ARuin::GetResourceType() const
 {
-	return ResourceType;
+	return EResourceType::NULLRESOURCE;
 }
 
 
 int32 ARuin::GetInitialResourceAmount() const
 {
-	return StartingResourceAmount;
+	return InitialResourceAmount;
 }
 
 FVector ARuin::GetEnteranceLocation() const
