@@ -103,20 +103,95 @@ void AEnemyCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    UpdateSpeed(DeltaTime);
-    RotateToGround(DeltaTime);
-    
-    if(VehicleRef == nullptr)
+
+    if (VehicleRef == nullptr)
     {
         LogError("failed to get a reference to the player in enemy character");
         return;
     }
-    //is it time to update?
-    TimeSinceLastNavUpdate += DeltaTime;
-    if(TimeSinceLastNavUpdate > (GetDistanceTo(VehicleRef) * NavUpdateDistanceScaleFactor) / 10000.0f)
+
+    float DistanceToPlayer = 0.0f;
+    FVector NewLocation = FVector::Zero();
+    AAIController* AIController = nullptr;
+
+    switch (EnemyState)
     {
+    case EEnemyState::RUNNING:
+        UpdateSpeed(DeltaTime);
+        RotateToGround(DeltaTime);
+
+        //is it time to update?
+        TimeSinceLastNavUpdate += DeltaTime;
+        if (TimeSinceLastNavUpdate > (GetDistanceTo(VehicleRef) * NavUpdateDistanceScaleFactor) / 10000.0f)
+        {
+            PathfindToPoint();
+        }
+
+        //is it time to lunge?
+        ElapsedLungeCooldownTime += DeltaTime;
+        if (ElapsedLungeCooldownTime > LungeCooldown)
+        {
+            //check distance from player
+            DistanceToPlayer = FVector::DistSquared(GetActorLocation(), VehicleRef->GetActorLocation());
+            //is it close enough to lunge?
+            if (DistanceToPlayer < LungeDistance * LungeDistance)
+            {
+                //lunge
+                EnemyState = EEnemyState::LUNGING;
+
+                //reset elapsed time
+                ElapsedLungeTime = 0.0f;
+
+                //make a vector toward the player
+                LungeDirection = VehicleRef->GetActorLocation() - GetActorLocation();
+                LungeDirection.Normalize();
+            }
+        }
+
+        
+
+        break;
+
+    case EEnemyState::LUNGING:
+        // Stop AI Controller
+        AIController = Cast<AAIController>(GetController());
+        if (AIController)
+        {
+            AIController->StopMovement();
+        }
+
+        //increment time
+        ElapsedLungeTime += DeltaTime;
+
+        //have we exceeded our time?
+        if (ElapsedLungeTime > LungeTime)
+        {
+            //finish the lunge
+            EnemyState = EEnemyState::ATTACKING;
+        }
+
+        //move toward player
+    	NewLocation = GetActorLocation() + (LungeDirection * LungeSpeed * DeltaTime);
+        SetActorLocation(NewLocation);
+        break;
+
+    case EEnemyState::ATTACKING:
+
+        //just to go back to running
+    	EnemyState = EEnemyState::RUNNING;
+
+        //find a new path
         PathfindToPoint();
+
+        //reset elapsed time
+        ElapsedLungeCooldownTime = 0.0f;
+    	break;
+
+    default:
+        break;
+
     }
+
 }
 
 float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
@@ -328,6 +403,8 @@ void AEnemyCharacter::PathfindToPoint()
         {
             AIController->MoveToActor(VehicleRef, 1.0f);
         }
+
+        
         
 
         
@@ -381,6 +458,9 @@ void AEnemyCharacter::HitByPlayer()
         //launch ourselves away from the vehicle
         LaunchCharacter(PushVector, false, false);
     }
+
+    //finish the lunge
+    EnemyState = EEnemyState::ATTACKING;
     
      
 }
@@ -413,4 +493,9 @@ void AEnemyCharacter::Landed(const FHitResult& Hit)
 
     //when we land on the ground, pathfind to point
     PathfindToPoint();
+}
+
+EEnemyState AEnemyCharacter::GetEnemyState() const
+{
+    return EnemyState;
 }
