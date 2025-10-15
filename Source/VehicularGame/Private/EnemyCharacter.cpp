@@ -110,8 +110,10 @@ void AEnemyCharacter::Tick(float DeltaTime)
         return;
     }
 
+    //declares for the switch statement
     float DistanceToPlayer = 0.0f;
     FVector NewLocation = FVector::Zero();
+    FVector TargetLocation = FVector::Zero();
     AAIController* AIController = nullptr;
 
     switch (EnemyState)
@@ -142,8 +144,15 @@ void AEnemyCharacter::Tick(float DeltaTime)
                 //reset elapsed time
                 ElapsedLungeTime = 0.0f;
 
-                //make a vector toward the player
-                LungeDirection = VehicleRef->GetActorLocation() - GetActorLocation();
+                //direction amount in front of the player
+                TargetLocation = VehicleRef->GetActorForwardVector() * VehicleRef->GetSpeed();
+                TargetLocation *= FMath::RandRange(MinLungeForwardPredictionFactor, MaxLungeForwardPredictionFactor);
+
+                //add it to the player location
+                TargetLocation = VehicleRef->GetActorLocation() + TargetLocation;
+
+                //calculate the direction for the enemy to lunge in
+                LungeDirection = TargetLocation - GetActorLocation();
                 LungeDirection.Normalize();
             }
         }

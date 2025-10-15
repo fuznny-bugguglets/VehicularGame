@@ -89,6 +89,14 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Lunge", meta = (AllowPrivateAccess = "true"))
 	float LungeCooldown = 5.0f;
 
+	//the bigger the number, the more 'in front' of the player the enemy will jump
+	UPROPERTY(EditDefaultsOnly, Category = "Lunge", meta = (AllowPrivateAccess = "true"))
+	float MinLungeForwardPredictionFactor = 100.0f;
+
+	//the bigger the number, the more 'in front' of the player the enemy will jump
+	UPROPERTY(EditDefaultsOnly, Category = "Lunge", meta = (AllowPrivateAccess = "true"))
+	float MaxLungeForwardPredictionFactor = 500.0f;
+
 	UPROPERTY()
 	FVector LungeDirection = FVector::Zero();
 
