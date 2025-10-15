@@ -7,6 +7,14 @@
 class AVehicle;
 class AVehicularGameState;
 
+UENUM(BlueprintType)
+enum class EEnemyState : uint8 {
+	IDLE UMETA(DisplayName = "Idle"),
+	RUNNING UMETA(DisplayName = "Running"),
+	LUNGING UMETA(DisplayName = "Lunging"),
+	ATTACKING UMETA(DisplayName = "Attacking")
+};
+
 UCLASS()
 class VEHICULARGAME_API AEnemyCharacter : public ACharacter
 {
@@ -36,6 +44,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Stats")
 	bool IsDead() const; // Checks if the enemy is dead
 
+	UFUNCTION(BlueprintCallable)
+	EEnemyState GetEnemyState() const;
+
 private:
 	
 	//reference to the game state
@@ -61,6 +72,41 @@ private:
 	//the rate at which the enemy should recalculate their pathfinding
 	UPROPERTY(EditDefaultsOnly, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	float NavUpdateDistanceScaleFactor = 2.5f;
+
+	//the distance from the player when the enemy should lunge
+	UPROPERTY(EditDefaultsOnly, Category = "Lunge", meta = (AllowPrivateAccess = "true"))
+	float LungeDistance = 200.0f;
+
+	//how fast the enemy travels while lunging
+	UPROPERTY(EditDefaultsOnly, Category = "Lunge", meta = (AllowPrivateAccess = "true"))
+	float LungeSpeed = 500.0f;
+
+	//how long the enemy can lunge before it fails
+	UPROPERTY(EditDefaultsOnly, Category = "Lunge", meta = (AllowPrivateAccess = "true"))
+	float LungeTime = 1.0f;
+
+	//this is the cooldown between lunges
+	UPROPERTY(EditDefaultsOnly, Category = "Lunge", meta = (AllowPrivateAccess = "true"))
+	float LungeCooldown = 5.0f;
+
+	//the bigger the number, the more 'in front' of the player the enemy will jump
+	UPROPERTY(EditDefaultsOnly, Category = "Lunge", meta = (AllowPrivateAccess = "true"))
+	float MinLungeForwardPredictionFactor = 100.0f;
+
+	//the bigger the number, the more 'in front' of the player the enemy will jump
+	UPROPERTY(EditDefaultsOnly, Category = "Lunge", meta = (AllowPrivateAccess = "true"))
+	float MaxLungeForwardPredictionFactor = 500.0f;
+
+	UPROPERTY()
+	FVector LungeDirection = FVector::Zero();
+
+	//how long the current lunge has been going on for
+	UPROPERTY()
+	float ElapsedLungeTime = 0.0f;
+
+	//how long the lunge has been cooling down for
+	UPROPERTY()
+	float ElapsedLungeCooldownTime = 0.0f;
 
 	//how far the player gets launched when attacked
 	UPROPERTY(EditDefaultsOnly, Category = "Damage", meta = (AllowPrivateAccess = "true"))
@@ -97,4 +143,7 @@ private:
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
 	void LogError(const FString& ErrorMessage);
+
+	UPROPERTY()
+	EEnemyState EnemyState = EEnemyState::RUNNING;
 };
