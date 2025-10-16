@@ -57,6 +57,7 @@ void UCityWidget::NativeConstruct()
 	ExitButton->OnClicked.AddDynamic(this, &UCityWidget::OnExitButton);
 	RelicsButton->OnClicked.AddDynamic(this, &UCityWidget::OnRelicsButton);
 	CrewButton->OnClicked.AddDynamic(this, &UCityWidget::OnCrewButton);
+	MechanicButton->OnClicked.AddDynamic(this, &UCityWidget::OnMechanicButton);
 }
 
 //returns child widgets
@@ -129,25 +130,30 @@ void UCityWidget::OnExitButton()
 
 void UCityWidget::OnRelicsButton()
 {
-	if (!WidgetSwitcher)
-	{
-		return;
-	}
-
-	//displays the relics screen
-	WidgetSwitcher->SetActiveWidgetIndex(0);
+	SetWidgetSwitcher(0);
 }
 
 void UCityWidget::OnCrewButton()
+{
+	SetWidgetSwitcher(1);
+}
+
+void UCityWidget::OnMechanicButton()
+{
+	SetWidgetSwitcher(2);
+}
+
+void UCityWidget::SetWidgetSwitcher(int32 index)
 {
 	if (!WidgetSwitcher)
 	{
 		return;
 	}
 
-	//displays the crew screen
-	WidgetSwitcher->SetActiveWidgetIndex(1);
+	//displays the mechanics screen
+	WidgetSwitcher->SetActiveWidgetIndex(index);
 }
+
 
 UInventorySubsystem* UCityWidget::GetInventorySubsystem()
 {
