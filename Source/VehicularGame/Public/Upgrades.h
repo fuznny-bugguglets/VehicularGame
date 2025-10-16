@@ -11,6 +11,8 @@
 UENUM(BlueprintType)
 enum class EUpgradeType : uint8
 {
+	ZERO = 0,
+
 	TurretCritChance UMETA(DisplayName = "Turret Crit Chance"),
 	TurretCritDamage UMETA(DisplayName = "Turret Crit Damage"),
 	TurretDamage UMETA(DisplayName = "Turret Damage"),
@@ -29,7 +31,9 @@ enum class EUpgradeType : uint8
 	CrewMovementSpeed UMETA(DisplayName = "Crew Movement Speed"),
 	CrewMaxCrew UMETA(DisplayName = "Crew Max Crew"),
 	CrewHP UMETA(DisplayName = "Crew HP"),
-	CrewHaulingCapacity UMETA(DisplayName = "Crew Hauling Capacity")
+	CrewHaulingCapacity UMETA(DisplayName = "Crew Hauling Capacity"),
+
+	MAX
 };
 
 class VEHICULARGAME_API Upgrades

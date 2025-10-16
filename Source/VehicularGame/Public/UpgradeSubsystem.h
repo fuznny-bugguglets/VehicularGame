@@ -16,6 +16,14 @@ class VEHICULARGAME_API UUpgradeSubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 public:
+	UUpgradeSubsystem();
+
 	void ProcessUpgrade(EUpgradeType UpgradeType, float UpgradeValue);
+
+	float GetUpgradeValue(EUpgradeType UpgradeType) const;
+
+private:
+	//maps each upgrade to a current value
+	TMap<EUpgradeType, float> UpgradeToValueMap;
 	
 };
