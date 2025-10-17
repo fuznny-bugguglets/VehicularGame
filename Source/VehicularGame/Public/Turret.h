@@ -32,6 +32,24 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	//the maximum amount of ammo the turret can hold
+	UPROPERTY(EditDefaultsOnly, Category = "Ammo", meta = (AllowPrivateAccess = "true"))
+	int32 MaxAmmoCount = 10;
+
+	//the current amount of ammo the turret has
+	UPROPERTY()
+	int32 AmmoCount = 0;
+
+	//the time in seconds it takes to reload
+	UPROPERTY(EditDefaultsOnly, Category = "Ammo", meta = (AllowPrivateAccess = "true"))
+	float ReloadTime = 1.0f;
+
+	//whether this turret is currently reloading
+	bool bIsReloading = false;
+
+	//how long we have been reloading for
+	float ElapsedReloadTime = 0.0f;
+
 	//seconds since we last fired a bullet
 	float TimeSinceLastShot = 0.0f;
 
@@ -43,7 +61,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
 	USoundBase* BulletSoundFile;
 
-	//reference to the instance of the bullet sund
+	//reference to the instance of the bullet sound
 	UPROPERTY()
 	UAudioComponent* BulletSoundInstance = nullptr;
 
@@ -51,6 +69,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Firing", meta = (AllowPrivateAccess = "true"))
 	float FireRate = 4.0f;
 
+	//smaller the number, the more accurate the shots
 	UPROPERTY(EditDefaultsOnly, Category = "Firing", meta = (AllowPrivateAccess = "true"))
 	float MaxSpreadAngle = 1.0f;
 
@@ -85,6 +104,12 @@ private:
 	USceneComponent* BulletSpawnR;
 
 	float UpgradedFireRate();
+
+	//initiates the reloading process
+	void BeginReload();
+
+	//ticks along the reloading process, only runs while reloading
+	void ReloadTick(float DeltaTime);
 
 	FRotator GetRotationWithSpread(const FTransform& InputTransform, const float SpreadAngle) const;
 

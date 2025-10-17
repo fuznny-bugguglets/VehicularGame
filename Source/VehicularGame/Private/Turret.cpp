@@ -84,6 +84,9 @@ void ATurret::BeginPlay()
 		return;
 	}
 
+	//set our ammo to be whatever our max is
+	AmmoCount = MaxAmmoCount;
+
 	//prevents the bullet sound from being garbage collected
 	//BulletSoundInstance->AddToRoot();
 	
@@ -109,6 +112,12 @@ void ATurret::Tick(float DeltaTime)
 	{
 		//increment time since last shot
 		TimeSinceLastShot += DeltaTime;
+	}
+
+	//are we reloading?
+	if (bIsReloading)
+	{
+		ReloadTick(DeltaTime);
 	}
 
 }
@@ -146,9 +155,30 @@ void ATurret::FireHeld()
 		return;
 	}
 
-	//can we shoot?
+	//are we reloading?
+	if (bIsReloading)
+	{
+		return;
+	}
+
+	//do we have ammo?
+	if (AmmoCount <= 0)
+	{
+		return;
+	}
+
+	//has it been enough time since the last shot?
 	if (TimeSinceLastShot > (1.0f / UpgradedFireRate()))
 	{
+		//consume a bullet
+		AmmoCount--;
+
+		//did we run out of ammo?
+		if (AmmoCount <= 0)
+		{
+			BeginReload();
+		}
+
 		float Spread = VehicularGameState->GetProjectileSpreadMultiplier() * MaxSpreadAngle;
 
 		//setup Instigator 
@@ -255,4 +285,44 @@ FRotator ATurret::GetRotationWithSpread(const FTransform& InputTransform, const 
 
 	//return the new rotation
 	return MyRotator;
+}
+
+void ATurret::BeginReload()
+{
+	//are we already reloading?
+	if (bIsReloading)
+	{
+		//ignore
+		return;
+	}
+
+	//set to be reloading
+	bIsReloading = true;
+
+	//reset elapsed time
+	ElapsedReloadTime = 0.0f;
+
+	LogError("reloading....");
+}
+
+
+void ATurret::ReloadTick(float DeltaTime)
+{
+	//increment the time we have been reloading for
+	ElapsedReloadTime += DeltaTime;
+
+	//have we finished reloading?
+	if (ElapsedReloadTime >= ReloadTime)
+	{
+		//set to be no longer reloading
+		bIsReloading = false;
+
+		//reset elapsed time
+		ElapsedReloadTime = 0.0f;
+
+		//give back ammo
+		AmmoCount = MaxAmmoCount;
+
+		LogError("RELOADED!!!!!!!!!!!!");
+	}
 }

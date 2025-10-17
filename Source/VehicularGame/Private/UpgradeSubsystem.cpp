@@ -20,3 +20,8 @@ void UUpgradeSubsystem::ProcessUpgrade(EUpgradeType UpgradeType, float UpgradeVa
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, "Processed Upgrade logic not written yet");
 }
+
+float UUpgradeSubsystem::GetUpgradeValue(EUpgradeType UpgradeType) const
+{
+	return UpgradeToValueMap[UpgradeType];
+}
