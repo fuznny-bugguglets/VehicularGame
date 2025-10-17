@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "Projectile.generated.h"
 
+class UUpgradeSubsystem;
 class USphereComponent;
 class UProjectileMovementComponent;
 class UNiagaraComponent;
@@ -72,4 +73,13 @@ private:
 
     int32 CurrentBounces;
     bool bIsDying;
+
+    //pointer to the upgrade subsystem
+    UPROPERTY()
+    UUpgradeSubsystem* UpgradeSubsystem = nullptr;
+
+    //returns the upgrade subsystem
+    UFUNCTION()
+    UUpgradeSubsystem* GetUpgradeSubsystem();
+
 };

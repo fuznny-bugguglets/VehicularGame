@@ -13,7 +13,7 @@ enum class EUpgradeType : uint8
 {
 	ZERO = 0,
 
-	TurretCritChance UMETA(DisplayName = "Turret Crit Chance"),
+	TurretCritChance UMETA(DisplayName = "Turret Crit Chance"), //number between 0-100. 0 is never, 100 is always
 	TurretCritDamage UMETA(DisplayName = "Turret Crit Damage"),
 	TurretDamage UMETA(DisplayName = "Turret Damage"),
 	TurretAmmo UMETA(DisplayName = "Turret Ammo"),

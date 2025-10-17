@@ -6,6 +6,7 @@
 #include "NiagaraSystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/DamageEvents.h"
+#include "UpgradeSubsystem.h"
 
 AProjectile::AProjectile()
 {
@@ -76,6 +77,23 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
         return;
     }
 
+    //make sure we have an upgrade subsystem
+    if (!GetUpgradeSubsystem())
+    {
+        return;
+    }
+
+    //grab the crit chance
+    float CritChance = GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretCritChance);
+
+    //should this be a crit?
+    if (CritChance >= FMath::RandRange(0.01f, 100.0f))
+    {
+	    //add the crit damage
+        Damage += GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretCritDamage);
+    }
+
+
     // Apply damage and impulse first, regardless of what was hit.
     if (OtherComp && OtherComp->IsSimulatingPhysics())
     {
@@ -122,4 +140,19 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
     }
 
     SetLifeSpan(LingerDuration);
+}
+
+UUpgradeSubsystem* AProjectile::GetUpgradeSubsystem()
+{
+    //if we have it already, return it
+	if (UpgradeSubsystem)
+	{
+        return UpgradeSubsystem;
+	}
+
+    //grab it
+    UpgradeSubsystem = GetGameInstance()->GetSubsystem<UUpgradeSubsystem>();
+
+    //return it
+    return UpgradeSubsystem;
 }
