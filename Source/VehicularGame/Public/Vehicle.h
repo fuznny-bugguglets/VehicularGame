@@ -183,6 +183,9 @@ private:
 	//input for firing
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputAction* FireAction;
+	//input for reloading
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* ReloadAction;
 	//input for shifting the engine up
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputAction* EngineShiftUpAction;
@@ -326,6 +329,9 @@ private:
 	//when the player finishes shooting
 	UFUNCTION()
 	void OnFireStop(const struct FInputActionValue& Value);
+	//when the player reloads
+	UFUNCTION()
+	void OnReload(const struct FInputActionValue& Value);
 	//when the player shifts the engine up
 	UFUNCTION()
 	void OnEngineShiftUpStart(const struct FInputActionValue& Value);

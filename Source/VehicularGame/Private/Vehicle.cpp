@@ -244,6 +244,11 @@ void AVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 			LogError("Fire Action wasn't set in Vehicle");
 			return;
 		}
+		if (ReloadAction == nullptr)
+		{
+			LogError("reload action was not set in Vehicle");
+			return;
+		}
 		if(EngineShiftUpAction == nullptr)
 		{
 			LogError("Engine shift up Action wasn't set in Vehicle");
@@ -270,6 +275,7 @@ void AVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &AVehicle::OnFireStart);
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Ongoing, this, &AVehicle::OnFiring);
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, this, &AVehicle::OnFireStop);
+		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Started, this, &AVehicle::OnReload);
 		EnhancedInputComponent->BindAction(EngineShiftUpAction, ETriggerEvent::Started, this, &AVehicle::OnEngineShiftUpStart);
 		EnhancedInputComponent->BindAction(EngineShiftUpAction, ETriggerEvent::Ongoing, this, &AVehicle::OnEngineShiftUpOnGoing);
 		EnhancedInputComponent->BindAction(EngineShiftUpAction, ETriggerEvent::Canceled, this, &AVehicle::OnEngineShiftUpStop);
@@ -591,6 +597,12 @@ void AVehicle::OnFireStop(const FInputActionValue& Value)
 {
 	Turret->FireReleased();
 }
+
+void AVehicle::OnReload(const struct FInputActionValue& Value)
+{
+	Turret->BeginReload();
+}
+
 
 //when the player shifts the engine up
 void AVehicle::OnEngineShiftUpStart(const FInputActionValue& Value)

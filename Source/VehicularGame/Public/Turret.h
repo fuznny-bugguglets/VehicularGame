@@ -23,6 +23,9 @@ public:
 	void FireReleased();
 	void FireHeld();
 
+	//initiates the reloading process
+	void BeginReload();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -105,8 +108,7 @@ private:
 
 	float UpgradedFireRate();
 
-	//initiates the reloading process
-	void BeginReload();
+	
 
 	//ticks along the reloading process, only runs while reloading
 	void ReloadTick(float DeltaTime);
