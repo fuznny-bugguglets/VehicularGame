@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Turret.generated.h"
 
+class UUpgradeSubsystem;
 class UTurretRotationComponent;
 class UCameraComponent;
 
@@ -114,6 +115,14 @@ private:
 	void ReloadTick(float DeltaTime);
 
 	FRotator GetRotationWithSpread(const FTransform& InputTransform, const float SpreadAngle) const;
+
+	//pointer to the upgrade subsystem
+	UPROPERTY()
+	UUpgradeSubsystem* UpgradeSubsystem = nullptr;
+
+	//returns the upgrade subsystem
+	UFUNCTION()
+	UUpgradeSubsystem* GetUpgradeSubsystem();
 
 	void LogError(const FString& ErrorMessage);
 

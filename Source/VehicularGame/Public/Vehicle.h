@@ -7,6 +7,7 @@
 #include "GameFramework/Pawn.h"
 #include "Vehicle.generated.h"
 
+class UUpgradeSubsystem;
 class AScavengerPawn;
 class AVehicularGameState;
 class AVehicularGameMode;
@@ -380,6 +381,14 @@ private:
 	void UpdateTimeSinceLastHit(float DeltaTime);
 
 	void SpawnScavengers(const float DeltaTime);
+
+	//pointer to the upgrade subsystem
+	UPROPERTY()
+	UUpgradeSubsystem* UpgradeSubsystem = nullptr;
+
+	//returns the upgrade subsystem
+	UFUNCTION()
+	UUpgradeSubsystem* GetUpgradeSubsystem();
 
 
 	//wrapper for CreateSound2D that doesn't auto destroy

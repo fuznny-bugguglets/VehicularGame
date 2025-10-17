@@ -46,6 +46,12 @@ void UCrewInformationPanel::HideDisplay()
 
 void UCrewInformationPanel::OnButtonClicked()
 {
+	//ignore if it hasnt been init
+	if (CrewID == 255)
+	{
+		return;
+	}
+
 	if (CityWidget)
 	{
 		if (bIsHired)

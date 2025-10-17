@@ -57,6 +57,14 @@ void AProjectile::BeginPlay()
         TrailNSC->SetAsset(TrailNiagaraSystemAsset);
         TrailNSC->Activate(true);
     }
+
+    //add additional damage
+    if (!GetUpgradeSubsystem())
+    {
+        return;
+    }
+
+    Damage += GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretDamage);
 }
 
 void AProjectile::InitializeProjectile(float InAdditionalDamage, int32 InPiercingCount, float InSpeedMultiplier)
