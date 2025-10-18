@@ -2,6 +2,8 @@
 
 
 #include "MechanicWidget.h"
+
+#include "Item.h"
 #include "Upgrades.h"
 #include "Components/HorizontalBoxSlot.h"
 
@@ -172,5 +174,24 @@ void UMechanicWidget::DisplayUpgradeInformation(uint8 UpgradeID)
 
 	//set the name to display
 	NameText->SetText(Upgrade.Name);
+
+	//build a string with the costs
+	FString TotalCostString;
+	
+	TotalCostString.Append("Cost:");
+	TotalCostString.Append("\n");
+	
+	for (auto Cost : Upgrade.Cost)
+	{
+		//get the name of the item
+		FText Name = UItemManager::GetItemFromTypeAndTier(Cost.Type, Cost.Tier).Name;
+		TotalCostString.Append(FString::FromInt(Cost.Amount));
+		TotalCostString.Append("x ");
+		TotalCostString.Append(Name.ToString());
+		TotalCostString.Append("\n");
+	}
+
+	//display the costs
+	CostText->SetText(FText::FromString(TotalCostString));
 }
 

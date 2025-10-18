@@ -28,6 +28,9 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* NameText = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* CostText = nullptr;
 	
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* TurretTreeLevel1;
