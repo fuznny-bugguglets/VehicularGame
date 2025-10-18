@@ -3,10 +3,10 @@
 
 #include "Upgrades.h"
 
-Upgrades::Upgrades()
+TArray<FUpgrade> UUpgradeManager::Upgrades;
+
+void UUpgradeManager::AddUpgrade(const FUpgrade& NewUpgrade)
 {
+	Upgrades.Emplace(NewUpgrade);
 }
 
-Upgrades::~Upgrades()
-{
-}

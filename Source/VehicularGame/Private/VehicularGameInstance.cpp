@@ -28,6 +28,12 @@ void UVehicularGameInstance::Init()
 		CrewManager->SetupCrewFromDataTable();
 	}
 
+	UpgradeManager = NewObject<UUpgradeManager>(GetTransientPackage(), UpgradeManagerClass);
+	if (UpgradeManager)
+	{
+		UpgradeManager->SetupItemsFromDataTable();
+	}
+
 }
 
 void UVehicularGameInstance::LoadGameData()

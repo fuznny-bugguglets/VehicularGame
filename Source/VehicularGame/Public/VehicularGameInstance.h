@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Crew.h"
 #include "Item.h"
+#include "Upgrades.h"
 #include "Engine/GameInstance.h"
 #include "VehicularGameInstance.generated.h"
 
@@ -78,4 +79,10 @@ private:
 
 	UPROPERTY()
 	UCrewManager* CrewManager = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Classes", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUpgradeManager> UpgradeManagerClass;
+
+	UPROPERTY()
+	UUpgradeManager* UpgradeManager = nullptr;
 };

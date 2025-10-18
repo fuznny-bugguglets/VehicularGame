@@ -38,6 +38,15 @@ enum class EUpgradeType : uint8
 	MAX
 };
 
+UENUM(BlueprintType)
+enum class EUpgradeTree : uint8
+{
+	Turret,
+	Bumper,
+	Crew,
+	Car
+};
+
 USTRUCT(BlueprintType)
 struct FUpgradePurchaseRequirements
 {
@@ -62,18 +71,36 @@ struct FUpgrade : public FTableRowBase
 	FText Name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EUpgradeTree Tree;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EUpgradeType Type;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Value;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(ClampMin=1, ClampMax=5))
+	int32 Level;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FUpgradePurchaseRequirements> Cost;
 };
 
-class VEHICULARGAME_API Upgrades
+UCLASS(Blueprintable, BlueprintType)
+class VEHICULARGAME_API UUpgradeManager : public UObject
 {
+	GENERATED_BODY()
+	
 public:
-	Upgrades();
-	~Upgrades();
+	//setup in game instance
+	//logic handled in blueprints to grab items from datatable
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetupItemsFromDataTable();
+	UFUNCTION(BlueprintCallable)
+	void AddUpgrade(const FUpgrade& NewUpgrade);
+
+private:
+
+	//used to store all existent upgrades
+	static TArray<FUpgrade> Upgrades;
 };
