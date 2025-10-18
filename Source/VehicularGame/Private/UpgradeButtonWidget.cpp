@@ -53,3 +53,8 @@ void UUpgradeButtonWidget::SetMechanicWidget(UMechanicWidget* IncomingPtr)
 	MechanicWidget = IncomingPtr;
 }
 
+void UUpgradeButtonWidget::SetText(const FText& InText)
+{
+	ButtonText->SetText(InText);
+}
+

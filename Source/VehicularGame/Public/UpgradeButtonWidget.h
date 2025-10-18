@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Upgrades.h"
+#include "Components/TextBlock.h"
 #include "UpgradeButtonWidget.generated.h"
 
 class UMechanicWidget;
@@ -28,11 +29,17 @@ public:
 	void SetUpgradeID(uint8 IncomingID);
 
 	UFUNCTION()
+	void SetText(const FText& InText);
+
+	UFUNCTION()
 	void SetMechanicWidget(UMechanicWidget* IncomingPtr);
 
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UButton* Button = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* ButtonText = nullptr;
 
 	UPROPERTY()
 	uint8 UpgradeID = 255;

@@ -45,6 +45,9 @@ void UMechanicWidget::NativeConstruct()
 
 		//give it a reference to us
 		UpgradeButtonObj->SetMechanicWidget(this);
+
+		//set its text
+		UpgradeButtonObj->SetText(Upgrade.Name);
 		
 		//figure out which tree it belongs to
 		UHorizontalBox* ThisUpgradeTree = GetUpgradeTree(Upgrade.Tree, Upgrade.Level);
