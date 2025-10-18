@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ResourceTypes.h"
+#include "Upgrades.generated.h"
 
 /**
  * 
@@ -34,6 +36,39 @@ enum class EUpgradeType : uint8
 	CrewHaulingCapacity UMETA(DisplayName = "Crew Hauling Capacity"),
 
 	MAX
+};
+
+USTRUCT(BlueprintType)
+struct FUpgradePurchaseRequirements
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EResourceTier Tier;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EResourceType Type;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Amount;
+};
+
+USTRUCT(BlueprintType)
+struct FUpgrade : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EUpgradeType Type;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Value;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FUpgradePurchaseRequirements> Cost;
 };
 
 class VEHICULARGAME_API Upgrades

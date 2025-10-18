@@ -26,7 +26,7 @@ void UUpgradeButtonWidget::OnButtonClicked()
 	}
 
 	//pass in upgrade to be processed
-	GetUpgradeSubsystem()->ProcessUpgrade(UpgradeType, UpgradeValue);
+	//GetUpgradeSubsystem()->ProcessUpgrade(UpgradeType, UpgradeValue);
 }
 
 UUpgradeSubsystem* UUpgradeButtonWidget::GetUpgradeSubsystem()
