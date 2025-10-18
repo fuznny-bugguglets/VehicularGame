@@ -5,12 +5,24 @@
 
 #include "Item.h"
 #include "Upgrades.h"
+#include "Components/Button.h"
 #include "Components/HorizontalBoxSlot.h"
 
 void UMechanicWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	//setup bindings for the selection buttons
+	TurretTreeButton->OnClicked.AddDynamic(this, &UMechanicWidget::OnTurretTreeButtonClicked);
+	BumperTreeButton->OnClicked.AddDynamic(this, &UMechanicWidget::OnBumperTreeButtonClicked);
+	CrewTreeButton->OnClicked.AddDynamic(this, &UMechanicWidget::OnCrewTreeButtonClicked);
+	CarTreeButton->OnClicked.AddDynamic(this, &UMechanicWidget::OnCarTreeButtonClicked);
+
+	//setup binding for unlock button
+	UnlockButton->OnClicked.AddDynamic(this, &UMechanicWidget::OnUnlockButtonClicked);
+
+	
+	//make sure we have a button class to spawn
 	if (!UpgradeButtonClass)
 	{
 		return;
@@ -177,10 +189,10 @@ void UMechanicWidget::DisplayUpgradeInformation(uint8 UpgradeID)
 
 	//build a string with the costs
 	FString TotalCostString;
-	
 	TotalCostString.Append("Cost:");
 	TotalCostString.Append("\n");
-	
+
+	//loop through each item and append to the string
 	for (auto Cost : Upgrade.Cost)
 	{
 		//get the name of the item
@@ -193,5 +205,32 @@ void UMechanicWidget::DisplayUpgradeInformation(uint8 UpgradeID)
 
 	//display the costs
 	CostText->SetText(FText::FromString(TotalCostString));
+
+	//display the unlock button
+	UnlockButton->SetVisibility(ESlateVisibility::Visible);
 }
 
+void UMechanicWidget::OnTurretTreeButtonClicked()
+{
+	TreeSwitcher->SetActiveWidgetIndex(0);
+}
+
+void UMechanicWidget::OnBumperTreeButtonClicked()
+{
+	TreeSwitcher->SetActiveWidgetIndex(1);
+}
+
+void UMechanicWidget::OnCrewTreeButtonClicked()
+{
+	TreeSwitcher->SetActiveWidgetIndex(2);
+}
+
+void UMechanicWidget::OnCarTreeButtonClicked()
+{
+	TreeSwitcher->SetActiveWidgetIndex(3);
+}
+
+void UMechanicWidget::OnUnlockButtonClicked()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, "to do!");
+}

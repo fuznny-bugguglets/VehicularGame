@@ -8,6 +8,7 @@
 #include "Components/HorizontalBox.h"
 #include "Upgrades.h"
 #include "Components/TextBlock.h"
+#include "Components/WidgetSwitcher.h"
 #include "MechanicWidget.generated.h"
 
 /**
@@ -31,6 +32,24 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* CostText = nullptr;
+	
+	UPROPERTY(meta = (BindWidget))
+	UButton* UnlockButton;
+
+	UPROPERTY(meta = (BindWidget))
+	UWidgetSwitcher* TreeSwitcher = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* TurretTreeButton = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* BumperTreeButton = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* CrewTreeButton = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* CarTreeButton = nullptr;
 	
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* TurretTreeLevel1;
@@ -95,6 +114,19 @@ protected:
 	UFUNCTION()
 	UHorizontalBox* GetUpgradeTree(EUpgradeTree UpgradeTree, uint8 Index);
 
+	UFUNCTION()
+	void OnUnlockButtonClicked();
 	
+	UFUNCTION()
+	void OnTurretTreeButtonClicked();
+
+	UFUNCTION()
+	void OnBumperTreeButtonClicked();
+
+	UFUNCTION()
+	void OnCrewTreeButtonClicked();
+
+	UFUNCTION()
+	void OnCarTreeButtonClicked();
 	
 };
