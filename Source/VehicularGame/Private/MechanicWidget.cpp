@@ -18,7 +18,19 @@ void UMechanicWidget::NativeConstruct()
 	for (FUpgrade Upgrade : UUpgradeManager::GetUpgrades())
 	{
 		//create the widget
-		UWidget* UpgradeButtonObj = CreateWidget(GetWorld(), UpgradeButtonClass);
+		UUpgradeButtonWidget* UpgradeButtonObj = CreateWidget<UUpgradeButtonWidget>(GetWorld(), UpgradeButtonClass);
+
+		//make sure it actually created
+		if (!UpgradeButtonObj)
+		{
+			return;
+		}
+
+		//set its ID
+		UpgradeButtonObj->SetUpgradeID(UUpgradeManager::GetIndexFromUpgrade(Upgrade));
+
+		//give it a reference to us
+		UpgradeButtonObj->SetMechanicWidget(this);
 		
 		//figure out which tree it belongs to
 		UHorizontalBox* ThisUpgradeTree = GetUpgradeTree(Upgrade.Tree, Upgrade.Level);
@@ -41,10 +53,6 @@ void UMechanicWidget::NativeConstruct()
 			ThisHBoxSlot->SetPadding(20.0f);
 		}
 	}
-
-	
-	
-	
 	
 }
 
@@ -60,6 +68,18 @@ UHorizontalBox* UMechanicWidget::GetUpgradeTree(EUpgradeTree UpgradeTree, uint8 
 		case 1:
 			return TurretTreeLevel1;
 
+		case 2:
+			return TurretTreeLevel2;
+
+		case 3:
+			return TurretTreeLevel3;
+
+		case 4:
+			return TurretTreeLevel4;
+
+		case 5:
+			return TurretTreeLevel5;
+	
 		default:
 			break;
 			
@@ -67,9 +87,90 @@ UHorizontalBox* UMechanicWidget::GetUpgradeTree(EUpgradeTree UpgradeTree, uint8 
 		
 		break;
 
+	case EUpgradeTree::Bumper:
+		//switch on the index
+		switch (Index)
+		{
+		case 1:
+			return BumperTreeLevel1;
+
+		case 2:
+			return BumperTreeLevel2;
+
+		case 3:
+			return BumperTreeLevel3;
+
+		case 4:
+			return BumperTreeLevel4;
+
+		case 5:
+			return BumperTreeLevel5;
+
+		default:
+			break;
+		}
+
+	case EUpgradeTree::Crew:
+		//switch on the index
+		switch (Index)
+		{
+		case 1:
+				return CrewTreeLevel1;
+
+		case 2:
+				return CrewTreeLevel2;
+
+		case 3:
+				return CrewTreeLevel3;
+
+		case 4:
+				return CrewTreeLevel4;
+
+		case 5:
+				return CrewTreeLevel5;
+	
+		default:
+			break;
+			
+		}
+
+	case EUpgradeTree::Car:
+		//switch on the index
+		switch (Index)
+		{
+		case 1:
+			return CarTreeLevel1;
+
+		case 2:
+			return CarTreeLevel2;
+
+		case 3:
+			return CarTreeLevel3;
+
+		case 4:
+			return CarTreeLevel4;
+
+		case 5:
+			return CarTreeLevel5;
+	
+		default:
+			break;
+			
+		}
+
 	default:
 		break;
 	}
 
 	return nullptr;
 }
+
+void UMechanicWidget::DisplayUpgradeInformation(uint8 UpgradeID)
+{
+	//get the upgrade information
+	FUpgrade& Upgrade = UUpgradeManager::GetUpgradeFromIndex(UpgradeID);
+
+	//set the name to display
+	NameText->SetText(Upgrade.Name);
+}
+

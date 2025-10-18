@@ -3,6 +3,7 @@
 
 #include "UpgradeButtonWidget.h"
 
+#include "MechanicWidget.h"
 #include "Components/Button.h"
 #include "UpgradeSubsystem.h"
 
@@ -20,13 +21,12 @@ void UUpgradeButtonWidget::NativeConstruct()
 
 void UUpgradeButtonWidget::OnButtonClicked()
 {
-	if (!GetUpgradeSubsystem())
+	if (!MechanicWidget)
 	{
 		return;
 	}
 
-	//pass in upgrade to be processed
-	//GetUpgradeSubsystem()->ProcessUpgrade(UpgradeType, UpgradeValue);
+	MechanicWidget->DisplayUpgradeInformation(UpgradeID);
 }
 
 UUpgradeSubsystem* UUpgradeButtonWidget::GetUpgradeSubsystem()
@@ -42,3 +42,14 @@ UUpgradeSubsystem* UUpgradeButtonWidget::GetUpgradeSubsystem()
 
 	return UpgradeSubsystem;
 }
+
+void UUpgradeButtonWidget::SetUpgradeID(uint8 IncomingID)
+{
+	UpgradeID = IncomingID;
+}
+
+void UUpgradeButtonWidget::SetMechanicWidget(UMechanicWidget* IncomingPtr)
+{
+	MechanicWidget = IncomingPtr;
+}
+

@@ -7,6 +7,7 @@
 #include "Upgrades.h"
 #include "UpgradeButtonWidget.generated.h"
 
+class UMechanicWidget;
 class UButton;
 class UUpgradeSubsystem;
 /**
@@ -23,20 +24,26 @@ public:
 	UFUNCTION()
 	void OnButtonClicked();
 
+	UFUNCTION()
+	void SetUpgradeID(uint8 IncomingID);
+
+	UFUNCTION()
+	void SetMechanicWidget(UMechanicWidget* IncomingPtr);
+
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UButton* Button = nullptr;
 
-	UPROPERTY(EditAnywhere)
-	EUpgradeType UpgradeType;
-
-	UPROPERTY(EditAnywhere)
-	float UpgradeValue;
+	UPROPERTY()
+	uint8 UpgradeID = 255;
 
 	UFUNCTION()
 	UUpgradeSubsystem* GetUpgradeSubsystem();
 
 	UPROPERTY()
 	UUpgradeSubsystem* UpgradeSubsystem = nullptr;
+
+	UPROPERTY()
+	UMechanicWidget* MechanicWidget = nullptr;
 	
 };
