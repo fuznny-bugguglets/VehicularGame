@@ -84,6 +84,12 @@ struct FUpgrade : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FUpgradePurchaseRequirements> Cost;
+
+	bool operator==(const FUpgrade& Other) const
+	{
+		return this->Type == Other.Type
+		&& this->Level == Other.Level;
+	}
 };
 
 UCLASS(Blueprintable, BlueprintType)
@@ -92,12 +98,19 @@ class VEHICULARGAME_API UUpgradeManager : public UObject
 	GENERATED_BODY()
 	
 public:
+	static FUpgrade& GetUpgradeFromIndex(const uint8 Index);
+	static uint8 GetIndexFromUpgrade(const FUpgrade& Upgrade);
+
+	static const TArray<FUpgrade>& GetUpgrades();
+	
 	//setup in game instance
 	//logic handled in blueprints to grab items from datatable
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetupItemsFromDataTable();
 	UFUNCTION(BlueprintCallable)
 	void AddUpgrade(const FUpgrade& NewUpgrade);
+	UFUNCTION(BlueprintCallable)
+	void ClearUpgrades();
 
 private:
 

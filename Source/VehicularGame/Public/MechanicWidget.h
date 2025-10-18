@@ -6,6 +6,7 @@
 #include "UpgradeButtonWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/HorizontalBox.h"
+#include "Upgrades.h"
 #include "MechanicWidget.generated.h"
 
 /**
@@ -24,6 +25,9 @@ protected:
 	
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* TurretTreeLevel1;
+
+	UFUNCTION()
+	UHorizontalBox* GetUpgradeTree(EUpgradeTree UpgradeTree, uint8 Index);
 
 	
 	
