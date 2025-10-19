@@ -317,3 +317,13 @@ void UMechanicWidget::OnUnlockButtonClicked()
 	
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, "unlocked!");
 }
+
+void UMechanicWidget::HideInformationPanel()
+{
+	//hide the purchase button
+	UnlockButton->SetVisibility(ESlateVisibility::Hidden);
+
+	//hide the text
+	NameText->SetText(FText::GetEmpty());
+	CostText->SetText(FText::GetEmpty());
+}

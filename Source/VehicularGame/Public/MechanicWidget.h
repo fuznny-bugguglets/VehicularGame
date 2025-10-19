@@ -22,6 +22,7 @@ public:
 	virtual void NativeConstruct() override;
 
 	void DisplayUpgradeInformation(uint8 UpgradeID);
+	void HideInformationPanel();
 
 protected:
 	UPROPERTY(EditAnywhere, Category="Classes", meta=(AllowPrivateAccess="true"))
@@ -115,7 +116,7 @@ protected:
 	bool bCanUnlockUpgrade = false;
 
 	UPROPERTY()
-	uint8 SelectedUpgradeID = 0;
+	uint8 SelectedUpgradeID = 255;
 
 	UFUNCTION()
 	UHorizontalBox* GetUpgradeTree(EUpgradeTree UpgradeTree, uint8 Index);

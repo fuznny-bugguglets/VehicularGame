@@ -20,9 +20,8 @@ UInventorySubsystem::UInventorySubsystem()
 	AddItemToCityStorage(11, 5);
 	
 	Shop.Empty();
-	AddItemToShop(1);
-	AddItemToShop(2);
-	AddItemToShop(4);
+	AddItemToShop(8);
+	AddItemToShop(11);
 
 	HirableCrew.Empty();
 	AddCrewForHire(0);
