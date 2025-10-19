@@ -111,6 +111,12 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* CarTreeLevel5;
 
+	UPROPERTY()
+	bool bCanUnlockUpgrade = false;
+
+	UPROPERTY()
+	uint8 SelectedUpgradeID = 0;
+
 	UFUNCTION()
 	UHorizontalBox* GetUpgradeTree(EUpgradeTree UpgradeTree, uint8 Index);
 

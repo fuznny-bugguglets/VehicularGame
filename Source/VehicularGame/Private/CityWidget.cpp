@@ -130,7 +130,11 @@ void UCityWidget::OnExitButton()
 
 void UCityWidget::OnRelicsButton()
 {
+	//change window to show relics widget
 	SetWidgetSwitcher(0);
+
+	//refresh the display of items
+	CityStorage->UpdateButtons();
 }
 
 void UCityWidget::OnCrewButton()

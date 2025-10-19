@@ -19,6 +19,7 @@ public:
 	UUpgradeSubsystem();
 
 	void ProcessUpgrade(EUpgradeType UpgradeType, float UpgradeValue);
+	void ProcessUpgrade(FUpgrade Upgrade);
 
 	float GetUpgradeValue(EUpgradeType UpgradeType) const;
 

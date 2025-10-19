@@ -3,8 +3,10 @@
 
 #include "MechanicWidget.h"
 
+#include "InventorySubsystem.h"
 #include "Item.h"
 #include "Upgrades.h"
+#include "UpgradeSubsystem.h"
 #include "Components/Button.h"
 #include "Components/HorizontalBoxSlot.h"
 
@@ -182,10 +184,18 @@ UHorizontalBox* UMechanicWidget::GetUpgradeTree(EUpgradeTree UpgradeTree, uint8 
 	return nullptr;
 }
 
+// ReSharper disable once CppMemberFunctionMayBeConst
 void UMechanicWidget::DisplayUpgradeInformation(uint8 UpgradeID)
 {
+	//set which upgrade is being viewed
+	SelectedUpgradeID = UpgradeID;
+	
 	//get the upgrade information
 	FUpgrade& Upgrade = UUpgradeManager::GetUpgradeFromIndex(UpgradeID);
+
+	//get the inventory subsystem
+	UInventorySubsystem* InventorySubsystem = GetGameInstance()->GetSubsystem<UInventorySubsystem>();
+	if (!InventorySubsystem) return;
 
 	//set the name to display
 	NameText->SetText(Upgrade.Name);
@@ -195,15 +205,29 @@ void UMechanicWidget::DisplayUpgradeInformation(uint8 UpgradeID)
 	TotalCostString.Append("Cost:");
 	TotalCostString.Append("\n");
 
-	//loop through each item and append to the string
-	for (auto Cost : Upgrade.Cost)
+	//assume we can afford it
+	bCanUnlockUpgrade = true;
+
+	//loop through each cost associated with the upgrade
+	for (auto [Tier, Type, Amount] : Upgrade.Cost)
 	{
 		//get the name of the item
-		FText Name = UItemManager::GetItemFromTypeAndTier(Cost.Type, Cost.Tier).Name;
-		TotalCostString.Append(FString::FromInt(Cost.Amount));
+		FText Name = UItemManager::GetItemFromTypeAndTier(Type, Tier).Name;
+
+		//add to the cost string
+		TotalCostString.Append(FString::FromInt(Amount));
 		TotalCostString.Append("x ");
 		TotalCostString.Append(Name.ToString());
 		TotalCostString.Append("\n");
+
+		//get the amount of this item the player has
+		int32 ItemCount = InventorySubsystem->GetItemCountFromCityStorage(UItemManager::GetItemFromTypeAndTier(Type, Tier));
+
+		//does the player have less than the required amount?
+		if (ItemCount < Amount)
+		{
+			bCanUnlockUpgrade = false;
+		}
 	}
 
 	//display the costs
@@ -211,6 +235,18 @@ void UMechanicWidget::DisplayUpgradeInformation(uint8 UpgradeID)
 
 	//display the unlock button
 	UnlockButton->SetVisibility(ESlateVisibility::Visible);
+
+	//can we afford it?
+	if (bCanUnlockUpgrade)
+	{
+		UnlockButton->SetBackgroundColor(FColor::Green);
+	}
+	else
+	{
+		UnlockButton->SetBackgroundColor(FColor::Red);
+	}
+
+	
 }
 
 void UMechanicWidget::OnTurretTreeButtonClicked()
@@ -235,5 +271,35 @@ void UMechanicWidget::OnCarTreeButtonClicked()
 
 void UMechanicWidget::OnUnlockButtonClicked()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, "to do!");
+	//can we afford it?
+	if (!bCanUnlockUpgrade) return;
+	
+	//get the upgrade information
+	FUpgrade& Upgrade = UUpgradeManager::GetUpgradeFromIndex(SelectedUpgradeID);
+
+	//get the inventory subsystem
+	UInventorySubsystem* InventorySubsystem = GetGameInstance()->GetSubsystem<UInventorySubsystem>();
+	if (!InventorySubsystem) return;
+
+	//loop through each cost associated with the upgrade
+	for (auto [Tier, Type, Amount] : Upgrade.Cost)
+	{
+		//get the item
+		FItem& ThisItem = UItemManager::GetItemFromTypeAndTier(Type, Tier);
+
+		//remove the item(s) from the player city storage
+		InventorySubsystem->RemoveItemFromCityStorage(ThisItem, Amount);
+	}
+
+	//get the upgrade subsystem
+	UUpgradeSubsystem* UpgradeSubsystem = GetGameInstance()->GetSubsystem<UUpgradeSubsystem>();
+	if (!UpgradeSubsystem) return;
+
+	//apply the upgrade
+	UpgradeSubsystem->ProcessUpgrade(Upgrade);
+
+	//hide the unlock button
+	UnlockButton->SetVisibility(ESlateVisibility::Hidden);
+	
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, "unlocked!");
 }
