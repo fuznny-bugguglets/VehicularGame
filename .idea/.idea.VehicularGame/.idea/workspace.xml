@@ -13,14 +13,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/City/Mechanic/BP_Mechanic.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/City/Mechanic/BP_Mechanic.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/CityWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/CityWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/InventorySubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/InventorySubsystem.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/MechanicWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/MechanicWidget.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/UpgradeSubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/UpgradeSubsystem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/InventorySubsystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/InventorySubsystem.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/Item.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/Item.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/MechanicWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/MechanicWidget.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/UpgradeSubsystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/UpgradeSubsystem.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -170,7 +165,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1760841916780</updated>
-      <workItem from="1760841918874" duration="3094000" />
+      <workItem from="1760841918874" duration="4137000" />
     </task>
     <servers />
   </component>

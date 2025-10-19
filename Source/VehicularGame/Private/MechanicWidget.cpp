@@ -232,10 +232,24 @@ void UMechanicWidget::DisplayUpgradeInformation(uint8 UpgradeID)
 
 	//display the costs
 	CostText->SetText(FText::FromString(TotalCostString));
+	
+	//get the upgrade subsystem
+	UUpgradeSubsystem* UpgradeSubsystem = GetGameInstance()->GetSubsystem<UUpgradeSubsystem>();
+	if (!UpgradeSubsystem) return;
+	
+	//has the player unlocked this already?
+	if (UpgradeSubsystem->GetUnlockStatus(UpgradeID))
+	{
+		//hide the unlock button
+		UnlockButton->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else
+	{
+		//display the unlock button
+		UnlockButton->SetVisibility(ESlateVisibility::Visible);
+	}
 
-	//display the unlock button
-	UnlockButton->SetVisibility(ESlateVisibility::Visible);
-
+	
 	//can we afford it?
 	if (bCanUnlockUpgrade)
 	{
