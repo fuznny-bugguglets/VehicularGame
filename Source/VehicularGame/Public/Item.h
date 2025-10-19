@@ -43,7 +43,7 @@ struct FItem : public FTableRowBase
 
 	bool operator==(const FItem& Other) const
 	{
-		return false;
+		return this->Name.ToString() == Other.Name.ToString();
 	}
 };
 

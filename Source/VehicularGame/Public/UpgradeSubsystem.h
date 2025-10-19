@@ -17,13 +17,19 @@ class VEHICULARGAME_API UUpgradeSubsystem : public UGameInstanceSubsystem
 
 public:
 	UUpgradeSubsystem();
-
-	void ProcessUpgrade(EUpgradeType UpgradeType, float UpgradeValue);
+	
+	void ProcessUpgrade(const FUpgrade& Upgrade);
 
 	float GetUpgradeValue(EUpgradeType UpgradeType) const;
 
+	bool GetUnlockStatus(uint8 UpgradeID);
+	void UnlockUpgrade(uint8 UpgradeID);
+
 private:
-	//maps each upgrade to a current value
+	//maps each upgrade type to its current value
 	TMap<EUpgradeType, float> UpgradeToValueMap;
+
+	//maps each upgrade ID to its unlocked status
+	TMap<uint8, bool> UpgradeUnlockStatusMap;
 	
 };

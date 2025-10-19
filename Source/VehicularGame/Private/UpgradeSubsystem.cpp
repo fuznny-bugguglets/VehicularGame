@@ -13,15 +13,43 @@ UUpgradeSubsystem::UUpgradeSubsystem()
 	}
 }
 
-
-void UUpgradeSubsystem::ProcessUpgrade(EUpgradeType UpgradeType, float UpgradeValue)
+void UUpgradeSubsystem::ProcessUpgrade(const FUpgrade& Upgrade)
 {
-	UpgradeToValueMap[UpgradeType] = UpgradeValue;
+	//set the value of the upgrade
+	UpgradeToValueMap[Upgrade.Type] = Upgrade.Value;
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, "Processed Upgrade logic not written yet");
+	//set the upgrade as unlocked
+	UnlockUpgrade(UUpgradeManager::GetIndexFromUpgrade(Upgrade));
 }
+
 
 float UUpgradeSubsystem::GetUpgradeValue(EUpgradeType UpgradeType) const
 {
 	return UpgradeToValueMap[UpgradeType];
+}
+
+bool UUpgradeSubsystem::GetUnlockStatus(uint8 UpgradeID)
+{
+	//does it not exist?
+	if (!UpgradeUnlockStatusMap.Contains(UpgradeID))
+	{
+		//if it doesn't exist, then it isn't unlocked
+		UpgradeUnlockStatusMap.Emplace(UpgradeID, false);
+	}
+	
+	return UpgradeUnlockStatusMap[UpgradeID];
+}
+
+void UUpgradeSubsystem::UnlockUpgrade(uint8 UpgradeID)
+{
+	//does it not exist?
+	if (!UpgradeUnlockStatusMap.Contains(UpgradeID))
+	{
+		//create it and set as unlocked
+		UpgradeUnlockStatusMap.Emplace(UpgradeID, true);
+		return;
+	}
+
+	//set as unlocked
+	UpgradeUnlockStatusMap[UpgradeID] = true;
 }

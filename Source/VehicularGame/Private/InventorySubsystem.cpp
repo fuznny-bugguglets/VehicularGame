@@ -16,18 +16,10 @@ UInventorySubsystem::UInventorySubsystem()
 	PlayerInventory.Empty();
 
 	CityStorage.Empty();
-	//AddItemToCityStorage(0, 10);
-	//AddItemToCityStorage(1, 10);
-	//AddItemToCityStorage(2, 10);
-	//AddItemToCityStorage(3, 10);
-	//AddItemToCityStorage(4, 10);
-	//AddItemToCityStorage(5, 10);
-	//AddItemToCityStorage(6, 10);
 	
 	Shop.Empty();
-	AddItemToShop(1);
-	AddItemToShop(2);
-	AddItemToShop(4);
+	AddItemToShop(8);
+	AddItemToShop(11);
 
 	HirableCrew.Empty();
 	AddCrewForHire(0);
@@ -313,4 +305,26 @@ void UInventorySubsystem::MoveFromPlayerInventoryToCityStorage()
 	}
 
 	PlayerInventory.Empty();
+}
+
+int32 UInventorySubsystem::GetItemCountFromCityStorage(uint8 ItemIndex) const
+{
+	//is the item in the city storage?
+	if (CityStorage.Contains(ItemIndex))
+	{
+		//return the count
+		return CityStorage[ItemIndex];
+	}
+	else
+	{
+		//not in city storage, return nothing
+		return 0;
+	}
+	
+	
+}
+
+int32 UInventorySubsystem::GetItemCountFromCityStorage(const FItem& InItem) const
+{
+	return GetItemCountFromCityStorage(UItemManager::GetIndexFromItem(InItem));
 }
