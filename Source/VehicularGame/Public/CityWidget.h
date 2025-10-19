@@ -70,6 +70,9 @@ protected:
 	UButton* CrewButton = nullptr;
 
 	UPROPERTY(meta = (BindWidget))
+	UButton* MechanicButton = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
 	UButton* ExitButton = nullptr;
 
 	UPROPERTY(meta = (BindWidget))
@@ -87,9 +90,14 @@ private:
 	void OnCrewButton();
 
 	UFUNCTION()
+	void OnMechanicButton();
+
+	UFUNCTION()
 	UInventorySubsystem* GetInventorySubsystem();
 
 	void UpdateMoney();
+
+	void SetWidgetSwitcher(int32 index);
 
 	UPROPERTY()
 	UInventorySubsystem* Inventory = nullptr;

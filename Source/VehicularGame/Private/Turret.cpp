@@ -8,6 +8,7 @@
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "UpgradeSubsystem.h"
 
 void ATurret::LogError(const FString& ErrorMessage)
 {
@@ -84,6 +85,35 @@ void ATurret::BeginPlay()
 		return;
 	}
 
+	//check we have an upgrade system
+	if (!GetUpgradeSubsystem())
+	{
+		LogError("no upgrade subsystem in turret");
+		return;
+	}
+
+	//set our max ammo count
+	MaxAmmoCount += GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretAmmo);
+
+	//set our ammo to be whatever our max is
+	AmmoCount = MaxAmmoCount;
+
+	//set our reload speed
+	ReloadTime -= GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretReloadSpeed);
+	if (ReloadTime < 0.0f)
+	{
+		LogError("0 reload time was achieved in the turret. was this a mistake?");
+		ReloadTime = 0.0f;
+	}
+
+	//set our fire rate
+	FireRate -= GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretFireRate);
+	if (FireRate < 0.0f)
+	{
+		LogError("0 fire rate time was achieved in the turret. was this a mistake?");
+		FireRate = 0.0f;
+	}
+
 	//prevents the bullet sound from being garbage collected
 	//BulletSoundInstance->AddToRoot();
 	
@@ -109,6 +139,12 @@ void ATurret::Tick(float DeltaTime)
 	{
 		//increment time since last shot
 		TimeSinceLastShot += DeltaTime;
+	}
+
+	//are we reloading?
+	if (bIsReloading)
+	{
+		ReloadTick(DeltaTime);
 	}
 
 }
@@ -146,9 +182,30 @@ void ATurret::FireHeld()
 		return;
 	}
 
-	//can we shoot?
+	//are we reloading?
+	if (bIsReloading)
+	{
+		return;
+	}
+
+	//do we have ammo?
+	if (AmmoCount <= 0)
+	{
+		return;
+	}
+
+	//has it been enough time since the last shot?
 	if (TimeSinceLastShot > (1.0f / UpgradedFireRate()))
 	{
+		//consume a bullet
+		AmmoCount--;
+
+		//did we run out of ammo?
+		if (AmmoCount <= 0)
+		{
+			BeginReload();
+		}
+
 		float Spread = VehicularGameState->GetProjectileSpreadMultiplier() * MaxSpreadAngle;
 
 		//setup Instigator 
@@ -255,4 +312,59 @@ FRotator ATurret::GetRotationWithSpread(const FTransform& InputTransform, const 
 
 	//return the new rotation
 	return MyRotator;
+}
+
+void ATurret::BeginReload()
+{
+	//are we already reloading?
+	if (bIsReloading)
+	{
+		//ignore
+		return;
+	}
+
+	//set to be reloading
+	bIsReloading = true;
+
+	//reset elapsed time
+	ElapsedReloadTime = 0.0f;
+
+	LogError("reloading....");
+}
+
+
+void ATurret::ReloadTick(float DeltaTime)
+{
+	//increment the time we have been reloading for
+	ElapsedReloadTime += DeltaTime;
+
+	//have we finished reloading?
+	if (ElapsedReloadTime >= ReloadTime)
+	{
+		//set to be no longer reloading
+		bIsReloading = false;
+
+		//reset elapsed time
+		ElapsedReloadTime = 0.0f;
+
+		//give back ammo
+		AmmoCount = MaxAmmoCount;
+
+		LogError("RELOADED!!!!!!!!!!!!");
+	}
+}
+
+UUpgradeSubsystem* ATurret::GetUpgradeSubsystem()
+{
+	//if we have it already, return it
+	if (UpgradeSubsystem)
+	{
+		return UpgradeSubsystem;
+	}
+
+	//grab it
+	UpgradeSubsystem = GetGameInstance()->GetSubsystem<UUpgradeSubsystem>();
+
+	//return it
+	return UpgradeSubsystem;
 }

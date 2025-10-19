@@ -22,6 +22,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/AudioComponent.h"
 #include "Curves/CurveFloat.h"
+#include "UpgradeSubsystem.h"
 
 //handy shortcut to displaying things when shit goes wrong
 void AVehicle::LogError(const FString& ErrorMessage)
@@ -244,6 +245,11 @@ void AVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 			LogError("Fire Action wasn't set in Vehicle");
 			return;
 		}
+		if (ReloadAction == nullptr)
+		{
+			LogError("reload action was not set in Vehicle");
+			return;
+		}
 		if(EngineShiftUpAction == nullptr)
 		{
 			LogError("Engine shift up Action wasn't set in Vehicle");
@@ -270,6 +276,7 @@ void AVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &AVehicle::OnFireStart);
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Ongoing, this, &AVehicle::OnFiring);
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, this, &AVehicle::OnFireStop);
+		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Started, this, &AVehicle::OnReload);
 		EnhancedInputComponent->BindAction(EngineShiftUpAction, ETriggerEvent::Started, this, &AVehicle::OnEngineShiftUpStart);
 		EnhancedInputComponent->BindAction(EngineShiftUpAction, ETriggerEvent::Ongoing, this, &AVehicle::OnEngineShiftUpOnGoing);
 		EnhancedInputComponent->BindAction(EngineShiftUpAction, ETriggerEvent::Canceled, this, &AVehicle::OnEngineShiftUpStop);
@@ -592,6 +599,12 @@ void AVehicle::OnFireStop(const FInputActionValue& Value)
 	Turret->FireReleased();
 }
 
+void AVehicle::OnReload(const struct FInputActionValue& Value)
+{
+	Turret->BeginReload();
+}
+
+
 //when the player shifts the engine up
 void AVehicle::OnEngineShiftUpStart(const FInputActionValue& Value)
 {
@@ -729,7 +742,7 @@ void AVehicle::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageTyp
 	//should we die?
 	if(Health <= 0)
 	{
-		UGameplayStatics::OpenLevel(this, FName("Main"));
+		UGameplayStatics::OpenLevel(this, FName("MainMenuLevel"));
 	}
 }
 
@@ -1087,4 +1100,19 @@ UAudioComponent* AVehicle::CreateSound2DNoDestroy(USoundBase* Sound)
 	return UGameplayStatics::CreateSound2D(this, Sound,
 		1.0f, 1.0f, 0.0, nullptr,
 		false, false);
+}
+
+UUpgradeSubsystem* AVehicle::GetUpgradeSubsystem()
+{
+	//if we have it already, return it
+	if (UpgradeSubsystem)
+	{
+		return UpgradeSubsystem;
+	}
+
+	//grab it
+	UpgradeSubsystem = GetGameInstance()->GetSubsystem<UUpgradeSubsystem>();
+
+	//return it
+	return UpgradeSubsystem;
 }

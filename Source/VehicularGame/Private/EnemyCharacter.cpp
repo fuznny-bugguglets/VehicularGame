@@ -453,6 +453,7 @@ void AEnemyCharacter::HitByPlayer()
         //launch ourselves away from the vehicle with extra oomf
         LaunchCharacter(PushVector * 2.5f, false, false);
     }
+
     //deal damage to the player
     else
     {
