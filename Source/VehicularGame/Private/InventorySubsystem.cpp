@@ -16,8 +16,6 @@ UInventorySubsystem::UInventorySubsystem()
 	PlayerInventory.Empty();
 
 	CityStorage.Empty();
-	AddItemToCityStorage(7, 5);
-	AddItemToCityStorage(11, 5);
 	
 	Shop.Empty();
 	AddItemToShop(8);
