@@ -14,9 +14,11 @@
   <component name="ChangeListManager">
     <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/MechanicWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/MechanicWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/UpgradeSubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/UpgradeSubsystem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/UpgradeSubsystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/UpgradeSubsystem.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_Vehicle.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_Vehicle.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Items/Items.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Items/Items.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Main3.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Main3.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/ScavengerPawn.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/ScavengerPawn.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/Vehicle.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/Vehicle.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,7 +167,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1760841916780</updated>
-      <workItem from="1760841918874" duration="4137000" />
+      <workItem from="1760841918874" duration="5950000" />
     </task>
     <servers />
   </component>

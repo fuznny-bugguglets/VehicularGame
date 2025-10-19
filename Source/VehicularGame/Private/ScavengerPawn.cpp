@@ -83,7 +83,6 @@ void AScavengerPawn::DoTravelToRuin()
 	//are we close enough to the ruin?
 	if (FVector::DistSquared(GetActorLocation(), MyRuin->GetEnteranceLocation()) <= TargetTolerance*TargetTolerance)
 	{
-		LogError("arrived at ruin entrance location");
 		ElapsedScavengeTime = 0.0f;
 
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -106,7 +105,6 @@ void AScavengerPawn::DoScavenge(float DeltaTime)
 	//does the ruin have resources?
 	if (MyRuin->GetResourceAmount() <= 0)
 	{
-		LogError("no more resources, returning to truck");
 		GoToTruck();
 		return;
 	}
@@ -143,8 +141,6 @@ void AScavengerPawn::DoTravelToTruck()
 	//are we close enough to the truck door?
 	if (FVector::DistSquared(GetActorLocation(), MyVehicle->GetDoorLocation()) <= TargetTolerance * TargetTolerance)
 	{
-		LogError("arrived at door entrance location");
-
 		//give the resource to the truck
 		MyVehicle->IncrementLootCount(HeldResource);
 		HeldResource = 9999;

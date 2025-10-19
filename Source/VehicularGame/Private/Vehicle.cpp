@@ -1014,7 +1014,13 @@ void AVehicle::IncrementLootCount(uint32 GivenResource)
 		return;
 	}
 
-	UE_LOG(LogTemp, Display, TEXT("got an item with %i"), GivenResource);
+	//debugging
+	FString DebugMessage;
+	DebugMessage.Append("Acquired Item: ");
+	DebugMessage.Append(UItemManager::GetItemFromIndex(GivenResource).Name.ToString());
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, DebugMessage);
+
+	//add resource to player inventory
 	GetGameInstance()->GetSubsystem<UInventorySubsystem>()->AddItemToPlayerInventory(GivenResource);
 }
 
@@ -1082,7 +1088,6 @@ void AVehicle::ReturnScavenger(AScavengerPawn* Scavenger)
 	ActiveScavengers.Remove(Scavenger);
 	ScavengerCount++;
 	Scavenger->Destroy();
-	LogError("killed");
 }
 
 void AVehicle::IncrementHealth()
