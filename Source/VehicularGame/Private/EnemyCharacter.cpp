@@ -2,6 +2,7 @@
 #include "AIController.h" // For AAIController
 #include "EnemyAIController.h"
 #include "NavigationSystem.h"
+#include "UpgradeSubsystem.h"
 #include "Vehicle.h"
 #include "VehicularGameState.h"
 #include "GameFramework/CharacterMovementComponent.h" // For character movement
@@ -445,11 +446,22 @@ void AEnemyCharacter::HitByPlayer()
     FVector PushVector = UKismetMathLibrary::GetDirectionUnitVector(VehicleRef->GetActorLocation(), GetActorLocation());
     PushVector.Z = 0.5f;
     PushVector *= PlayerPushForce;
+
+    //grab the upgrade system
+    UUpgradeSubsystem* UpgradeSubsystem = GetGameInstance()->GetSubsystem<UUpgradeSubsystem>();
+    if (!UpgradeSubsystem) return;
     
 
     //is the enemy in front of the vehicle?
     if(UKismetMathLibrary::InverseTransformLocation(VehicleRef->GetActorTransform(), GetActorLocation()).X > 250.0f)
     {
+        //grab the bumper damage
+        float BumperDamage = UpgradeSubsystem->GetUpgradeValue(EUpgradeType::BumperDMG);
+
+        //apply damage to ourselves
+        const TSubclassOf<UDamageType> DamageType;
+        UGameplayStatics::ApplyDamage(this, BumperDamage, VehicleRef->GetController(), VehicleRef, DamageType);
+
         //launch ourselves away from the vehicle with extra oomf
         LaunchCharacter(PushVector * 2.5f, false, false);
     }
