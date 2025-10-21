@@ -5,7 +5,7 @@
 #include "TimerManager.h"
 #include "GameFramework/Pawn.h"
 #include "Ruin.h"
-#include "MainHUD.h"
+#include "NewHUDWidget.h"
 
 struct FSpawnPointData
 {
@@ -64,7 +64,7 @@ void AVehicularGameMode::BeginPlay()
 		return;
 	}
 
-	MainHUDInstance = CreateWidget<UMainHUD>(GetWorld(), MainHUDClass);
+	MainHUDInstance = CreateWidget<UNewHUDWidget>(GetWorld(), MainHUDClass);
 	if(!MainHUDInstance)
 	{
 		LogError("main hud failed to cast from user widget");
@@ -101,13 +101,28 @@ void AVehicularGameMode::SpawnWave()
 void AVehicularGameMode::SetHandbrake(bool InHandbrake)
 {
 	bIsHandbrakeOn = InHandbrake;
-	DisplayRuinPrompt();
 }
 
 void AVehicularGameMode::SetRuinOverlap(ARuin* InRuin)
 {
 	OverlappingRuin = InRuin;
-	DisplayRuinPrompt();
+
+	if(!MainHUDInstance)
+	{
+		LogError("failed to access main hud instance");
+		return;
+	}
+
+	if (OverlappingRuin)
+	{
+		MainHUDInstance->EnableExtractionAnimation();
+	}
+	else
+	{
+		MainHUDInstance->EnableExtractionAnimation();
+	}
+	
+	//DisplayRuinPrompt();
 }
 
 void AVehicularGameMode::DisplayRuinPrompt()
@@ -120,19 +135,19 @@ void AVehicularGameMode::DisplayRuinPrompt()
 
 	if(!OverlappingRuin)
 	{
-		MainHUDInstance->HideRuinPrompts();
+		//MainHUDInstance->HideRuinPrompts();
 	}
 	else if(OverlappingRuin->GetResourceAmount() <= 0)
 	{
-		MainHUDInstance->DisplayExtracted();
+		//MainHUDInstance->DisplayExtracted();
 	}
 	else if(!bIsHandbrakeOn)
 	{
-		MainHUDInstance->DisplayHandbrakePrompt();
+		//MainHUDInstance->DisplayHandbrakePrompt();
 	}
 	else
 	{
-		MainHUDInstance->DisplayExtracting();
+		//MainHUDInstance->DisplayExtracting();
 	}
 }
 
@@ -144,7 +159,7 @@ void AVehicularGameMode::UpdateCommonLootDisplay(int32 Loot)
 		return;
 	}
 
-	MainHUDInstance->UpdateCommonLootDisplay(Loot);
+	//MainHUDInstance->UpdateCommonLootDisplay(Loot);
 }
 
 void AVehicularGameMode::UpdateUncommonLootDisplay(int32 Loot)
@@ -155,7 +170,7 @@ void AVehicularGameMode::UpdateUncommonLootDisplay(int32 Loot)
 		return;
 	}
 
-	MainHUDInstance->UpdateUncommonLootDisplay(Loot);
+	//MainHUDInstance->UpdateUncommonLootDisplay(Loot);
 }
 
 void AVehicularGameMode::UpdateRareLootDisplay(int32 Loot)
@@ -166,7 +181,7 @@ void AVehicularGameMode::UpdateRareLootDisplay(int32 Loot)
 		return;
 	}
 
-	MainHUDInstance->UpdateRareLootDisplay(Loot);
+	//MainHUDInstance->UpdateRareLootDisplay(Loot);
 }
 
 void AVehicularGameMode::UpdateCurrentNoise(float Noise)
@@ -177,7 +192,7 @@ void AVehicularGameMode::UpdateCurrentNoise(float Noise)
 		return;
 	}
 
-	MainHUDInstance->UpdateCurrentNoiseDisplay(Noise * 60.0f);
+	//MainHUDInstance->UpdateCurrentNoiseDisplay(Noise * 60.0f);
 }
 
 void AVehicularGameMode::UpdateCurrentDifficulty(float Difficulty)
@@ -189,7 +204,7 @@ void AVehicularGameMode::UpdateCurrentDifficulty(float Difficulty)
 	}
 
 	const float RoundedDifficulty = FMath::RoundHalfToEven(Difficulty);
-	MainHUDInstance->UpdateCurrentDifficultyDisplay(RoundedDifficulty);
+	//MainHUDInstance->UpdateCurrentDifficultyDisplay(RoundedDifficulty);
 }
 
 
@@ -312,3 +327,20 @@ void AVehicularGameMode::ResumeEnemySpawning()
 	GetWorldTimerManager().UnPauseTimer(SpawnWaveTimerHandle);
 }
 
+void AVehicularGameMode::SetRadioStatus(bool bIsOn)
+{
+	if(!MainHUDInstance)
+	{
+		LogError("failed to access main hud instance");
+		return;
+	}
+	
+	if (bIsOn)
+	{
+		MainHUDInstance->EnableRadioAnimation();	
+	}
+	else
+	{
+		MainHUDInstance->DisableRadioAnimation();	
+	}
+}

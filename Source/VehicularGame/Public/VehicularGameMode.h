@@ -5,6 +5,7 @@
 #include "EnemyWaveData.h"
 #include "VehicularGameMode.generated.h"
 
+class UNewHUDWidget;
 class AVehicularGameState;
 class UMainHUD;
 class AEnemyCharacter;
@@ -36,6 +37,9 @@ public:
 
     void PauseEnemySpawning();
     void ResumeEnemySpawning();
+
+    UFUNCTION(BlueprintCallable)
+    void SetRadioStatus(bool bIsOn);
 
     FVector CreateEnemies(AVehicularGameState* VehicularGameState = nullptr, AActor* PlayerPawn = nullptr);
 
@@ -76,12 +80,12 @@ private:
 
     UPROPERTY()
     TArray<AActor*> AllSpawnPoints;
-
+    
     UPROPERTY(EditDefaultsOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
-    TSubclassOf<UMainHUD> MainHUDClass;
-
+    TSubclassOf<UNewHUDWidget> MainHUDClass;
+    
     UPROPERTY()
-    UMainHUD* MainHUDInstance = nullptr;
+    UNewHUDWidget* MainHUDInstance = nullptr;
 
     UPROPERTY()
     bool bIsHandbrakeOn = false;
