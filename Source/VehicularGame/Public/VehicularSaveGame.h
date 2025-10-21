@@ -12,18 +12,7 @@ class VEHICULARGAME_API UVehicularSaveGame : public USaveGame
 public:
 	UVehicularSaveGame();
 
-	// Total resources the player has successfully banked in the city.
-	UPROPERTY(BlueprintReadWrite, Category = "Save Data | Inventory")
-	int32 BankedCommonLoot;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Save Data | Inventory")
-	int32 BankedUncommonLoot;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Save Data | Inventory")
-	int32 BankedRareLoot;
-
-	// Stores the remaining resource count for each ruin in the level.
-	// We use the ruin's unique actor name (FName) as the key.
-	UPROPERTY(BlueprintReadWrite, Category = "Save Data | World State")
-	TMap<FName, int32> RuinResourceData;
+	//city storage inventory
+	UPROPERTY()
+	TMap<uint8, uint32> CityStorage;
 };

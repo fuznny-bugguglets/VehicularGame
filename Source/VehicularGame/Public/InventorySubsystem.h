@@ -19,6 +19,8 @@ class VEHICULARGAME_API UInventorySubsystem : public UGameInstanceSubsystem
 public:
 	UInventorySubsystem();
 
+	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+
 	const TMap<uint8, uint32>& GetCityStorage() const;
 	const TMap<uint8, uint32>& GetShop() const;
 
@@ -30,7 +32,11 @@ public:
 	void AddMoney(int32 NewMoney);
 	void RemoveMoney(int32 NewMoney);
 
+	//moves all items from the player inventory into city storage
 	void MoveFromPlayerInventoryToCityStorage();
+
+	//removes all items from the player inventory
+	void ClearPlayerInventory();
 
 	//adds item to current inventory
 	void AddItemToPlayerInventory(uint8 ItemIndex);
@@ -78,6 +84,8 @@ private:
 
 	//maps the item index to the amount of the item
 	TMap<uint8, uint32> PlayerInventory;
+
+	UPROPERTY()
 	TMap<uint8, uint32> CityStorage;
 	TMap<uint8, uint32> Shop;
 

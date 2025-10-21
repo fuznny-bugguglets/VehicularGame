@@ -7,6 +7,7 @@
 #include "GameFramework/Pawn.h"
 #include "Vehicle.generated.h"
 
+class UInventorySubsystem;
 class UUpgradeSubsystem;
 class AScavengerPawn;
 class AVehicularGameState;
@@ -389,6 +390,14 @@ private:
 	//returns the upgrade subsystem
 	UFUNCTION()
 	UUpgradeSubsystem* GetUpgradeSubsystem();
+
+	//pointer to the inventory subsystem
+	UPROPERTY()
+	UInventorySubsystem* InventorySubsystem = nullptr;
+
+	//returns the inventory subsystem
+	UFUNCTION()
+	UInventorySubsystem* GetInventorySubsystem();
 
 
 	//wrapper for CreateSound2D that doesn't auto destroy

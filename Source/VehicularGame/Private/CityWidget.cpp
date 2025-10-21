@@ -17,7 +17,17 @@
 //setup its child widgets
 void UCityWidget::NativeConstruct()
 {
+	//move everything from the player inventory into the city storage
 	GetInventorySubsystem()->MoveFromPlayerInventoryToCityStorage();
+
+	//save the game
+	UVehicularGameInstance* VGameInstance = Cast<UVehicularGameInstance>(GetGameInstance());
+	if (VGameInstance)
+	{
+		UE_LOG(LogTemp, Display, TEXT("about to save"));
+		VGameInstance->SaveGameData();
+		
+	}
 
 	if (CityStorage)
 	{
@@ -53,8 +63,7 @@ void UCityWidget::NativeConstruct()
 	{
 		UpdateMoney();
 	}
-
-	ExitButton->OnClicked.AddDynamic(this, &UCityWidget::OnExitButton);
+	
 	RelicsButton->OnClicked.AddDynamic(this, &UCityWidget::OnRelicsButton);
 	CrewButton->OnClicked.AddDynamic(this, &UCityWidget::OnCrewButton);
 	MechanicButton->OnClicked.AddDynamic(this, &UCityWidget::OnMechanicButton);
@@ -121,11 +130,6 @@ void UCityWidget::BuyItem(const uint8 ID)
 
 	
 
-}
-
-void UCityWidget::OnExitButton()
-{
-	UGameplayStatics::OpenLevel(this, TEXT("Main"));
 }
 
 void UCityWidget::OnRelicsButton()

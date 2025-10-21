@@ -1,33 +1,37 @@
 #include "VehicularGameInstance.h"
 
-#include "Vehicle.h"
+#include "InventorySubsystem.h"
 #include "VehicularSaveGame.h"
 #include "Kismet/GameplayStatics.h"
-#include "Ruin.h"
 #include "Engine/Engine.h"
 
 UVehicularGameInstance::UVehicularGameInstance()
 {
 	SaveSlotName = TEXT("SaveSlot1");
+
+	//loads save data
+	LoadGameData();
 }
 
 void UVehicularGameInstance::Init()
 {
 	Super::Init();
-	LoadGameData();
-
+	
+	//inits item manager
 	ItemManager = NewObject<UItemManager>(GetTransientPackage(), ItemManagerClass);
 	if (ItemManager)
 	{
 		ItemManager->SetupItemsFromDataTable();
 	}
 
+	//inits crew manager
 	CrewManager = NewObject<UCrewManager>(GetTransientPackage(), CrewManagerClass);
 	if (CrewManager)
 	{
 		CrewManager->SetupCrewFromDataTable();
 	}
 
+	//inits upgrade manager
 	UpgradeManager = NewObject<UUpgradeManager>(GetTransientPackage(), UpgradeManagerClass);
 	if (UpgradeManager)
 	{
@@ -38,38 +42,55 @@ void UVehicularGameInstance::Init()
 
 void UVehicularGameInstance::LoadGameData()
 {
+	UE_LOG(LogTemp, Display, TEXT("Loaded"));
 	// Check if the file is on disk.
 	if (UGameplayStatics::DoesSaveGameExist(SaveSlotName, 0))
 	{
 		// If it exists, load it from the disk.
 		SaveGameObject = Cast<UVehicularSaveGame>(UGameplayStatics::LoadGameFromSlot(SaveSlotName, 0));
+		if (!SaveGameObject)
+		{
+			UE_LOG(LogTemp, Display, TEXT("FAILED TO ASSIGN SAVE GAME OBJECT IN GAME INSTANCE"));
+		}
 	}
 	else
 	{
-		// If it does not exist, create a new, default SaveGame object.
-		if (SaveGameClass)
+		//check we gave a save game class
+		if (!SaveGameClass)
 		{
-			SaveGameObject = Cast<UVehicularSaveGame>(UGameplayStatics::CreateSaveGameObject(SaveGameClass));
+			//debug
+			LogError("FAILED TO ACCESS SAVE DATA CLASS");
+
+			return;
 		}
-		else
-		{
-			SaveGameObject = Cast<UVehicularSaveGame>(UGameplayStatics::CreateSaveGameObject(UVehicularSaveGame::StaticClass()));
-		}
+
+		//create the save data object
+		SaveGameObject = Cast<UVehicularSaveGame>(UGameplayStatics::CreateSaveGameObject(SaveGameClass));
+
+		//save the slot
+		UGameplayStatics::SaveGameToSlot(SaveGameObject, SaveSlotName, 0);
+
+		//load into the tutorial map
+		UGameplayStatics::OpenLevel(this, "TutorialMainMenu");
 	}
 }
 
 void UVehicularGameInstance::SaveGameData()
 {
 	//checks we have an object to save to
-	if (SaveGameObject)
+	if (!SaveGameObject)
 	{
-		//saves to that object
-		UGameplayStatics::SaveGameToSlot(SaveGameObject, SaveSlotName, 0);
+		LogError("NO SAVE OBJECT TO SAVE INTO");
+		return;
 	}
-	else
-	{
-		
-	}
+
+	//copy the city storage into the save data
+	SaveGameObject->CityStorage = GetSubsystem<UInventorySubsystem>()->GetCityStorage();
+	
+	//saves to that object
+	UGameplayStatics::SaveGameToSlot(SaveGameObject, SaveSlotName, 0);
+
+	UE_LOG(LogTemp, Display, TEXT("Saved"));
 }
 
 void UVehicularGameInstance::ResetSaveData()
@@ -83,90 +104,6 @@ void UVehicularGameInstance::ResetSaveData()
 
 	// Load a fresh, default game state.
 	LoadGameData();
-}
-
-// Called when the player successfully returns to the city.
-void UVehicularGameInstance::OnRunSuccess()
-{
-	BankInventory();
-	SaveRuinResources();
-	SaveGameData();
-	UGameplayStatics::OpenLevel(this, "UpgradeLevel");
-}
-
-//Transfers player resources out of their inventory and into the city bank
-void UVehicularGameInstance::BankInventory()
-{
-	//make sure the save game object exists
-	if(!SaveGameObject)
-	{
-		LogError(TEXT("Failed to locate save game object in VehicularGameInstance"));
-		return;
-	}
-	
-	//get the player pawn
-	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(this, 0);
-	if(PlayerPawn == nullptr)
-	{
-		LogError(TEXT("Failed to find a pawn in VehicularGameInstance"));
-		return;
-	}
-		
-	//cast it to the vehicle
-	AVehicle* Vehicle = Cast<AVehicle>(PlayerPawn);
-	if(Vehicle == nullptr)
-	{
-		LogError(TEXT("Failed to convert player pawn into vehicle in VehicularGameInstance"));
-		return;
-	}
-
-	//increment the banked components
-	SaveGameObject->BankedCommonLoot += Vehicle->GetCommonLootCount();
-	SaveGameObject->BankedUncommonLoot += Vehicle->GetUncommonLootCount();
-	SaveGameObject->BankedRareLoot += Vehicle->GetRareLootCount();
-
-	//reset player inventory loot back to 0
-	Vehicle->ResetAllLoot();
-}
-
-void UVehicularGameInstance::SaveRuinResources()
-{
-	//make sure the save game object exists
-	if(!SaveGameObject)
-	{
-		LogError(TEXT("Failed to locate save game object in VehicularGameInstance"));
-		return;
-	}
-
-	//wipes the ruin resource data
-	SaveGameObject->RuinResourceData.Reset();
-
-	if(RuinClass == nullptr)
-	{
-		LogError("ruin class not set in game instance");
-	}
-	
-	//implements the data
-	TArray<AActor*> Ruins;
-	UGameplayStatics::GetAllActorsOfClass(this, RuinClass, Ruins);
-
-	for(AActor* Actor : Ruins)
-	{
-		if(Actor == nullptr)
-		{
-			LogError("the game instance fetched a null ruin while saving! somehow?!");
-			return;
-		}
-
-		ARuin* Ruin = Cast<ARuin>(Actor);
-		if(Ruin == nullptr)
-		{
-			LogError("failed to cast 'a ruin' into an actual ruin class.");
-			return;
-		}
-		
-		SaveGameObject->RuinResourceData.Add(FName(UKismetSystemLibrary::GetDisplayName(Ruin)), Ruin->GetResourceAmount());
-	}
 }
 
 UVehicularSaveGame* UVehicularGameInstance::GetSaveGameObject() const

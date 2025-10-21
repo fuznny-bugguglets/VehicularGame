@@ -81,9 +81,6 @@ protected:
 
 private:
 	UFUNCTION()
-	void OnExitButton();
-
-	UFUNCTION()
 	void OnRelicsButton();
 
 	UFUNCTION()
@@ -101,5 +98,6 @@ private:
 
 	UPROPERTY()
 	UInventorySubsystem* Inventory = nullptr;
+	
 	
 };

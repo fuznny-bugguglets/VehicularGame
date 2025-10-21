@@ -129,68 +129,63 @@ void ARuin::BeginPlay()
 		LogError(TEXT("Failed to get the save game object in Ruin"));
 		return;
 	}
-
-	//tries to find information about the ruin in the save file
-	int32* DataResourceAmount = SaveGameObject->RuinResourceData.Find(FName(*UKismetSystemLibrary::GetDisplayName(this)));
 	
-	//nothing was found in the save
-	if(DataResourceAmount == nullptr)
+	//set the resource amount to the default
+	ResourceAmount = FMath::RandRange(StartingResourceAmountMin, StartingResourceAmountMax);
+	InitialResourceAmount = ResourceAmount;
+
+	//old blueprint code that is probably dead
+	UpdateBubble();
+
+	//fill us up with resources
+	Resources.Empty();
+
+	//generate a list with 0-4
+	TArray<int32> tempNumbers;
+	for (int32 i = 0; i < 5; i++)
 	{
-		//set the resource amount to the default
-		ResourceAmount = FMath::RandRange(StartingResourceAmountMin, StartingResourceAmountMax);
-		InitialResourceAmount = ResourceAmount;
+		tempNumbers.Add(i);
+	}
 
-		//old blueprint code that is probably dead
-		UpdateBubble();
+	TArray<int32> selectedNumbers;
 
-		//fill us up with resources
-		Resources.Empty();
+	int32 randomTypeProbability = FMath::RandRange(0, 53);
 
-		//generate a list with 0-4
-		TArray<int32> tempNumbers;
-		for (int32 i = 0; i < 5; i++)
+	switch (RuinType)
+	{
+	case ERuinType::Tier1:
+		//pick 3 random numbers from that list (acts as relic types ABCDE)
+			
+		for (int32 i = 0; i < 3; i++)
 		{
-			tempNumbers.Add(i);
+			int32 randIndex = FMath::RandRange(0, tempNumbers.Num() - 1);
+			int32 randNumber = tempNumbers[randIndex];
+			tempNumbers.Remove(randNumber);
+			selectedNumbers.Add(randNumber);
 		}
 
-		TArray<int32> selectedNumbers;
-
-		int32 randomTypeProbability = FMath::RandRange(0, 53);
-
-		switch (RuinType)
+		//fill up the resources
+		for (int32 i = 0; i < ResourceAmount; i++)
 		{
-		case ERuinType::Tier1:
-			//pick 3 random numbers from that list (acts as relic types ABCDE)
-			
-			for (int32 i = 0; i < 3; i++)
-			{
-				int32 randIndex = FMath::RandRange(0, tempNumbers.Num() - 1);
-				int32 randNumber = tempNumbers[randIndex];
-				tempNumbers.Remove(randNumber);
-				selectedNumbers.Add(randNumber);
-			}
+			int32 thisRandIndex = FMath::RandRange(0, selectedNumbers.Num() - 1);
+			int32 thisRandNumber = selectedNumbers[thisRandIndex];
+			int32 probability = FMath::RandRange(0, 33);
 
-			//fill up the resources
-			for (int32 i = 0; i < ResourceAmount; i++)
+			if (probability <= 25)
 			{
-				int32 thisRandIndex = FMath::RandRange(0, selectedNumbers.Num() - 1);
-				int32 thisRandNumber = selectedNumbers[thisRandIndex];
-				int32 probability = FMath::RandRange(0, 33);
-
-				if (probability <= 25)
-				{
-					Resources.Add(0 + (thisRandNumber * 3));
-				}
-				else if (probability <= 32)
-				{
-					Resources.Add(1 + (thisRandNumber * 3));
-				}
-				else
-				{
-					Resources.Add(2 + (thisRandNumber * 3));
-				}
+				Resources.Add(0 + (thisRandNumber * 3));
 			}
-			break;
+			else if (probability <= 32)
+			{
+				Resources.Add(1 + (thisRandNumber * 3));
+			}
+			else
+			{
+				Resources.Add(2 + (thisRandNumber * 3));
+			}
+		}
+		
+		break;
 
 		case ERuinType::Tier2:
 			//pick 3 random numbers from that list (acts as relic types ABCDE)
@@ -551,12 +546,6 @@ void ARuin::BeginPlay()
 		default:
 			break;
 		}
-	}
-	else
-	{
-		//set the resource amount found in the data
-		ResourceAmount = *DataResourceAmount;
-	}
 
 	
 	

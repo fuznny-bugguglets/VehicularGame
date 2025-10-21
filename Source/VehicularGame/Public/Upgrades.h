@@ -22,7 +22,7 @@ enum class EUpgradeType : uint8
 	TurretReloadSpeed UMETA(DisplayName = "Turret Reload Speed"), //the amount of time in seconds removed from default reload time
 	TurretFireRate UMETA(DisplayName = "Turret Fire Rate"), //the amount of time in seconds removed from the default fire rate
 
-	BumperDMG UMETA(DisplayName = "Bumper DMG"), //TODO the amount of additional damage the bumper deals on top of default
+	BumperDMG UMETA(DisplayName = "Bumper DMG"), //the amount of additional damage the bumper deals on top of default
 	BumperHealth UMETA(DisplayName = "Bumper Health"),
 	BumperImpactAbsorption UMETA(DisplayName = "Bumper Impact Absorption"),
 
