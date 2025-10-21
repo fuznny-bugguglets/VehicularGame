@@ -3,7 +3,6 @@
 
 #include "Ruin.h"
 #include "VehicularGameInstance.h"
-#include "VehicularSaveGame.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -119,14 +118,6 @@ void ARuin::BeginPlay()
 	if(VGameInstance == nullptr)
 	{
 		LogError(TEXT("Failed to cast to VehicularGameInstance in Ruin"));
-		return;
-	}
-
-	//get the save game object
-	UVehicularSaveGame* SaveGameObject = VGameInstance->GetSaveGameObject();
-	if(SaveGameObject == nullptr)
-	{
-		LogError(TEXT("Failed to get the save game object in Ruin"));
 		return;
 	}
 	

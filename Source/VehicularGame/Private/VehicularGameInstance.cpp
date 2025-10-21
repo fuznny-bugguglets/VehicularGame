@@ -9,8 +9,7 @@ UVehicularGameInstance::UVehicularGameInstance()
 {
 	SaveSlotName = TEXT("SaveSlot1");
 
-	//loads save data
-	LoadGameData();
+	
 }
 
 void UVehicularGameInstance::Init()
@@ -38,6 +37,9 @@ void UVehicularGameInstance::Init()
 		UpgradeManager->SetupItemsFromDataTable();
 	}
 
+	//loads save data
+	LoadGameData();
+
 }
 
 void UVehicularGameInstance::LoadGameData()
@@ -51,7 +53,11 @@ void UVehicularGameInstance::LoadGameData()
 		if (!SaveGameObject)
 		{
 			UE_LOG(LogTemp, Display, TEXT("FAILED TO ASSIGN SAVE GAME OBJECT IN GAME INSTANCE"));
+			return;
 		}
+
+		//load in the items
+		GetSubsystem<UInventorySubsystem>()->LoadSaveData();
 	}
 	else
 	{
