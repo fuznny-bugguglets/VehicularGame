@@ -1,5 +1,6 @@
 #include "VehicularGameInstance.h"
 
+#include "InventorySubsystem.h"
 #include "VehicularSaveGame.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/Engine.h"
@@ -7,15 +8,15 @@
 UVehicularGameInstance::UVehicularGameInstance()
 {
 	SaveSlotName = TEXT("SaveSlot1");
+
+	//loads save data
+	LoadGameData();
 }
 
 void UVehicularGameInstance::Init()
 {
 	Super::Init();
-
-	//loads save data
-	LoadGameData();
-
+	
 	//inits item manager
 	ItemManager = NewObject<UItemManager>(GetTransientPackage(), ItemManagerClass);
 	if (ItemManager)
@@ -41,11 +42,16 @@ void UVehicularGameInstance::Init()
 
 void UVehicularGameInstance::LoadGameData()
 {
+	UE_LOG(LogTemp, Display, TEXT("Loaded"));
 	// Check if the file is on disk.
 	if (UGameplayStatics::DoesSaveGameExist(SaveSlotName, 0))
 	{
 		// If it exists, load it from the disk.
 		SaveGameObject = Cast<UVehicularSaveGame>(UGameplayStatics::LoadGameFromSlot(SaveSlotName, 0));
+		if (!SaveGameObject)
+		{
+			UE_LOG(LogTemp, Display, TEXT("FAILED TO ASSIGN SAVE GAME OBJECT IN GAME INSTANCE"));
+		}
 	}
 	else
 	{
@@ -78,10 +84,13 @@ void UVehicularGameInstance::SaveGameData()
 		return;
 	}
 
-	
+	//copy the city storage into the save data
+	SaveGameObject->CityStorage = GetSubsystem<UInventorySubsystem>()->GetCityStorage();
 	
 	//saves to that object
 	UGameplayStatics::SaveGameToSlot(SaveGameObject, SaveSlotName, 0);
+
+	UE_LOG(LogTemp, Display, TEXT("Saved"));
 }
 
 void UVehicularGameInstance::ResetSaveData()

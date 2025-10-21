@@ -24,7 +24,9 @@ void UCityWidget::NativeConstruct()
 	UVehicularGameInstance* VGameInstance = Cast<UVehicularGameInstance>(GetGameInstance());
 	if (VGameInstance)
 	{
+		UE_LOG(LogTemp, Display, TEXT("about to save"));
 		VGameInstance->SaveGameData();
+		
 	}
 
 	if (CityStorage)

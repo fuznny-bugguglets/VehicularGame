@@ -3,6 +3,9 @@
 
 #include "InventorySubsystem.h"
 
+#include "VehicularGameInstance.h"
+#include "VehicularSaveGame.h"
+
 UInventorySubsystem::UInventorySubsystem()
 {
 	//sets hired crew inventory to default
@@ -10,11 +13,8 @@ UInventorySubsystem::UInventorySubsystem()
 	{
 		HiredCrew[i] = 255;
 	}
-
-	//temp testing things you can delete later
-
+	
 	PlayerInventory.Empty();
-
 	CityStorage.Empty();
 	
 	Shop.Empty();
@@ -27,6 +27,32 @@ UInventorySubsystem::UInventorySubsystem()
 	AddCrewForHire(2);
 
 }
+
+void UInventorySubsystem::Initialize(FSubsystemCollectionBase& Collection)
+{
+	Super::Initialize(Collection);
+	
+	//get save data
+	UVehicularGameInstance* VGameInstance = Cast<UVehicularGameInstance>(GetGameInstance());
+	if (VGameInstance)
+	{
+		if (VGameInstance->GetSaveGameObject())
+		{
+			//set the city storage from the save data
+			CityStorage = VGameInstance->GetSaveGameObject()->CityStorage;
+			UE_LOG(LogTemp, Display, TEXT("set city storage from save data"));
+		}
+		else
+		{
+			UE_LOG(LogTemp, Display, TEXT("FAILED TO GET VEHICULAR SAVE OBJECT IN INVENTORY SUBSYSTEM"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Display, TEXT("FAILED TO GET VEHICULAR GAME INSTANCE"));
+	}
+}
+
 
 void UInventorySubsystem::AddItemToCityStorage(uint8 ItemIndex)
 {
