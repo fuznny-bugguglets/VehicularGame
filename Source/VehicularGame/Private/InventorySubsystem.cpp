@@ -28,10 +28,8 @@ UInventorySubsystem::UInventorySubsystem()
 
 }
 
-void UInventorySubsystem::Initialize(FSubsystemCollectionBase& Collection)
+void UInventorySubsystem::LoadSaveData()
 {
-	Super::Initialize(Collection);
-	
 	//get save data
 	UVehicularGameInstance* VGameInstance = Cast<UVehicularGameInstance>(GetGameInstance());
 	if (VGameInstance)
@@ -51,6 +49,13 @@ void UInventorySubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	{
 		UE_LOG(LogTemp, Display, TEXT("FAILED TO GET VEHICULAR GAME INSTANCE"));
 	}
+}
+
+void UInventorySubsystem::Initialize(FSubsystemCollectionBase& Collection)
+{
+	Super::Initialize(Collection);
+	
+	
 }
 
 

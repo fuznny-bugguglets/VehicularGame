@@ -21,6 +21,8 @@ public:
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
+	void LoadSaveData();
+
 	const TMap<uint8, uint32>& GetCityStorage() const;
 	const TMap<uint8, uint32>& GetShop() const;
 
