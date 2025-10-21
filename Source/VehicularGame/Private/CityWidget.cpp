@@ -17,7 +17,15 @@
 //setup its child widgets
 void UCityWidget::NativeConstruct()
 {
+	//move everything from the player inventory into the city storage
 	GetInventorySubsystem()->MoveFromPlayerInventoryToCityStorage();
+
+	//save the game
+	UVehicularGameInstance* VGameInstance = Cast<UVehicularGameInstance>(GetGameInstance());
+	if (VGameInstance)
+	{
+		VGameInstance->SaveGameData();
+	}
 
 	if (CityStorage)
 	{

@@ -328,3 +328,8 @@ int32 UInventorySubsystem::GetItemCountFromCityStorage(const FItem& InItem) cons
 {
 	return GetItemCountFromCityStorage(UItemManager::GetIndexFromItem(InItem));
 }
+
+void UInventorySubsystem::ClearPlayerInventory()
+{
+	PlayerInventory.Empty();
+}

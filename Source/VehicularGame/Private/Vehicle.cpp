@@ -153,7 +153,8 @@ void AVehicle::BeginPlay()
 
 	ActiveScavengers.Empty();
 
-
+	//wipe the player inventory
+	GetInventorySubsystem()->ClearPlayerInventory();
 	
 	
 }
@@ -1121,3 +1122,19 @@ UUpgradeSubsystem* AVehicle::GetUpgradeSubsystem()
 	//return it
 	return UpgradeSubsystem;
 }
+
+UInventorySubsystem* AVehicle::GetInventorySubsystem()
+{
+	//if we have it already, return it
+	if (InventorySubsystem)
+	{
+		return InventorySubsystem;
+	}
+
+	//grab it
+	InventorySubsystem = GetGameInstance()->GetSubsystem<UInventorySubsystem>();
+
+	//return it
+	return InventorySubsystem;
+}
+

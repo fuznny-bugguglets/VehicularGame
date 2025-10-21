@@ -30,7 +30,11 @@ public:
 	void AddMoney(int32 NewMoney);
 	void RemoveMoney(int32 NewMoney);
 
+	//moves all items from the player inventory into city storage
 	void MoveFromPlayerInventoryToCityStorage();
+
+	//removes all items from the player inventory
+	void ClearPlayerInventory();
 
 	//adds item to current inventory
 	void AddItemToPlayerInventory(uint8 ItemIndex);
