@@ -14,11 +14,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NEWMainMenu.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/NEWMainMenu.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/InventorySubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/InventorySubsystem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/Ruin.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/Ruin.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/VehicularGameInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/VehicularGameInstance.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/InventorySubsystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/InventorySubsystem.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/HUD/DRAFT_HUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/HUD/DRAFT_HUD.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/HUD/HUD_Elements/SPEEDOMETER.uasset" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,10 +29,12 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Source/VehicularGame/Private/CityWidget.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/VehicularGame/Private/InventorySubsystem.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/VehicularGame/Private/Ruin.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/VehicularGame/Private/VehicularGameInstance.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/VehicularGame/Private/CityWidget.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/VehicularGame/Private/InventorySubsystem.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/VehicularGame/Private/NewHUDWidget.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/VehicularGame/Private/Ruin.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/VehicularGame/Private/VehicularGameInstance.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/VehicularGame/Public/NewHUDWidget.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -52,7 +51,7 @@
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;implementMitchUI&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -185,6 +184,8 @@
       <workItem from="1761009662237" duration="7273000" />
       <workItem from="1761035858933" duration="282000" />
       <workItem from="1761036251936" duration="1109000" />
+      <workItem from="1761037535676" duration="2221000" />
+      <workItem from="1761040077801" duration="916000" />
     </task>
     <servers />
   </component>
