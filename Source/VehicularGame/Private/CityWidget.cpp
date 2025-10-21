@@ -63,8 +63,7 @@ void UCityWidget::NativeConstruct()
 	{
 		UpdateMoney();
 	}
-
-	ExitButton->OnClicked.AddDynamic(this, &UCityWidget::OnExitButton);
+	
 	RelicsButton->OnClicked.AddDynamic(this, &UCityWidget::OnRelicsButton);
 	CrewButton->OnClicked.AddDynamic(this, &UCityWidget::OnCrewButton);
 	MechanicButton->OnClicked.AddDynamic(this, &UCityWidget::OnMechanicButton);
@@ -131,11 +130,6 @@ void UCityWidget::BuyItem(const uint8 ID)
 
 	
 
-}
-
-void UCityWidget::OnExitButton()
-{
-	UGameplayStatics::OpenLevel(this, TEXT("Main"));
 }
 
 void UCityWidget::OnRelicsButton()

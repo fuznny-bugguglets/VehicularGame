@@ -13,16 +13,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/TutorialMainMenu.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/TutorialMainMenu.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/MainMenu/WB_MainMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/MainMenu/WB_MainMenu.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/Upgrades.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/Upgrades.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/City/WB_CityScreen.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/City/WB_CityScreen.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/CityWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/CityWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/CityWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/CityWidget.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DpaMonitoringSettings">
+    <option name="firstShow" value="false" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -38,6 +39,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "C/C++ Project.VehicularGame.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -171,6 +173,7 @@
       <updated>1760841916780</updated>
       <workItem from="1760841918874" duration="8474000" />
       <workItem from="1760948062032" duration="2747000" />
+      <workItem from="1761009662237" duration="7273000" />
     </task>
     <servers />
   </component>
