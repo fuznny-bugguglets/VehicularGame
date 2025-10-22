@@ -3,7 +3,9 @@
 
 #include "Ruin.h"
 #include "VehicularGameInstance.h"
+#include "VehicularGameMode.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 void ARuin::LogError(const FString& ErrorMessage) const
@@ -568,6 +570,17 @@ uint32 ARuin::TakeOneResource()
 {
 	//lowers resource by one
 	ResourceAmount--;
+
+	//grab the game mode
+	AVehicularGameMode* VGameMode = Cast<AVehicularGameMode>(UGameplayStatics::GetGameMode(this));
+	if (!VGameMode)
+	{
+		LogError("FAILED TO GET VEHICULAR GAME MODE IN RUIN");
+		return 0;
+	}
+
+	//tell the game mode we extracted (for UI)
+	VGameMode->RuinExtractionCountUpdated();
 
 	//runs a check to see if we have resources left
 	UpdateBubble();

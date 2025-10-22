@@ -3,8 +3,10 @@
 
 #include "NewHUDWidget.h"
 #include "Vehicle.h"
+#include "VehicularGameState.h"
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
 
 void UNewHUDWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
@@ -13,11 +15,17 @@ void UNewHUDWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 
 	UpdateSpeedo(InDeltaTime);
 	UpdateHealthBar();
+	UpdateHazTrack();
 	
 }
 
 void UNewHUDWidget::UpdateSpeedo(float DeltaTime)
 {
+	//set text
+	int32 SpeedAsInt = GetVehicle()->GetSpeed();
+	SpeedAsInt = FMath::Abs(SpeedAsInt);
+	T_Speedometer->SetText(FText::FromString(FString::FromInt(SpeedAsInt)));
+
 	//get current and target angle
 	const float CurrentAngle = SpeedIndicator->GetRenderTransformAngle();
 	const float TargetAngle = FMath::Abs(GetVehicle()->GetSpeed() * 1.5f);
@@ -59,14 +67,17 @@ void UNewHUDWidget::UpdateHealthBar()
 	PB_Health->SetPercent(Percent);
 }
 
-void UNewHUDWidget::EnableExtractionAnimation()
+void UNewHUDWidget::UpdateHazTrack()
 {
-	
-}
+	//get the difficulty from the game state
+	const float CurrentDifficulty = GetVGameState()->Difficulty;
 
-void UNewHUDWidget::DisableExtractionAnimation()
-{
-	
+	//figure out the percentage
+	float Percentage = (CurrentDifficulty - HazTrackMin) / (HazTrackMax - HazTrackMin);
+	Percentage = FMath::Clamp(Percentage, 0.0f, 1.0f);
+
+	//apply to haz track
+	PB_HazTrack->SetPercent(Percentage);
 }
 
 
@@ -83,3 +94,37 @@ AVehicle* UNewHUDWidget::GetVehicle()
 	Vehicle = Cast<AVehicle>(UGameplayStatics::GetPlayerPawn(this, 0));
 	return Vehicle;
 }
+
+AVehicularGameState* UNewHUDWidget::GetVGameState()
+{
+	//if we have it already, return it
+	if (VGameState)
+	{
+		return VGameState;
+	}
+
+	//otherwise, find it
+	VGameState = Cast<AVehicularGameState>(UGameplayStatics::GetGameState(this));
+	return VGameState;
+}
+
+
+void UNewHUDWidget::UpdateExtractionProgress(int32 CurrentCount, int32 InitCount)
+{
+	float Progress = (float)CurrentCount / (float)InitCount;
+
+	PB_POI_Extraction->SetPercent(Progress);
+}
+
+void UNewHUDWidget::EnableHandbrake()
+{
+	I_Handbrake_Up->SetVisibility(ESlateVisibility::Visible);
+	I_Handbrake_Down->SetVisibility(ESlateVisibility::Hidden);
+}
+
+void UNewHUDWidget::DisableHandbrake()
+{
+	I_Handbrake_Down->SetVisibility(ESlateVisibility::Visible);
+	I_Handbrake_Up->SetVisibility(ESlateVisibility::Hidden);
+}
+
