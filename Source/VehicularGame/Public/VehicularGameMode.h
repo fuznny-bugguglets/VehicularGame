@@ -28,6 +28,8 @@ public:
     void SetHandbrake(bool InHandbrake);
     void SetRuinOverlap(ARuin* InRuin);
 
+    void RuinExtractionCountUpdated();
+
     void UpdateCommonLootDisplay(int32 loot);
     void UpdateUncommonLootDisplay(int32 loot);
     void UpdateRareLootDisplay(int32 loot);

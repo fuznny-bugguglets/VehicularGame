@@ -101,6 +101,22 @@ void AVehicularGameMode::SpawnWave()
 void AVehicularGameMode::SetHandbrake(bool InHandbrake)
 {
 	bIsHandbrakeOn = InHandbrake;
+
+	//check we have the HUD
+	if (!MainHUDInstance)
+	{
+		LogError("failed to access main hud instance");
+		return;
+	}
+
+	if (bIsHandbrakeOn)
+	{
+		MainHUDInstance->EnableHandbrake();
+	}
+	else
+	{
+		MainHUDInstance->DisableHandbrake();
+	}
 }
 
 void AVehicularGameMode::SetRuinOverlap(ARuin* InRuin)
@@ -116,14 +132,35 @@ void AVehicularGameMode::SetRuinOverlap(ARuin* InRuin)
 	if (OverlappingRuin)
 	{
 		MainHUDInstance->EnableExtractionAnimation();
+		MainHUDInstance->UpdateExtractionProgress(OverlappingRuin->GetResourceAmount(), OverlappingRuin->GetInitialResourceAmount());
 	}
 	else
 	{
-		MainHUDInstance->EnableExtractionAnimation();
+		MainHUDInstance->DisableExtractionAnimation();
 	}
 	
 	//DisplayRuinPrompt();
 }
+
+void AVehicularGameMode::RuinExtractionCountUpdated()
+{
+	//check we have a ruin to update
+	if (!OverlappingRuin)
+	{
+		return;
+	}
+
+	//check we have a HUD to update
+	if (!MainHUDInstance)
+	{
+		LogError("failed to access main hud instance");
+		return;
+	}
+
+	//update the HUD
+	MainHUDInstance->UpdateExtractionProgress(OverlappingRuin->GetResourceAmount(), OverlappingRuin->GetInitialResourceAmount());
+}
+
 
 void AVehicularGameMode::DisplayRuinPrompt()
 {
