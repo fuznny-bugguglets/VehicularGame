@@ -3,16 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Upgrades.h"
 #include "Crew.generated.h"
 
-UENUM()
-enum class EAttributeName : uint8
+USTRUCT(BlueprintType)
+struct FCrewPassive
 {
-	SharpShooter,
-	Marathoner,
-	Storyteller,
-	Grumpy
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EUpgradeType UpgradeType;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Multiplier;
 };
 
 USTRUCT(BlueprintType)
@@ -30,7 +33,7 @@ struct FCrew : public FTableRowBase
 	int32 Cost;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<EAttributeName> Attributes;
+	TArray<FCrewPassive> Passives;
 
 	bool operator==(const FCrew& Other) const
 	{
