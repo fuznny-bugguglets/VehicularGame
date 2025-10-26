@@ -266,6 +266,10 @@ void AVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 			LogError("Open door action not set in vehicle");
 			return;
 		}
+		if (RadioAction == nullptr)
+		{
+			LogError("Radio action not set in vehicle");
+		}
 		
 		//bind the inputs
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AVehicle::OnLook);
@@ -283,6 +287,7 @@ void AVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		EnhancedInputComponent->BindAction(EngineShiftUpAction, ETriggerEvent::Canceled, this, &AVehicle::OnEngineShiftUpStop);
 		EnhancedInputComponent->BindAction(EngineShiftDownAction, ETriggerEvent::Triggered, this, &AVehicle::OnEngineShiftDown);
 		EnhancedInputComponent->BindAction(OpenDoorAction, ETriggerEvent::Triggered, this, &AVehicle::OnOpenDoor);
+		EnhancedInputComponent->BindAction(RadioAction, ETriggerEvent::Triggered, this, &AVehicle::OnRadio);
 	}
 	else
 	{
@@ -722,6 +727,75 @@ void AVehicle::OnOpenDoor(const FInputActionValue& Value)
 	bIsDoorOpen = true;
 	LogError("Door Opened");
 	ElapsedScavengerExitTime = ScavengerExitTime;
+}
+
+void AVehicle::OnRadio(const struct FInputActionValue& Value)
+{
+	//flip radio status
+	bIsRadioOn = !bIsRadioOn;
+
+	//display pop up
+	if (!VehicularGameMode)
+	{
+		LogError("failed to get game mode in vehicle");
+		return;
+	}
+
+	VehicularGameMode->SetRadioStatus(bIsRadioOn);
+
+	if (bIsRadioOn)
+	{
+		if (RadioInstance)
+		{
+			//amplify playback
+			RadioInstance->SetVolumeMultiplier(1.0f);
+		}
+		else
+		{
+			//check there is at least one sound
+			if (RadioClips.Num() <= 0)
+			{
+				LogError("no sounds to play in radio");
+				return;
+			}
+			
+			//create the radio
+			const int32 RandIndex = FMath::RandRange(0, RadioClips.Num() - 1);
+			RadioInstance = CreateSound2DNoDestroy(RadioClips[RandIndex]);
+			RadioInstance->Play();
+			RadioInstance->OnAudioFinished.AddDynamic(this, &AVehicle::PlayNewRadioClip);
+		}
+	}
+	else
+	{
+		if (RadioInstance)
+		{
+			//mute playback
+			RadioInstance->SetVolumeMultiplier(0.0f);
+		}
+	}
+}
+
+void AVehicle::PlayNewRadioClip()
+{
+	//check there is a radio to play sound into
+	if (!RadioInstance)
+	{
+		LogError("trying to play radio clip, but radio instance");
+		return;
+	}
+
+	//check there is at least one sound
+	if (RadioClips.Num() <= 0)
+	{
+		LogError("no sounds to play in radio");
+		return;
+	}
+
+	//play a new clip
+	const int32 RandIndex = FMath::RandRange(0, RadioClips.Num() - 1);
+	RadioInstance->SetSound(RadioClips[RandIndex]);
+	RadioInstance->Play();
 }
 
 
