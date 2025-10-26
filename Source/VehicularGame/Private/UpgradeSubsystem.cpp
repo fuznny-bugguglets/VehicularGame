@@ -3,6 +3,9 @@
 
 #include "UpgradeSubsystem.h"
 
+#include "VehicularGameInstance.h"
+#include "VehicularSaveGame.h"
+
 UUpgradeSubsystem::UUpgradeSubsystem()
 {
 	//set each upgrade to be 0
@@ -52,4 +55,32 @@ void UUpgradeSubsystem::UnlockUpgrade(uint8 UpgradeID)
 
 	//set as unlocked
 	UpgradeUnlockStatusMap[UpgradeID] = true;
+}
+
+const TMap<uint8, bool>& UUpgradeSubsystem::GetUpgradeUnlockStatusMap()
+{
+	return UpgradeUnlockStatusMap;
+}
+
+void UUpgradeSubsystem::LoadSaveData()
+{
+	//get save data
+	UVehicularGameInstance* VGameInstance = Cast<UVehicularGameInstance>(GetGameInstance());
+	if (VGameInstance)
+	{
+		if (VGameInstance->GetSaveGameObject())
+		{
+			//set the city storage from the save data
+			UpgradeUnlockStatusMap = VGameInstance->GetSaveGameObject()->UpgradeUnlockStatusMap;
+			UE_LOG(LogTemp, Display, TEXT("set upgrade unlock status map from save data"));
+		}
+		else
+		{
+			UE_LOG(LogTemp, Display, TEXT("FAILED TO GET VEHICULAR SAVE OBJECT IN UPGRADE SUBSYSTEM"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Display, TEXT("FAILED TO GET VEHICULAR GAME INSTANCE IN UPGRADE SUBSYSTEM"));
+	}
 }

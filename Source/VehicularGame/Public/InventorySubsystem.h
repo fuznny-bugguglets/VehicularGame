@@ -82,6 +82,7 @@ public:
 	void RemoveHiredCrew(FCrew& CrewRef);
 
 private:
+	UPROPERTY()
 	int32 Money = 0;
 
 	//maps the item index to the amount of the item

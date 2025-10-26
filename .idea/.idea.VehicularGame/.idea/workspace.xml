@@ -47,7 +47,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "new-sounds",
+    "git-widget-placeholder": "addMoreToSaveData",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -183,6 +183,7 @@
       <workItem from="1761037535676" duration="2221000" />
       <workItem from="1761040077801" duration="3919000" />
       <workItem from="1761437939795" duration="7322000" />
+      <workItem from="1761454905098" duration="3764000" />
     </task>
     <servers />
   </component>

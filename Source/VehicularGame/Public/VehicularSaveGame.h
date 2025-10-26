@@ -15,4 +15,12 @@ public:
 	//city storage inventory
 	UPROPERTY()
 	TMap<uint8, uint32> CityStorage;
+
+	//unlocked upgrades
+	UPROPERTY()
+	TMap<uint8, bool> UpgradeUnlockStatusMap;
+
+	//money
+	UPROPERTY()
+	int32 Money;
 };
