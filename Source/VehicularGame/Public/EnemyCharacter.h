@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "EnemyCharacter.generated.h"
 
+class UNiagaraSystem;
 class AVehicle;
 class AVehicularGameState;
 
@@ -103,6 +104,9 @@ private:
 	USoundBase* ExplosionSound = nullptr;
 	UPROPERTY(EditDefaultsOnly, Category="Sound|Death", meta = (AllowPrivateAccess = "true"))
 	USoundBase* HitSound = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category="Particles", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> DeathParticles = nullptr;
 
 	UPROPERTY()
 	FVector LungeDirection = FVector::Zero();

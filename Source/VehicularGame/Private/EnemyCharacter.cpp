@@ -218,6 +218,8 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const&
         
         if (HitSound)
             UGameplayStatics::PlaySound2D(this, HitSound, 1, PitchModifier);
+        
+        
 
         if (CurrentHealth <= 0.f)
         {
@@ -261,6 +263,9 @@ void AEnemyCharacter::Die()
     //play explosion sound
     if (ExplosionSound)
         UGameplayStatics::PlaySound2D(this, ExplosionSound);
+
+    //play explosion particle
+    GetWorld()->SpawnActor<AActor>(DeathParticles, GetActorLocation(), GetActorRotation());
 
     // Destroy the enemy.
     Destroy();
