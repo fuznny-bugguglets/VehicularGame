@@ -97,6 +97,13 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Lunge", meta = (AllowPrivateAccess = "true"))
 	float MaxLungeForwardPredictionFactor = 500.0f;
 
+	UPROPERTY(EditDefaultsOnly, Category="Sound|Death", meta = (AllowPrivateAccess = "true"))
+	TArray<USoundBase*> DeathClips;
+	UPROPERTY(EditDefaultsOnly, Category="Sound|Death", meta = (AllowPrivateAccess = "true"))
+	USoundBase* ExplosionSound = nullptr;
+	UPROPERTY(EditDefaultsOnly, Category="Sound|Death", meta = (AllowPrivateAccess = "true"))
+	USoundBase* HitSound = nullptr;
+
 	UPROPERTY()
 	FVector LungeDirection = FVector::Zero();
 

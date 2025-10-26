@@ -329,7 +329,14 @@ void ATurret::BeginReload()
 	//reset elapsed time
 	ElapsedReloadTime = 0.0f;
 
-	LogError("reloading....");
+	//play sound
+	if (ReloadingClips.Num() <= 0)
+	{
+		LogError("no reloading voice clips");
+		return;
+	}
+	const int32 RandIndex = FMath::RandRange(0, ReloadingClips.Num() - 1);
+	UGameplayStatics::PlaySound2D(this, ReloadingClips[RandIndex]);
 }
 
 

@@ -77,6 +77,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Firing", meta = (AllowPrivateAccess = "true"))
 	float MaxSpreadAngle = 1.0f;
 
+	UPROPERTY(EditDefaultsOnly, Category="Sound|Reloading", meta = (AllowPrivateAccess = "true"))
+	TArray<USoundBase*> ReloadingClips;
+
 	//whether the bullet fires from the left or right barrel
 	bool bFireFromLeftBarrel = true;
 
