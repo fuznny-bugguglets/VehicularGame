@@ -12,14 +12,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Enemies/Classes/EnemyBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Enemies/Classes/EnemyBase.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UpgradeLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UpgradeLevel.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/EnemyCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/EnemyCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/EnemyCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/EnemyCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VehicularGame.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/VehicularGame.uproject" afterDir="false" />
-    </list>
+    <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -189,7 +182,7 @@
       <workItem from="1761036251936" duration="1109000" />
       <workItem from="1761037535676" duration="2221000" />
       <workItem from="1761040077801" duration="3919000" />
-      <workItem from="1761437939795" duration="5867000" />
+      <workItem from="1761437939795" duration="7322000" />
     </task>
     <servers />
   </component>
