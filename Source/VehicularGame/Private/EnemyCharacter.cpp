@@ -212,6 +212,15 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const&
     {
         CurrentHealth -= ActualDamage;
 
+        //play hit sound
+
+        float PitchModifier = 2 - (CurrentHealth/MaxHealth);
+        
+        if (HitSound)
+            UGameplayStatics::PlaySound2D(this, HitSound, 1, PitchModifier);
+        
+        
+
         if (CurrentHealth <= 0.f)
         {
             Die();
@@ -241,6 +250,22 @@ void AEnemyCharacter::Die()
     {
         AIController->StopMovement();
     }
+
+    if (DeathClips.Num() <= 0)
+    {
+        LogError("no death clips to play");
+        return;
+    }
+
+    const int32 RandIndex = FMath::RandRange(0, DeathClips.Num() - 1);
+    UGameplayStatics::PlaySound2D(this, DeathClips[RandIndex]);
+
+    //play explosion sound
+    if (ExplosionSound)
+        UGameplayStatics::PlaySound2D(this, ExplosionSound);
+
+    //play explosion particle
+    GetWorld()->SpawnActor<AActor>(DeathParticles, GetActorLocation(), GetActorRotation());
 
     // Destroy the enemy.
     Destroy();

@@ -151,21 +151,24 @@ private:
 	float BaseDifficultIncreasePerMinute = 3.0f;
 	
 	//the engine sound file
-	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Sound|Engine", meta = (AllowPrivateAccess = "true"))
 	USoundBase* EngineSound;
 	//how loud the engine sound can get
-	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Sound|Engine", meta = (AllowPrivateAccess = "true"))
 	float EngineMinVolume = 1.f;
-	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Sound|Engine", meta = (AllowPrivateAccess = "true"))
 	float EngineMaxVolume = 2.0f;
 	//how fast the engine sound can get
-	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Sound|Engine", meta = (AllowPrivateAccess = "true"))
 	float EngineMinPitch = 0.6f;
-	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Sound|Engine", meta = (AllowPrivateAccess = "true"))
 	float EngineMaxPitch = 3.0f;
 	//how fast the car needs to travel for max volume and speed
-	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, Category = "Sound|Engine", meta = (AllowPrivateAccess = "true"))
 	float SpeedRequiredForMaxEngineSound = 50.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category="Sound|Radio", meta = (AllowPrivateAccess = "true"))
+	TArray<USoundBase*> RadioClips;
 
 	//default input
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
@@ -196,6 +199,9 @@ private:
 	UInputAction* EngineShiftDownAction;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputAction* OpenDoorAction;
+	//input for radio toggle
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* RadioAction;
 	
 
 	//reference to the instance of the engine sound
@@ -297,6 +303,11 @@ private:
 
 	bool bIsDoorOpen = false;
 
+	UPROPERTY()
+	UAudioComponent* RadioInstance;
+	bool bIsRadioOn = false;
+	
+
 	//the ruin we are currently overlapping with
 	ARuin* OverlappingRuin = nullptr;
 	
@@ -346,6 +357,10 @@ private:
 	void OnEngineShiftDown(const struct FInputActionValue& Value);
 	UFUNCTION()
 	void OnOpenDoor(const struct FInputActionValue& Value);
+	UFUNCTION()
+	void OnRadio(const struct FInputActionValue& Value);
+	UFUNCTION()
+	void PlayNewRadioClip();
 	//when the player is dealt damage
 	UFUNCTION()
 	void OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);

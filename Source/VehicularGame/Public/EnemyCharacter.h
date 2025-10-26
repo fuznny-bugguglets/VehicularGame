@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "EnemyCharacter.generated.h"
 
+class UNiagaraSystem;
 class AVehicle;
 class AVehicularGameState;
 
@@ -96,6 +97,16 @@ private:
 	//the bigger the number, the more 'in front' of the player the enemy will jump
 	UPROPERTY(EditDefaultsOnly, Category = "Lunge", meta = (AllowPrivateAccess = "true"))
 	float MaxLungeForwardPredictionFactor = 500.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category="Sound|Death", meta = (AllowPrivateAccess = "true"))
+	TArray<USoundBase*> DeathClips;
+	UPROPERTY(EditDefaultsOnly, Category="Sound|Death", meta = (AllowPrivateAccess = "true"))
+	USoundBase* ExplosionSound = nullptr;
+	UPROPERTY(EditDefaultsOnly, Category="Sound|Death", meta = (AllowPrivateAccess = "true"))
+	USoundBase* HitSound = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category="Particles", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> DeathParticles = nullptr;
 
 	UPROPERTY()
 	FVector LungeDirection = FVector::Zero();
