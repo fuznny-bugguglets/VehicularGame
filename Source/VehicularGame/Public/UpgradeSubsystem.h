@@ -25,11 +25,16 @@ public:
 	bool GetUnlockStatus(uint8 UpgradeID);
 	void UnlockUpgrade(uint8 UpgradeID);
 
+	const TMap<uint8, bool>& GetUpgradeUnlockStatusMap();
+
+	void LoadSaveData();
+
 private:
 	//maps each upgrade type to its current value
 	TMap<EUpgradeType, float> UpgradeToValueMap;
 
 	//maps each upgrade ID to its unlocked status
+	UPROPERTY()
 	TMap<uint8, bool> UpgradeUnlockStatusMap;
 	
 };

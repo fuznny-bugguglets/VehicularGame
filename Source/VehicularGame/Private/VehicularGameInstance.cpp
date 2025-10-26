@@ -1,6 +1,7 @@
 #include "VehicularGameInstance.h"
 
 #include "InventorySubsystem.h"
+#include "UpgradeSubsystem.h"
 #include "VehicularSaveGame.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/Engine.h"
@@ -58,6 +59,7 @@ void UVehicularGameInstance::LoadGameData()
 
 		//load in the items
 		GetSubsystem<UInventorySubsystem>()->LoadSaveData();
+		GetSubsystem<UUpgradeSubsystem>()->LoadSaveData();
 	}
 	else
 	{
@@ -92,6 +94,10 @@ void UVehicularGameInstance::SaveGameData()
 
 	//copy the city storage into the save data
 	SaveGameObject->CityStorage = GetSubsystem<UInventorySubsystem>()->GetCityStorage();
+	//copy money into the save data
+	SaveGameObject->Money = GetSubsystem<UInventorySubsystem>()->GetMoney();
+	//copy the upgrade unlocks into the save data
+	SaveGameObject->UpgradeUnlockStatusMap = GetSubsystem<UUpgradeSubsystem>()->GetUpgradeUnlockStatusMap();
 	
 	//saves to that object
 	UGameplayStatics::SaveGameToSlot(SaveGameObject, SaveSlotName, 0);

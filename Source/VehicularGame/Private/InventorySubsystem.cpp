@@ -39,6 +39,9 @@ void UInventorySubsystem::LoadSaveData()
 			//set the city storage from the save data
 			CityStorage = VGameInstance->GetSaveGameObject()->CityStorage;
 			UE_LOG(LogTemp, Display, TEXT("set city storage from save data"));
+
+			//set others
+			Money = VGameInstance->GetSaveGameObject()->Money;
 		}
 		else
 		{

@@ -3,6 +3,7 @@
 
 #include "DevToolsWidget.h"
 
+#include "InventorySubsystem.h"
 #include "Vehicle.h"
 #include "VehicularGameMode.h"
 #include "VehicularGameState.h"
@@ -18,14 +19,16 @@ void UDevToolsWidget::NativeConstruct()
 
 void UDevToolsWidget::GiveInfiniteResources()
 {
-	if (!Vehicle)
+	//add every item
+	for (int32 i = 0; i < 15; i++)
 	{
-		return;
+		GetGameInstance()->GetSubsystem<UInventorySubsystem>()->AddItemToCityStorage(i, 999);
 	}
 
-	Vehicle->SetCommonLootCount(99999);
-	Vehicle->SetUncommonLootCount(99999);
-	Vehicle->SetRareLootCount(99999);
+	//add lots of money
+	GetGameInstance()->GetSubsystem<UInventorySubsystem>()->AddMoney(99999);
+
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, "Added infinite resources");
 }
 
 void UDevToolsWidget::ForceSpawnEnemyWave()
