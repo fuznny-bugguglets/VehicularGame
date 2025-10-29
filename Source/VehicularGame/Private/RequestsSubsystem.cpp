@@ -1,0 +1,63 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "RequestsSubsystem.h"
+
+#include "Requests.h"
+
+void URequestsSubsystem::AddEnemyKill()
+{
+	LifetimeEnemyKills++;
+	CheckKillRequests();
+}
+
+void URequestsSubsystem::CheckKillRequests()
+{
+	for (FRequest Request : URequestsManager::GetRequests())
+	{
+		//check if it is a kill request
+		if (Request.RequestType == ERequestType::KillRequest)
+		{
+			//check if the request has been achieved
+			if (LifetimeEnemyKills >= Request.Count)
+			{
+				RequestAchieved(Request);
+			}
+		}
+	}
+}
+
+void URequestsSubsystem::RequestAchieved(const FRequest& Request)
+{
+	RequestAchieved(URequestsManager::GetIndexFromRequest(Request));
+}
+
+
+void URequestsSubsystem::RequestAchieved(uint8 RequestID)
+{
+	RequestAchievementStatus[RequestID] = true;
+}
+
+bool URequestsSubsystem::GetRequestAchievementStatus(uint8 RequestID)
+{
+	//is it in the map?
+	if (!RequestAchievementStatus.Find(RequestID))
+	{
+		//if it doesn't exist, it is false
+		RequestAchievementStatus[RequestID] = false;
+	}
+
+	return RequestAchievementStatus[RequestID];
+}
+
+bool URequestsSubsystem::GetRequestRedeemedStatus(uint8 RequestID)
+{
+	//is it in the map?
+	if (!RequestRedeemedStatus.Find(RequestID))
+	{
+		//if it doesn't exist, it is false
+		RequestRedeemedStatus[RequestID] = false;
+	}
+
+	return RequestRedeemedStatus[RequestID];
+}
