@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "RequestsWidget.generated.h"
 
+class URequestBoxWidget;
 class UScrollBox;
 /**
  * 
@@ -21,4 +22,7 @@ public:
 protected:
 	UPROPERTY(meta=(BindWidget))
 	UScrollBox* RequestsScrollBox = nullptr;
+
+	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"))
+	TSubclassOf<URequestBoxWidget> RequestBoxWidgetClass;
 };

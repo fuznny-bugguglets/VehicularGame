@@ -67,6 +67,7 @@ void UCityWidget::NativeConstruct()
 	RelicsButton->OnClicked.AddDynamic(this, &UCityWidget::OnRelicsButton);
 	CrewButton->OnClicked.AddDynamic(this, &UCityWidget::OnCrewButton);
 	MechanicButton->OnClicked.AddDynamic(this, &UCityWidget::OnMechanicButton);
+	RequestsButton->OnClicked.AddDynamic(this, &UCityWidget::OnRequestsButton);
 }
 
 //returns child widgets
@@ -150,6 +151,12 @@ void UCityWidget::OnMechanicButton()
 {
 	SetWidgetSwitcher(2);
 }
+
+void UCityWidget::OnRequestsButton()
+{
+	SetWidgetSwitcher(3);
+}
+
 
 void UCityWidget::SetWidgetSwitcher(int32 index)
 {

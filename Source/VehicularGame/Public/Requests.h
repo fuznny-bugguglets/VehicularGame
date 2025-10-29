@@ -24,22 +24,22 @@ struct FRequest : public FTableRowBase
 {
 	GENERATED_BODY()
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	FText Name;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	ERequestType RequestType;
 
 	//Used for Collect, POI Discovery 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	EResourceTier Tier;
 
 	//Used for Collect
-	UPROPERTY()
-	EResourceTier ItemType;
+	UPROPERTY(EditAnywhere)
+	EResourceType ItemType;
 
 	//Used for Collect, Kill
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	int32 Count;
 
 	bool operator==(const FRequest& Other) const

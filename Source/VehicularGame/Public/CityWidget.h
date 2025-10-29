@@ -73,6 +73,9 @@ protected:
 	UButton* MechanicButton = nullptr;
 
 	UPROPERTY(meta = (BindWidget))
+	UButton* RequestsButton = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
 	UButton* ExitButton = nullptr;
 
 	UPROPERTY(meta = (BindWidget))
@@ -88,6 +91,9 @@ private:
 
 	UFUNCTION()
 	void OnMechanicButton();
+
+	UFUNCTION()
+	void OnRequestsButton();
 
 	UFUNCTION()
 	UInventorySubsystem* GetInventorySubsystem();

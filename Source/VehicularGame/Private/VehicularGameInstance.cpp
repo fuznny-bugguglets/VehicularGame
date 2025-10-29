@@ -38,6 +38,13 @@ void UVehicularGameInstance::Init()
 		UpgradeManager->SetupItemsFromDataTable();
 	}
 
+	//inits request manager
+	RequestManager = NewObject<URequestsManager>(GetTransientPackage(), RequestManagerClass);
+	if (RequestManager)
+	{
+		RequestManager->SetupItemsFromDataTable();
+	}
+
 	//loads save data
 	LoadGameData();
 
