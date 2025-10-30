@@ -35,7 +35,17 @@ void URequestsSubsystem::RequestAchieved(const FRequest& Request)
 
 void URequestsSubsystem::RequestAchieved(uint8 RequestID)
 {
-	RequestAchievementStatus[RequestID] = true;
+	//is it in the map?
+	if (RequestAchievementStatus.Find(RequestID))
+	{
+		RequestAchievementStatus[RequestID] = true;
+	}
+	else
+	{
+		RequestAchievementStatus.Emplace(RequestID, true);
+	}
+	
+	
 }
 
 bool URequestsSubsystem::GetRequestAchievementStatus(uint8 RequestID)
@@ -44,7 +54,7 @@ bool URequestsSubsystem::GetRequestAchievementStatus(uint8 RequestID)
 	if (!RequestAchievementStatus.Find(RequestID))
 	{
 		//if it doesn't exist, it is false
-		RequestAchievementStatus[RequestID] = false;
+		RequestAchievementStatus.Emplace(RequestID, false);
 	}
 
 	return RequestAchievementStatus[RequestID];
@@ -56,8 +66,13 @@ bool URequestsSubsystem::GetRequestRedeemedStatus(uint8 RequestID)
 	if (!RequestRedeemedStatus.Find(RequestID))
 	{
 		//if it doesn't exist, it is false
-		RequestRedeemedStatus[RequestID] = false;
+		RequestRedeemedStatus.Emplace(RequestID, false);
 	}
 
 	return RequestRedeemedStatus[RequestID];
+}
+
+int32 URequestsSubsystem::GetEnemiesKilled() const
+{
+	return LifetimeEnemyKills;
 }

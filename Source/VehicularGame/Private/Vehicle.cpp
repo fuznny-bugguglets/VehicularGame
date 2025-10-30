@@ -817,7 +817,7 @@ void AVehicle::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageTyp
 	//should we die?
 	if(Health <= 0)
 	{
-		UGameplayStatics::OpenLevel(this, FName("MainMenuLevel"));
+		UGameplayStatics::OpenLevel(this, FName("NEWMainMenu"));
 	}
 }
 

@@ -17,6 +17,7 @@ class VEHICULARGAME_API URequestsSubsystem : public UGameInstanceSubsystem
 
 public:
 	void AddEnemyKill();
+	int32 GetEnemiesKilled() const;
 
 	void RequestAchieved(uint8 RequestID);
 	void RequestAchieved(const FRequest& Request);

@@ -28,6 +28,12 @@ struct FRequest : public FTableRowBase
 	FText Name;
 
 	UPROPERTY(EditAnywhere)
+	FText Description;
+
+	UPROPERTY(EditAnywhere)
+	int32 MoneyReward;
+
+	UPROPERTY(EditAnywhere)
 	ERequestType RequestType;
 
 	//Used for Collect, POI Discovery 
