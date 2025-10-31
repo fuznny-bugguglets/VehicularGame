@@ -111,6 +111,7 @@ void UVehicularGameInstance::SaveGameData()
 	//requests
 	SaveGameObject->RequestAchievementStatus = GetSubsystem<URequestsSubsystem>()->GetRequestAchievementStatusMap();
 	SaveGameObject->RequestRedeemedStatus = GetSubsystem<URequestsSubsystem>()->GetRequestRedeemedStatusMap();
+	SaveGameObject->LifetimeItemsCollected = GetSubsystem<URequestsSubsystem>()->GetLifetimeItemsCollectedMap();
 	SaveGameObject->LifetimeEnemyKills = GetSubsystem<URequestsSubsystem>()->GetEnemiesKilled();
 	
 	//saves to that object

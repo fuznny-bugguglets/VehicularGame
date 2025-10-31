@@ -109,6 +109,7 @@ void URequestsSubsystem::LoadSaveData()
 		{
 			RequestAchievementStatus = VGameInstance->GetSaveGameObject()->RequestAchievementStatus;
 			RequestRedeemedStatus = VGameInstance->GetSaveGameObject()->RequestRedeemedStatus;
+			LifetimeItemsCollected = VGameInstance->GetSaveGameObject()->LifetimeItemsCollected;
 			LifetimeEnemyKills = VGameInstance->GetSaveGameObject()->LifetimeEnemyKills;
 		}
 	}
