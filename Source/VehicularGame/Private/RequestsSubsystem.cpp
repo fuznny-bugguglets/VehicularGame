@@ -5,6 +5,8 @@
 
 #include "InventorySubsystem.h"
 #include "Requests.h"
+#include "VehicularGameInstance.h"
+#include "VehicularSaveGame.h"
 
 void URequestsSubsystem::AddEnemyKill()
 {
@@ -96,3 +98,31 @@ void URequestsSubsystem::RequestRedeemed(uint8 RequestID)
 	GetGameInstance()->GetSubsystem<UInventorySubsystem>()->AddMoney(URequestsManager::GetRequestFromIndex(RequestID).MoneyReward);
 	
 }
+
+void URequestsSubsystem::LoadSaveData()
+{
+	//get save data
+	UVehicularGameInstance* VGameInstance = Cast<UVehicularGameInstance>(GetGameInstance());
+	if (VGameInstance)
+	{
+		if (VGameInstance->GetSaveGameObject())
+		{
+			RequestAchievementStatus = VGameInstance->GetSaveGameObject()->RequestAchievementStatus;
+			RequestRedeemedStatus = VGameInstance->GetSaveGameObject()->RequestRedeemedStatus;
+			LifetimeEnemyKills = VGameInstance->GetSaveGameObject()->LifetimeEnemyKills;
+		}
+	}
+	
+}
+
+
+const TMap<uint8, bool>& URequestsSubsystem::GetRequestAchievementStatusMap() const
+{
+	return RequestAchievementStatus;
+}
+
+const TMap<uint8, bool>& URequestsSubsystem::GetRequestRedeemedStatusMap() const
+{
+	return RequestRedeemedStatus;
+}
+

@@ -10,6 +10,7 @@
 #include "ShopWidget.h"
 #include "InventorySubsystem.h"
 #include "RelicInformationPanel.h"
+#include "RequestsWidget.h"
 #include "VehicularGameInstance.h"
 #include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
@@ -58,6 +59,8 @@ void UCityWidget::NativeConstruct()
 	{
 		CrewInformationPanel->Setup(this);
 	}
+
+	RequestsWidget->SetCityWidget(this);
 
 	if (MoneyText)
 	{

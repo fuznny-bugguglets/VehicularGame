@@ -25,7 +25,11 @@ public:
 	void RequestRedeemed(uint8 RequestID);
 
 	bool GetRequestAchievementStatus(uint8 RequestID);
-	bool GetRequestRedeemedStatus(uint8 RequestID); 
+	bool GetRequestRedeemedStatus(uint8 RequestID);
+
+	void LoadSaveData();
+	const TMap<uint8, bool>& GetRequestAchievementStatusMap() const;
+	const TMap<uint8, bool>& GetRequestRedeemedStatusMap() const;
 
 private:
 	void CheckKillRequests();

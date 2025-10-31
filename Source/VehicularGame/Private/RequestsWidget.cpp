@@ -3,6 +3,7 @@
 
 #include "RequestsWidget.h"
 
+#include "CityWidget.h"
 #include "Requests.h"
 #include "RequestBoxWidget.h"
 #include "RequestsSubsystem.h"
@@ -115,9 +116,18 @@ void URequestsWidget::OnRedeemButton()
 		&& !RequestsSubsystem->GetRequestRedeemedStatus(SelectedRequestID))
 	{
 		//set it as redeemed
-		RequestsSubsystem->RequestAchieved(SelectedRequestID);
+		RequestsSubsystem->RequestRedeemed(SelectedRequestID);
 
 		//hide the button
 		RedeemButton->SetVisibility(ESlateVisibility::Hidden);
+
+		//update money
+		CityWidget->UpdateMoney();
 	}
 }
+
+void URequestsWidget::SetCityWidget(UCityWidget* In)
+{
+	CityWidget = In;
+}
+

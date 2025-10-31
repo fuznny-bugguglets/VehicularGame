@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "RequestsWidget.generated.h"
 
+class UCityWidget;
 class UButton;
 class URequestBoxWidget;
 class UScrollBox;
@@ -25,6 +26,9 @@ public:
 
 	UFUNCTION()
 	void OnRedeemButton();
+
+	UFUNCTION()
+	void SetCityWidget(UCityWidget* In);
 
 protected:
 	UFUNCTION()
@@ -50,4 +54,7 @@ protected:
 
 	UPROPERTY()
 	uint8 SelectedRequestID = 0;
+
+	UPROPERTY()
+	UCityWidget* CityWidget = nullptr;
 };
