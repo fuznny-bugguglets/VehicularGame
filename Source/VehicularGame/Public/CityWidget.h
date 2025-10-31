@@ -8,6 +8,7 @@
 #include "Components/WidgetSwitcher.h"
 #include "CityWidget.generated.h"
 
+class URequestsWidget;
 class UCrewEquippedWidget;
 class UCrewInformationPanel;
 class UTextBlock;
@@ -40,6 +41,8 @@ public:
 	void HireCrewMember(const uint8 ID);
 	void LayOffCrewMember(const uint8 ID);
 
+	void UpdateMoney();
+
 protected:
 	//child widgets
 	UPROPERTY(meta = (BindWidget))
@@ -61,6 +64,9 @@ protected:
 	UCrewInformationPanel* CrewInformationPanel = nullptr;
 
 	UPROPERTY(meta = (BindWidget))
+	URequestsWidget* RequestsWidget = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
 	UWidgetSwitcher* WidgetSwitcher = nullptr;
 
 	UPROPERTY(meta = (BindWidget))
@@ -71,6 +77,9 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* MechanicButton = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* RequestsButton = nullptr;
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* ExitButton = nullptr;
@@ -90,9 +99,12 @@ private:
 	void OnMechanicButton();
 
 	UFUNCTION()
+	void OnRequestsButton();
+
+	UFUNCTION()
 	UInventorySubsystem* GetInventorySubsystem();
 
-	void UpdateMoney();
+	
 
 	void SetWidgetSwitcher(int32 index);
 

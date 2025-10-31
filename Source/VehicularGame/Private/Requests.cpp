@@ -12,5 +12,24 @@ void URequestsManager::AddRequest(const FRequest& Request)
 
 void URequestsManager::ClearRequests()
 {
-	
+	Requests.Empty();
+}
+
+const TArray<FRequest>& URequestsManager::GetRequests()
+{
+	return Requests;
+}
+
+FRequest& URequestsManager::GetRequestFromIndex(const uint8 Index)
+{
+	return Requests[Index];
+}
+
+
+uint8 URequestsManager::GetIndexFromRequest(const FRequest& Request)
+{
+	int32 OutIndex = 255;
+	Requests.Find(Request, OutIndex);
+
+	return OutIndex;
 }

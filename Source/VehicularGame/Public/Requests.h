@@ -24,19 +24,34 @@ struct FRequest : public FTableRowBase
 {
 	GENERATED_BODY()
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	FText Name;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
+	FText Description;
+
+	UPROPERTY(EditAnywhere)
+	int32 MoneyReward;
+
+	UPROPERTY(EditAnywhere)
 	ERequestType RequestType;
 
-	//Used for Collect Request and POI Discovery Request
-	UPROPERTY()
+	//Used for Collect, POI Discovery 
+	UPROPERTY(EditAnywhere)
 	EResourceTier Tier;
 
-	//Used for Collect Request
-	UPROPERTY()
-	EResourceTier ItemType;
+	//Used for Collect
+	UPROPERTY(EditAnywhere)
+	EResourceType ItemType;
+
+	//Used for Collect, Kill
+	UPROPERTY(EditAnywhere)
+	int32 Count;
+
+	bool operator==(const FRequest& Other) const
+	{
+		return Name.ToString() == Other.Name.ToString();
+	}
 };
 
 UCLASS(Blueprintable, BlueprintType)
@@ -45,6 +60,8 @@ class VEHICULARGAME_API URequestsManager : public UObject
 	GENERATED_BODY()
 
 public:
+	static FRequest& GetRequestFromIndex(const uint8 Index);
+	static uint8 GetIndexFromRequest(const FRequest& Request);
 
 	//setup in game instance
 	//logic handled in blueprints
@@ -54,6 +71,9 @@ public:
 	void AddRequest(const FRequest& Request);
 	UFUNCTION(BlueprintCallable)
 	void ClearRequests();
+
+
+	static const TArray<FRequest>& GetRequests();
 private:
 	//stores all requests
 	static TArray<FRequest> Requests;

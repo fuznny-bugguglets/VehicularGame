@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Crew.h"
 #include "Item.h"
+#include "Requests.h"
 #include "Upgrades.h"
 #include "Engine/GameInstance.h"
 #include "VehicularGameInstance.generated.h"
@@ -73,4 +74,10 @@ private:
 
 	UPROPERTY()
 	UUpgradeManager* UpgradeManager = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Classes", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<URequestsManager> RequestManagerClass;
+
+	UPROPERTY()
+	URequestsManager* RequestManager = nullptr;
 };

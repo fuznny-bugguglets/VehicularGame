@@ -20,6 +20,18 @@ public:
 	UPROPERTY()
 	TMap<uint8, bool> UpgradeUnlockStatusMap;
 
+	//achieved requests
+	UPROPERTY()
+	TMap<uint8, bool> RequestAchievementStatus;
+	
+	//redeemed requests
+	UPROPERTY()
+	TMap<uint8, bool> RequestRedeemedStatus;
+
+	//
+	UPROPERTY()
+	int32 LifetimeEnemyKills;
+	
 	//money
 	UPROPERTY()
 	int32 Money;

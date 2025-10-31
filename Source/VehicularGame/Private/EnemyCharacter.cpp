@@ -2,6 +2,7 @@
 #include "AIController.h" // For AAIController
 #include "EnemyAIController.h"
 #include "NavigationSystem.h"
+#include "RequestsSubsystem.h"
 #include "UpgradeSubsystem.h"
 #include "Vehicle.h"
 #include "VehicularGameState.h"
@@ -266,6 +267,9 @@ void AEnemyCharacter::Die()
 
     //play explosion particle
     GetWorld()->SpawnActor<AActor>(DeathParticles, GetActorLocation(), GetActorRotation());
+
+    //tell the request system that an enemy was killed
+    GetGameInstance()->GetSubsystem<URequestsSubsystem>()->AddEnemyKill();
 
     // Destroy the enemy.
     Destroy();

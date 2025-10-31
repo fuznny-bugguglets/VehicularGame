@@ -19,7 +19,7 @@ UUpgradeSubsystem::UUpgradeSubsystem()
 void UUpgradeSubsystem::ProcessUpgrade(const FUpgrade& Upgrade)
 {
 	//set the value of the upgrade
-	UpgradeToValueMap[Upgrade.Type] = Upgrade.Value;
+	UpgradeToValueMap[Upgrade.Type] += Upgrade.Value;
 
 	//set the upgrade as unlocked
 	UnlockUpgrade(UUpgradeManager::GetIndexFromUpgrade(Upgrade));
@@ -73,6 +73,16 @@ void UUpgradeSubsystem::LoadSaveData()
 			//set the city storage from the save data
 			UpgradeUnlockStatusMap = VGameInstance->GetSaveGameObject()->UpgradeUnlockStatusMap;
 			UE_LOG(LogTemp, Display, TEXT("set upgrade unlock status map from save data"));
+
+			//for each unlocked upgrade
+			for (TPair<unsigned char, bool> Unlock : UpgradeUnlockStatusMap)
+			{
+				//get the upgrade
+				FUpgrade& Upgrade = UUpgradeManager::GetUpgradeFromIndex(Unlock.Key);
+				
+				//apply the value
+				UpgradeToValueMap[Upgrade.Type] += Upgrade.Value;
+			}
 		}
 		else
 		{
