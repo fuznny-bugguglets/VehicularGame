@@ -109,6 +109,7 @@ void URequestsSubsystem::LoadSaveData()
 		{
 			RequestAchievementStatus = VGameInstance->GetSaveGameObject()->RequestAchievementStatus;
 			RequestRedeemedStatus = VGameInstance->GetSaveGameObject()->RequestRedeemedStatus;
+			LifetimeItemsCollected = VGameInstance->GetSaveGameObject()->LifetimeItemsCollected;
 			LifetimeEnemyKills = VGameInstance->GetSaveGameObject()->LifetimeEnemyKills;
 		}
 	}
@@ -124,5 +125,66 @@ const TMap<uint8, bool>& URequestsSubsystem::GetRequestAchievementStatusMap() co
 const TMap<uint8, bool>& URequestsSubsystem::GetRequestRedeemedStatusMap() const
 {
 	return RequestRedeemedStatus;
+}
+
+const TMap<uint8, uint32>& URequestsSubsystem::GetLifetimeItemsCollectedMap() const
+{
+	return LifetimeItemsCollected;
+}
+
+void URequestsSubsystem::ItemsCollected(uint8 ItemIndex, int32 ItemCount)
+{
+	//is it in the map?
+	if (LifetimeItemsCollected.Find(ItemIndex))
+	{
+		//add on existing count
+		LifetimeItemsCollected[ItemIndex] += ItemCount;
+	}
+	else
+	{
+		//set count
+		LifetimeItemsCollected.Emplace(ItemIndex, ItemCount);
+	}
+
+	//check if we can update completion status
+	for (const FRequest& Request : URequestsManager::GetRequests())
+	{
+		//is it a collection request?
+		if (Request.RequestType == ERequestType::CollectRequest)
+		{
+			//is this request asking for this item?
+			if (ItemIndex == UItemManager::GetIndexFromTypeAndTier(Request.ItemType, Request.Tier))
+			{
+				//does the player have enough?
+				if (LifetimeItemsCollected[ItemIndex] >= static_cast<uint32>(Request.Count))
+				{
+					//achieved!
+					RequestAchieved(Request);
+				}
+			}
+		}
+	}
+}
+
+uint32 URequestsSubsystem::GetItemsCollected(uint8 ItemID) const
+{
+	//is it in the map?
+	if (LifetimeItemsCollected.Find(ItemID))
+	{
+		return LifetimeItemsCollected[ItemID];
+	}
+
+	return 0;
+}
+
+uint32 URequestsSubsystem::GetItemsCollected(FItem& Item) const
+{
+	return GetItemsCollected(UItemManager::GetIndexFromItem(Item));
+}
+
+
+uint32 URequestsSubsystem::GetItemsCollected(EResourceType Type, EResourceTier Tier) const
+{
+	return GetItemsCollected(UItemManager::GetItemFromTypeAndTier(Type, Tier));
 }
 

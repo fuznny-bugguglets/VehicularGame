@@ -30,6 +30,10 @@ public:
 
 	//
 	UPROPERTY()
+	TMap<uint8, uint32> LifetimeItemsCollected;
+
+	//
+	UPROPERTY()
 	int32 LifetimeEnemyKills;
 	
 	//money

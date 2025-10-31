@@ -6,6 +6,9 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "RequestsSubsystem.generated.h"
 
+struct FItem;
+enum class EResourceTier : uint8;
+enum class EResourceType : uint8;
 struct FRequest;
 /**
  * 
@@ -19,6 +22,8 @@ public:
 	void AddEnemyKill();
 	int32 GetEnemiesKilled() const;
 
+	void ItemsCollected(uint8 ItemIndex, int32 ItemCount);
+
 	void RequestAchieved(uint8 RequestID);
 	void RequestAchieved(const FRequest& Request);
 
@@ -30,6 +35,10 @@ public:
 	void LoadSaveData();
 	const TMap<uint8, bool>& GetRequestAchievementStatusMap() const;
 	const TMap<uint8, bool>& GetRequestRedeemedStatusMap() const;
+	const TMap<uint8, uint32>& GetLifetimeItemsCollectedMap() const;
+	uint32 GetItemsCollected(uint8 ItemID) const;
+	uint32 GetItemsCollected(FItem& Item) const;
+	uint32 GetItemsCollected(EResourceType Type, EResourceTier) const;
 
 private:
 	void CheckKillRequests();
@@ -39,6 +48,8 @@ private:
 
 	//maps request ID's to achievement to redeemed status
 	TMap<uint8, bool> RequestRedeemedStatus;
+
+	TMap<uint8, uint32> LifetimeItemsCollected;
 
 	//how many enemies have been killed over the lifetime of this save file
 	int32 LifetimeEnemyKills = 0;

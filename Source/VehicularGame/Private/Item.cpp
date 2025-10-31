@@ -24,6 +24,12 @@ uint8 UItemManager::GetIndexFromItem(const FItem& Item)
 	return OutIndex;
 }
 
+uint8 UItemManager::GetIndexFromTypeAndTier(const EResourceType Type, const EResourceTier Tier)
+{
+	return GetIndexFromItem(GetItemFromTypeAndTier(Type, Tier));
+}
+
+
 FItem& UItemManager::GetItemFromTypeAndTier(const EResourceType Type, const EResourceTier Tier)
 {
 	//brute force search
