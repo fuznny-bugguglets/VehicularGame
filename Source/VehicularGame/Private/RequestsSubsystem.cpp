@@ -3,6 +3,7 @@
 
 #include "RequestsSubsystem.h"
 
+#include "InventorySubsystem.h"
 #include "Requests.h"
 
 void URequestsSubsystem::AddEnemyKill()
@@ -75,4 +76,23 @@ bool URequestsSubsystem::GetRequestRedeemedStatus(uint8 RequestID)
 int32 URequestsSubsystem::GetEnemiesKilled() const
 {
 	return LifetimeEnemyKills;
+}
+
+void URequestsSubsystem::RequestRedeemed(uint8 RequestID)
+{
+	//is it in the map?
+	if (RequestRedeemedStatus.Find(RequestID))
+	{
+		//already exists, set it
+		RequestRedeemedStatus[RequestID] = true;
+	}
+	else
+	{
+		//if it doesn't exist, make it
+		RequestRedeemedStatus.Emplace(RequestID, true);
+	}
+
+	//pay the reward
+	GetGameInstance()->GetSubsystem<UInventorySubsystem>()->AddMoney(URequestsManager::GetRequestFromIndex(RequestID).MoneyReward);
+	
 }

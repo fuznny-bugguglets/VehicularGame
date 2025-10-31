@@ -23,6 +23,9 @@ public:
 
 	void OnRequestSelected(uint8 RequestID);
 
+	UFUNCTION()
+	void OnRedeemButton();
+
 protected:
 	UFUNCTION()
 	void HideInfoPanel();
@@ -44,4 +47,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"))
 	TSubclassOf<URequestBoxWidget> RequestBoxWidgetClass;
+
+	UPROPERTY()
+	uint8 SelectedRequestID = 0;
 };

@@ -14,15 +14,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/DataTables/Requests/Requests.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/DataTables/Requests/Requests.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/City/Requests/WB_Requests.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/City/Requests/WB_Requests.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/EnemyCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/EnemyCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/RequestBoxWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/RequestBoxWidget.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/RequestsSubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/RequestsSubsystem.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/RequestsWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/RequestsWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/Vehicle.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/Vehicle.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/RequestBoxWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/RequestBoxWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/Requests.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/Requests.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/RequestsSubsystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/RequestsSubsystem.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/RequestsWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/RequestsWidget.h" afterDir="false" />
     </list>
@@ -54,23 +47,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "C/C++ Project.VehicularGame.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "quests",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;C/C++ Project.VehicularGame.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;quests&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="C/C++ Project.VehicularGame">
     <configuration name="UE5" type="CppProject" factoryName="C++ Project">
       <option name="DEFAULT_PROJECT_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UE5.vcxproj" />
@@ -198,6 +191,8 @@
       <workItem from="1761437939795" duration="7322000" />
       <workItem from="1761454905098" duration="3764000" />
       <workItem from="1761781150070" duration="5430000" />
+      <workItem from="1761871381777" duration="1008000" />
+      <workItem from="1761883919494" duration="1641000" />
     </task>
     <servers />
   </component>

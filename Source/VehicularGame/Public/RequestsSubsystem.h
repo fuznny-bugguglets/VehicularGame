@@ -22,6 +22,8 @@ public:
 	void RequestAchieved(uint8 RequestID);
 	void RequestAchieved(const FRequest& Request);
 
+	void RequestRedeemed(uint8 RequestID);
+
 	bool GetRequestAchievementStatus(uint8 RequestID);
 	bool GetRequestRedeemedStatus(uint8 RequestID); 
 

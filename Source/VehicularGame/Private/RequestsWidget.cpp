@@ -14,6 +14,8 @@ void URequestsWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	RedeemButton->OnClicked.AddDynamic(this, &URequestsWidget::OnRedeemButton);
+
 	if (!RequestBoxWidgetClass)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "No Request Box Widget Set!");
@@ -53,6 +55,7 @@ void URequestsWidget::HideInfoPanel()
 
 void URequestsWidget::ShowInfoPanel(const uint8 RequestID)
 {
+	SelectedRequestID = RequestID;
 	FRequest& Request = URequestsManager::GetRequestFromIndex(RequestID);
 
 	URequestsSubsystem* RequestsSubsystem = GetGameInstance()->GetSubsystem<URequestsSubsystem>();
@@ -104,3 +107,17 @@ void URequestsWidget::ShowInfoPanel(const uint8 RequestID)
 	}
 }
 
+void URequestsWidget::OnRedeemButton()
+{
+	URequestsSubsystem* RequestsSubsystem = GetGameInstance()->GetSubsystem<URequestsSubsystem>();
+	//can we redeem?
+	if (RequestsSubsystem->GetRequestAchievementStatus(SelectedRequestID)
+		&& !RequestsSubsystem->GetRequestRedeemedStatus(SelectedRequestID))
+	{
+		//set it as redeemed
+		RequestsSubsystem->RequestAchieved(SelectedRequestID);
+
+		//hide the button
+		RedeemButton->SetVisibility(ESlateVisibility::Hidden);
+	}
+}
