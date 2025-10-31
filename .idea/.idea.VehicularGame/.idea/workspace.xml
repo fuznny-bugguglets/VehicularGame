@@ -12,9 +12,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/DataTables/Upgrades/Upgrades.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/DataTables/Upgrades/Upgrades.uasset" afterDir="false" />
-    </list>
+    <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -49,7 +47,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "collectRequests",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -189,7 +187,7 @@
       <workItem from="1761781150070" duration="5430000" />
       <workItem from="1761871381777" duration="1008000" />
       <workItem from="1761883919494" duration="4757000" />
-      <workItem from="1761890139820" duration="4721000" />
+      <workItem from="1761890139820" duration="5384000" />
     </task>
     <servers />
   </component>
