@@ -4,6 +4,7 @@
 #include "RequestsWidget.h"
 
 #include "CityWidget.h"
+#include "InventorySubsystem.h"
 #include "Requests.h"
 #include "RequestBoxWidget.h"
 #include "RequestsSubsystem.h"
@@ -66,6 +67,8 @@ void URequestsWidget::ShowInfoPanel(const uint8 RequestID)
 			"Failed to find requests subsystem in requests widget");
 		return;
 	}
+
+	UInventorySubsystem* InventorySubsystem = GetGameInstance()->GetSubsystem<UInventorySubsystem>();
 	
 	NameText->SetText(Request.Name);
 
@@ -82,6 +85,14 @@ void URequestsWidget::ShowInfoPanel(const uint8 RequestID)
 	{
 		DescriptionString.Append("Killed: ");
 		DescriptionString.AppendInt(RequestsSubsystem->GetEnemiesKilled());
+		DescriptionString.Append("/");
+		DescriptionString.AppendInt(Request.Count);
+	}
+
+	else if (Request.RequestType == ERequestType::CollectRequest)
+	{
+		DescriptionString.Append("Collected: ");
+		DescriptionString.AppendInt(RequestsSubsystem->GetItemsCollected(Request.ItemType, Request.Tier));
 		DescriptionString.Append("/");
 		DescriptionString.AppendInt(Request.Count);
 	}

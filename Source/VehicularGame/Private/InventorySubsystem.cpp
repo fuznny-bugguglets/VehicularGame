@@ -3,6 +3,7 @@
 
 #include "InventorySubsystem.h"
 
+#include "RequestsSubsystem.h"
 #include "VehicularGameInstance.h"
 #include "VehicularSaveGame.h"
 
@@ -326,8 +327,14 @@ void UInventorySubsystem::AddItemToPlayerInventory(uint8 ItemIndex)
 
 void UInventorySubsystem::MoveFromPlayerInventoryToCityStorage()
 {
+	URequestsSubsystem* RequestsSubsystem = GetGameInstance()->GetSubsystem<URequestsSubsystem>();
+	
+	//move everything from the player inventory into the city storage
 	for (auto ItemPiece : PlayerInventory)
 	{
+		//pass in the item id and the amount collected to the requests system
+		RequestsSubsystem->ItemsCollected(ItemPiece.Key, ItemPiece.Value);
+		
 		if (CityStorage.Contains(ItemPiece.Key))
 		{
 			CityStorage[ItemPiece.Key] += ItemPiece.Value;
@@ -338,7 +345,10 @@ void UInventorySubsystem::MoveFromPlayerInventoryToCityStorage()
 		}
 	}
 
+	//wipe the player inventory
 	PlayerInventory.Empty();
+
+	
 }
 
 int32 UInventorySubsystem::GetItemCountFromCityStorage(uint8 ItemIndex) const
@@ -362,6 +372,12 @@ int32 UInventorySubsystem::GetItemCountFromCityStorage(const FItem& InItem) cons
 {
 	return GetItemCountFromCityStorage(UItemManager::GetIndexFromItem(InItem));
 }
+
+int32 UInventorySubsystem::GetItemCountFromCityStorage(EResourceType Type, EResourceTier Tier) const
+{
+	return GetItemCountFromCityStorage(UItemManager::GetItemFromTypeAndTier(Type, Tier));
+}
+
 
 void UInventorySubsystem::ClearPlayerInventory()
 {

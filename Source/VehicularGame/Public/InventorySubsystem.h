@@ -46,6 +46,7 @@ public:
 	//returns the amount of items in the city storage for a given item
 	int32 GetItemCountFromCityStorage(uint8 ItemIndex) const;
 	int32 GetItemCountFromCityStorage(const FItem& InItem) const;
+	int32 GetItemCountFromCityStorage(EResourceType Type, EResourceTier Tier) const;
 
 	//takes in an item (by index or type) and adds it to the inventory
 	void AddItemToCityStorage(uint8 ItemIndex);

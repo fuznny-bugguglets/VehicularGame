@@ -59,6 +59,7 @@ public:
 	static FItem& GetItemFromIndex(const uint8 Index);
 	static uint8 GetIndexFromItem(const FItem& Item);
 
+	static uint8 GetIndexFromTypeAndTier(const EResourceType Type, const EResourceTier Tier);
 	static FItem& GetItemFromTypeAndTier(const EResourceType Type, const EResourceTier Tier);
 
 	//setup in game instance
