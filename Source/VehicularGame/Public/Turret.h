@@ -110,8 +110,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USceneComponent* BulletSpawnR;
 
-	float UpgradedFireRate();
-
 	
 
 	//ticks along the reloading process, only runs while reloading

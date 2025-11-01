@@ -30,6 +30,8 @@ public:
 	const uint8* GetHiredCrew() const;
 	uint8 GetHiredCrewCount() const;
 
+	float GetPassiveMultiplier(EPassiveType Passive) const;
+
 	const int32 GetMoney() const;
 	void SetMoney(int32 NewMoney);
 	void AddMoney(int32 NewMoney);

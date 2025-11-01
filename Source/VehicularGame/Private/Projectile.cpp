@@ -1,4 +1,6 @@
 #include "Projectile.h"
+
+#include "InventorySubsystem.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -64,7 +66,10 @@ void AProjectile::BeginPlay()
         return;
     }
 
+    UInventorySubsystem* InventorySubsystem = GetGameInstance()->GetSubsystem<UInventorySubsystem>();
+
     Damage += GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretDamage);
+    Damage *= InventorySubsystem->GetPassiveMultiplier(EPassiveType::TurretDamage);
 }
 
 void AProjectile::InitializeProjectile(float InAdditionalDamage, int32 InPiercingCount, float InSpeedMultiplier)

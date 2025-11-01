@@ -77,6 +77,9 @@ private:
 	//time i have been scavenging
 	float ElapsedScavengeTime = 0.0f;
 
+	//extra speed at which the scavenger extracts
+	float PassiveScavengerExtractionSpeed = 1.0f;
+
 	//called every frame when my behaviour is travelling to the ruin
 	void DoTravelToRuin();
 

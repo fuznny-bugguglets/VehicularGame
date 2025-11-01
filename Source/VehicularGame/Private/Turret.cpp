@@ -2,6 +2,8 @@
 
 
 #include "Turret.h"
+
+#include "InventorySubsystem.h"
 #include "VehicularGameState.h"
 #include "TurretRotationComponent.h"
 #include "Camera/CameraComponent.h"
@@ -92,14 +94,18 @@ void ATurret::BeginPlay()
 		return;
 	}
 
+	UInventorySubsystem* InventorySubsystem = GetGameInstance()->GetSubsystem<UInventorySubsystem>();
+
 	//set our max ammo count
 	MaxAmmoCount += GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretAmmo);
+	MaxAmmoCount *= InventorySubsystem->GetPassiveMultiplier(EPassiveType::MagazineSize);
 
 	//set our ammo to be whatever our max is
 	AmmoCount = MaxAmmoCount;
 
 	//set our reload speed
 	ReloadTime -= GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretReloadSpeed);
+	ReloadTime /= InventorySubsystem->GetPassiveMultiplier(EPassiveType::ReloadSpeed);
 	if (ReloadTime < 0.0f)
 	{
 		LogError("0 reload time was achieved in the turret. was this a mistake?");
@@ -107,7 +113,8 @@ void ATurret::BeginPlay()
 	}
 
 	//set our fire rate
-	FireRate -= GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretFireRate);
+	FireRate += GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretFireRate);
+	FireRate *= InventorySubsystem->GetPassiveMultiplier(EPassiveType::TurretFireRate); 
 	if (FireRate < 0.0f)
 	{
 		LogError("0 fire rate time was achieved in the turret. was this a mistake?");
@@ -135,7 +142,7 @@ void ATurret::Tick(float DeltaTime)
 	TurretRotationComponent->RotateTurretHead(VehicleCamera->GetComponentTransform(), DeltaTime, 10000, 20);
 
 	//check if the time since last shot timer should still increment
-	if (TimeSinceLastShot < (1.0f / UpgradedFireRate()))
+	if (TimeSinceLastShot < (1.0f / FireRate))
 	{
 		//increment time since last shot
 		TimeSinceLastShot += DeltaTime;
@@ -195,7 +202,7 @@ void ATurret::FireHeld()
 	}
 
 	//has it been enough time since the last shot?
-	if (TimeSinceLastShot > (1.0f / UpgradedFireRate()))
+	if (TimeSinceLastShot > (1.0f / FireRate))
 	{
 		//consume a bullet
 		AmmoCount--;
@@ -254,45 +261,6 @@ void ATurret::FireReleased()
 	
 }
 
-
-float ATurret::UpgradedFireRate()
-{
-	//do we have the game state reference?
-	if (VehicularGameState == nullptr)
-	{
-		LogError("failed to get vehicular game state in the turret");
-		return 0.0f;
-	}
-
-	//set the upgraded fire rate to what our base fire rate is
-	float UpgradedFireRate = FireRate;
-
-	//then add on the upgrade
-	switch (VehicularGameState->GetFireRateUpgradeLevel())
-	{
-		case 0:
-			UpgradedFireRate += 0.0f;
-			break;
-	 	case 1:
-	 		UpgradedFireRate += 2.0f;
-	 		break;
-	
-	 	case 2:
-	 		UpgradedFireRate += 4.0f;
-	 		break;
-	
-	 	case 3:
-	 		UpgradedFireRate += 8.0f;
-	 		break;
-	
-	 	default:
-	 		LogError("Unknown fire rate upgrade level in turret");
-	 		break;
-	 }
-
-	return UpgradedFireRate;
-
-}
 
 //returns a transform with a random amount of spread
 FRotator ATurret::GetRotationWithSpread(const FTransform& InputTransform, const float SpreadAngle) const

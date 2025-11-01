@@ -26,6 +26,10 @@ UInventorySubsystem::UInventorySubsystem()
 	AddCrewForHire(0);
 	AddCrewForHire(1);
 	AddCrewForHire(2);
+	AddCrewForHire(3);
+	AddCrewForHire(4);
+	AddCrewForHire(5);
+	AddCrewForHire(6);
 
 }
 
@@ -397,4 +401,35 @@ uint8 UInventorySubsystem::GetHiredCrewCount() const
 	}
 
 	return Count;
+}
+
+float UInventorySubsystem::GetPassiveMultiplier(EPassiveType Passive) const
+{
+	float Multiplier = 1.0f;
+
+	//for each hired crew
+	for (uint8 i = 0; i < 6; i++)
+	{
+		//continue if it is null
+		if (HiredCrew[i] == 255)
+		{
+			continue;
+		}
+
+		//grab the crew information
+		FCrew& Crew = UCrewManager::GetCrewFromIndex(HiredCrew[i]);
+
+		//for each passive
+		for (const FCrewPassive CrewPassive : Crew.Passives)
+		{
+			//is this the passive we care about?
+			if (CrewPassive.UpgradeType == Passive)
+			{
+				//multiply on the multiplier
+				Multiplier *= CrewPassive.Multiplier;
+			}
+		}
+	}
+
+	return Multiplier;
 }
