@@ -39,4 +39,7 @@ public:
 	//money
 	UPROPERTY()
 	int32 Money;
+
+	UPROPERTY()
+	uint8 HiredCrew[6];
 };

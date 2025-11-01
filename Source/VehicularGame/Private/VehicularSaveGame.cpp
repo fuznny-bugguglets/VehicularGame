@@ -10,4 +10,8 @@ UVehicularSaveGame::UVehicularSaveGame()
 	LifetimeItemsCollected.Empty();
 	LifetimeEnemyKills = 0;
 	Money = 10;
+	for (int32 i = 0; i < 6; i++)
+	{
+		HiredCrew[i] = 255;
+	}
 }

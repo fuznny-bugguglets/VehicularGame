@@ -11,6 +11,7 @@ void UCrewInformationPanel::NativeConstruct()
 	Super::NativeConstruct();
 
 	InteractionButton->OnClicked.AddDynamic(this, &UCrewInformationPanel::OnButtonClicked);
+	InteractionButton->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void UCrewInformationPanel::DisplayCrewInformation(uint8 ID, bool _bIsHired)

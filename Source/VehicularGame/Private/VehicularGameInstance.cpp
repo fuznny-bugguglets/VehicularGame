@@ -103,6 +103,10 @@ void UVehicularGameInstance::SaveGameData()
 
 	//copy the city storage into the save data
 	SaveGameObject->CityStorage = GetSubsystem<UInventorySubsystem>()->GetCityStorage();
+	for (int32 i = 0; i < 6; i++)
+	{
+		SaveGameObject->HiredCrew[i] = GetSubsystem<UInventorySubsystem>()->GetHiredCrew()[i];
+	}
 	//copy money into the save data
 	SaveGameObject->Money = GetSubsystem<UInventorySubsystem>()->GetMoney();
 	//copy the upgrade unlocks into the save data

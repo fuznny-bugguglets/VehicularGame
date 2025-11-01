@@ -98,5 +98,6 @@ private:
 
 	//int is crewmate index
 	TArray<uint8> HirableCrew;
+	UPROPERTY()
 	uint8 HiredCrew[6]; //inventory size of 6
 };

@@ -13,11 +13,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Scavengers/ScavyBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Scavengers/ScavyBase.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Models/Scavenger/M_Scavenger_01.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Models/Scavenger/M_Scavenger_01.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Models/Scavenger/M_Scavenger_01_PhysicsAsset.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Models/Scavenger/M_Scavenger_01_Skeleton.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Models/Scavenger/lambert1.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/InventorySubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/InventorySubsystem.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/VehicularGameInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/VehicularGameInstance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/VehicularSaveGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/VehicularSaveGame.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/InventorySubsystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/InventorySubsystem.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/VehicularSaveGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/VehicularSaveGame.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -194,7 +195,7 @@
       <workItem from="1761871381777" duration="1008000" />
       <workItem from="1761883919494" duration="4757000" />
       <workItem from="1761890139820" duration="5536000" />
-      <workItem from="1761967746186" duration="7212000" />
+      <workItem from="1761967746186" duration="8459000" />
     </task>
     <servers />
   </component>
