@@ -383,3 +383,18 @@ void UInventorySubsystem::ClearPlayerInventory()
 {
 	PlayerInventory.Empty();
 }
+
+uint8 UInventorySubsystem::GetHiredCrewCount() const
+{
+	uint8 Count = 0;
+	for (uint8 i = 0; i < 6; i++)
+	{
+		//do we have a crew in this slot?
+		if (HiredCrew[i] != 255)
+		{
+			Count++;
+		}
+	}
+
+	return Count;
+}

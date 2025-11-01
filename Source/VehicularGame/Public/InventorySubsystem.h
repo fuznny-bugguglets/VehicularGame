@@ -28,6 +28,7 @@ public:
 
 	const TArray<uint8> GetHirableCrew() const;
 	const uint8* GetHiredCrew() const;
+	uint8 GetHiredCrewCount() const;
 
 	const int32 GetMoney() const;
 	void SetMoney(int32 NewMoney);
