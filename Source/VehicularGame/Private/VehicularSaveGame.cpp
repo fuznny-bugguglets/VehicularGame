@@ -7,6 +7,7 @@ UVehicularSaveGame::UVehicularSaveGame()
 	UpgradeUnlockStatusMap.Empty();
 	RequestAchievementStatus.Empty();
 	RequestRedeemedStatus.Empty();
+	LifetimeItemsCollected.Empty();
 	LifetimeEnemyKills = 0;
-	Money = 0;
+	Money = 10;
 }
