@@ -14,4 +14,6 @@ UVehicularSaveGame::UVehicularSaveGame()
 	{
 		HiredCrew[i] = 255;
 	}
+	bRelicsTutorialSeen = false;
+	bCrewTutorialSeen = false;
 }
