@@ -175,7 +175,7 @@ void ATurret::InitializeVariables(UCameraComponent* InCameraComponent, APawn* In
 }
 
 //no function 
-void ATurret::irePressed()
+void ATurret::FirePressed()
 {
 	
 }
