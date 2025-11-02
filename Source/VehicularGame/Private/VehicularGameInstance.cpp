@@ -88,7 +88,7 @@ void UVehicularGameInstance::LoadGameData()
 		UGameplayStatics::SaveGameToSlot(SaveGameObject, SaveSlotName, 0);
 
 		//load into the tutorial map
-		UGameplayStatics::OpenLevel(this, "TutorialMainMenu");
+		UGameplayStatics::OpenLevel(this, "Tutorial");
 	}
 }
 
