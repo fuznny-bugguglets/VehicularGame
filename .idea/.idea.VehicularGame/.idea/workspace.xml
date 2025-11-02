@@ -14,6 +14,12 @@
   <component name="ChangeListManager">
     <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CinematicAssets/BPs/BP_TutorialController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CinematicAssets/BPs/BP_TutorialController.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CinematicAssets/Inputs/IM_Cinematic.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CinematicAssets/Inputs/IM_Cinematic.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CinematicAssets/Sequences/TurretShot.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CinematicAssets/Sequences/TurretShot.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Tutorial.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Tutorial.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/Turret.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/Turret.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/Turret.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/Turret.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -191,7 +197,7 @@
       <workItem from="1761883919494" duration="4757000" />
       <workItem from="1761890139820" duration="5536000" />
       <workItem from="1761967746186" duration="10143000" />
-      <workItem from="1762043320801" duration="1761000" />
+      <workItem from="1762043320801" duration="5203000" />
     </task>
     <servers />
   </component>
