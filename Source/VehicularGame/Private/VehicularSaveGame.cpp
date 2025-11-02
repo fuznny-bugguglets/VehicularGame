@@ -7,6 +7,13 @@ UVehicularSaveGame::UVehicularSaveGame()
 	UpgradeUnlockStatusMap.Empty();
 	RequestAchievementStatus.Empty();
 	RequestRedeemedStatus.Empty();
+	LifetimeItemsCollected.Empty();
 	LifetimeEnemyKills = 0;
-	Money = 0;
+	Money = 10;
+	for (int32 i = 0; i < 6; i++)
+	{
+		HiredCrew[i] = 255;
+	}
+	bRelicsTutorialSeen = false;
+	bCrewTutorialSeen = false;
 }

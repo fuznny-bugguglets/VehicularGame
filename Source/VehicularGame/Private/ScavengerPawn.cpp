@@ -3,6 +3,7 @@
 
 #include "ScavengerPawn.h"
 #include "AIController.h"
+#include "InventorySubsystem.h"
 #include "Vehicle.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h" // For character movement
@@ -45,6 +46,10 @@ void AScavengerPawn::BeginPlay()
 	//by default, go to the ruin
 	CurrentBehaviour = EScavengerBehaviourState::TRAVELLING_TO_RUIN;
 
+	//apply the crew passives
+	UInventorySubsystem* InventorySubsystem = GetGameInstance()->GetSubsystem<UInventorySubsystem>();
+	GetCharacterMovement()->MaxWalkSpeed *= InventorySubsystem->GetPassiveMultiplier(EPassiveType::CrewMoveSpeed);
+	PassiveScavengerExtractionSpeed = InventorySubsystem->GetPassiveMultiplier(EPassiveType::CrewScavengeSpeed);
 
 }
 
@@ -113,7 +118,7 @@ void AScavengerPawn::DoScavenge(float DeltaTime)
 	ElapsedScavengeTime += DeltaTime;
 
 	//have we done our time?
-	if (ElapsedScavengeTime >= MyRuin->GetExtractionTime())
+	if (ElapsedScavengeTime >= (MyRuin->GetExtractionTime() / PassiveScavengerExtractionSpeed))
 	{
 		//take a resource
 		HeldResource = MyRuin->TakeOneResource();

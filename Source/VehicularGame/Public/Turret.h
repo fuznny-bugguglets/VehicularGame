@@ -19,9 +19,11 @@ public:
 	// Sets default values for this actor's properties
 	ATurret();
 
+	UFUNCTION(BlueprintCallable)
 	void InitializeVariables(UCameraComponent* InCameraComponent, APawn* InShootingPawn);
 	void FirePressed();
 	void FireReleased();
+	UFUNCTION(BlueprintCallable)
 	void FireHeld();
 
 	//initiates the reloading process
@@ -109,8 +111,6 @@ private:
 	USceneComponent* BulletSpawnL;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USceneComponent* BulletSpawnR;
-
-	float UpgradedFireRate();
 
 	
 

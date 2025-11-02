@@ -19,8 +19,6 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "ScavengerPawn.h"
-#include "Camera/CameraComponent.h"
-#include "Components/AudioComponent.h"
 #include "Curves/CurveFloat.h"
 #include "UpgradeSubsystem.h"
 
@@ -152,6 +150,8 @@ void AVehicle::BeginPlay()
 	}
 
 	ActiveScavengers.Empty();
+
+	ScavengerCount = GetInventorySubsystem()->GetHiredCrewCount();
 
 	//wipe the player inventory
 	GetInventorySubsystem()->ClearPlayerInventory();
@@ -367,6 +367,7 @@ void AVehicle::SetEngineSoundValues()
 }
 
 //when the player looks around
+// ReSharper disable once CppMemberFunctionMayBeConst
 void AVehicle::OnLook(const FInputActionValue& Value)
 {
 	//get the vec2 out of the input
@@ -478,6 +479,7 @@ void AVehicle::OnMoveStop(const FInputActionValue& Value)
 }
 
 //when the player drifts
+// ReSharper disable once CppMemberFunctionMayBeConst
 void AVehicle::OnStartDrift(const FInputActionValue& Value)
 {
 	//make sure the handbrake is off
@@ -500,6 +502,7 @@ void AVehicle::OnStartDrift(const FInputActionValue& Value)
 }
 
 //when the player stops drifts
+// ReSharper disable once CppMemberFunctionMayBeConst
 void AVehicle::OnStopDrift(const FInputActionValue& Value)
 {
 	//change the stiffness of the wheels
@@ -588,23 +591,27 @@ void AVehicle::OnHandbreak(const FInputActionValue& Value)
 }
 
 //when the player first begins to shoot
+// ReSharper disable once CppMemberFunctionMayBeConst
 void AVehicle::OnFireStart(const FInputActionValue& Value)
 {
 	Turret->FirePressed();
 }
 
 //while the player is firing
+// ReSharper disable once CppMemberFunctionMayBeConst
 void AVehicle::OnFiring(const FInputActionValue& Value)
 {
 	Turret->FireHeld();
 }
 
 //when the player lets go of fire
+// ReSharper disable once CppMemberFunctionMayBeConst
 void AVehicle::OnFireStop(const FInputActionValue& Value)
 {
 	Turret->FireReleased();
 }
 
+// ReSharper disable once CppMemberFunctionMayBeConst
 void AVehicle::OnReload(const struct FInputActionValue& Value)
 {
 	Turret->BeginReload();
@@ -691,6 +698,8 @@ void AVehicle::OnEngineShiftDown(const FInputActionValue& Value)
 		break;
 	case EEngineState::BOOST2:
 		CurrentEngineState = EEngineState::BOOST1;
+		break;
+	case EEngineState::OFF:
 		break;
 	}
 }
@@ -879,6 +888,7 @@ void AVehicle::SteerWheels(float DeltaTime)
 }
 
 //Updates the difficulty depending on the noise being produced
+// ReSharper disable once CppMemberFunctionMayBeConst
 void AVehicle::UpdateDifficulty(float DeltaTime)
 {
 	//calculate the vibration level
@@ -941,8 +951,9 @@ void AVehicle::OnVehicleBeginOverlap(UPrimitiveComponent* OverlappedComponent, A
 	}
 }
 
+// ReSharper disable once CppParameterMayBeConstPtrOrRef
 void AVehicle::OnVehicleEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+                                   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	//are we overlapping with a ruin?
 	if(OverlappingRuin == nullptr)
@@ -1081,6 +1092,7 @@ bool AVehicle::IsHandbrakeActive() const
 	return bHandbrakeActive;
 }
 
+// ReSharper disable once CppMemberFunctionMayBeConst
 void AVehicle::IncrementLootCount(uint32 GivenResource)
 {
 	//is it valid?
@@ -1175,6 +1187,7 @@ void AVehicle::DecrementHealth()
 	Health -= 5;
 }
 
+// ReSharper disable once CppMemberFunctionMayBeConst
 UAudioComponent* AVehicle::CreateSound2DNoDestroy(USoundBase* Sound)
 {
 	return UGameplayStatics::CreateSound2D(this, Sound,

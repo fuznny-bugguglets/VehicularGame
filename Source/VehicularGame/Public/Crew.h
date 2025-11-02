@@ -3,8 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Upgrades.h"
 #include "Crew.generated.h"
+
+UENUM()
+enum class EPassiveType : uint8
+{
+	CrewMoveSpeed, 
+	CrewScavengeSpeed, 
+	TurretFireRate, 
+	TurretDamage, //TODO
+	ReloadSpeed, 
+	MagazineSize 
+};
 
 USTRUCT(BlueprintType)
 struct FCrewPassive
@@ -12,7 +22,7 @@ struct FCrewPassive
 	GENERATED_BODY()
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EUpgradeType UpgradeType;
+	EPassiveType UpgradeType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Multiplier;

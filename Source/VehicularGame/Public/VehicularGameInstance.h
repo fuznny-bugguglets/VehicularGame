@@ -34,6 +34,7 @@ public:
 	void ResetSaveData();
 
 	//returns the save game object
+	UFUNCTION(BlueprintCallable)
 	UVehicularSaveGame* GetSaveGameObject() const; 
 
 protected:

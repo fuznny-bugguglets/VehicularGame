@@ -28,6 +28,9 @@ public:
 
 	const TArray<uint8> GetHirableCrew() const;
 	const uint8* GetHiredCrew() const;
+	uint8 GetHiredCrewCount() const;
+
+	float GetPassiveMultiplier(EPassiveType Passive) const;
 
 	const int32 GetMoney() const;
 	void SetMoney(int32 NewMoney);
@@ -95,5 +98,6 @@ private:
 
 	//int is crewmate index
 	TArray<uint8> HirableCrew;
+	UPROPERTY()
 	uint8 HiredCrew[6]; //inventory size of 6
 };

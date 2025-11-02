@@ -123,7 +123,7 @@ private:
 	float HitCooldown = 0.75f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Scavengers", meta = (AllowPrivateAccess = "true"))
-	int ScavengerCount = 3;
+	int ScavengerCount = 0;
 
 	//how many seconds between each scavenger exiting the truck
 	UPROPERTY(EditDefaultsOnly, Category = "Scavengers", meta = (AllowPrivateAccess = "true"))
@@ -172,6 +172,7 @@ private:
 
 	//default input
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	// ReSharper disable once UnrealHeaderToolError
 	class UInputMappingContext* DefaultMappingContext;
 	//input for looking
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
@@ -309,6 +310,7 @@ private:
 	
 
 	//the ruin we are currently overlapping with
+	UPROPERTY()
 	ARuin* OverlappingRuin = nullptr;
 	
 	//sets the speed and pitch of the engine based on speed
@@ -417,5 +419,5 @@ private:
 
 	//wrapper for CreateSound2D that doesn't auto destroy
 	UAudioComponent* CreateSound2DNoDestroy(USoundBase* Sound);
-	void LogError(const FString& ErrorMessage);
+	static void LogError(const FString& ErrorMessage);
 };
