@@ -2,6 +2,7 @@
 #include "AIController.h" // For AAIController
 #include "EnemyAIController.h"
 #include "NavigationSystem.h"
+#include "PatrolArea.h"
 #include "RequestsSubsystem.h"
 #include "UpgradeSubsystem.h"
 #include "Vehicle.h"
@@ -198,6 +199,10 @@ void AEnemyCharacter::Tick(float DeltaTime)
         ElapsedLungeCooldownTime = 0.0f;
     	break;
 
+    case EEnemyState::PATROLLING:
+        TickPatrol(DeltaTime);
+        break;
+
     default:
         break;
 
@@ -211,21 +216,23 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const&
 
     if (ActualDamage > 0.f && !IsDead())
     {
+        //take the damage
         CurrentHealth -= ActualDamage;
 
         //play hit sound
-
         float PitchModifier = 2 - (CurrentHealth/MaxHealth);
-        
         if (HitSound)
             UGameplayStatics::PlaySound2D(this, HitSound, 1, PitchModifier);
         
-        
-
+        //check if we should die
         if (CurrentHealth <= 0.f)
         {
             Die();
         }
+
+        //anger towards player
+        SetEnemyState(EEnemyState::RUNNING);
+        PathfindToPoint();
     }
     return ActualDamage;
 }
@@ -467,9 +474,7 @@ void AEnemyCharacter::HitByPlayer()
     {
         LogError("failed to get character movement component in enemy");
     }
-
-    FVector PlayerMeshVelocity = VehicleRef->GetStaticMesh()->GetPhysicsLinearVelocity();
-
+    
     GetCharacterMovement()->SetMovementMode(MOVE_Falling);
 
     FVector PushVector = UKismetMathLibrary::GetDirectionUnitVector(VehicleRef->GetActorLocation(), GetActorLocation());
@@ -543,10 +548,78 @@ void AEnemyCharacter::Landed(const FHitResult& Hit)
     Super::Landed(Hit);
 
     //when we land on the ground, pathfind to point
-    PathfindToPoint();
+    if (EnemyState == EEnemyState::PATROLLING)
+    {
+        TravelToNewPatrolPoint();
+    }
+    else
+    {
+        PathfindToPoint();
+    }
+    
 }
 
 EEnemyState AEnemyCharacter::GetEnemyState() const
 {
     return EnemyState;
 }
+
+void AEnemyCharacter::SetEnemyState(EEnemyState NewState)
+{
+    EnemyState = NewState;
+}
+
+void AEnemyCharacter::BeginPatrol(APatrolArea* NewPatrolArea)
+{
+    SetEnemyState(EEnemyState::PATROLLING);
+    PatrolArea = NewPatrolArea;
+    TravelToNewPatrolPoint();
+}
+
+void AEnemyCharacter::TickPatrol(float DeltaTime)
+{
+    //are we close enough to the patrol point?
+    if (FVector::DistSquared(GetActorLocation(), PatrolPointLocation) < PatrolDistance * PatrolDistance)
+    {
+        TravelToNewPatrolPoint();
+    }
+}
+
+void AEnemyCharacter::TravelToNewPatrolPoint()
+{
+    //set a point to travel to
+    PatrolPointLocation = PatrolArea->GetRandomPatrolPoint();
+
+    //get the ai controller
+    AEnemyAIController* AIController = Cast<AEnemyAIController>(GetController());
+    if (AIController == nullptr)
+    {
+        LogError("failed to get ai controller for enemy");
+        return;
+    }
+    
+    //get the nav system
+    UNavigationSystemV1* NavSystem = Cast<UNavigationSystemV1>(GetWorld()->GetNavigationSystem());
+    if(NavSystem == nullptr)
+    {
+        LogError("failed to get the nav system in character");
+        return;
+    }
+    
+    //find the closest point on the navmesh to the location
+    FNavLocation OutLocation;
+    const FVector Extent(5000.f);
+    if(NavSystem->ProjectPointToNavigation(PatrolPointLocation, OutLocation, Extent))
+    {
+        //travel to that point
+        AIController->MoveToLocation(OutLocation, 1.0f);
+    }
+    else
+    {
+        FString DebugMessage = "Enemy failed to pathfind to ";
+        DebugMessage.Append(GetActorNameOrLabel());
+        GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, DebugMessage);
+    }
+}
+
+

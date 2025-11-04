@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "EnemyCharacter.generated.h"
 
+class APatrolArea;
 class UNiagaraSystem;
 class AVehicle;
 class AVehicularGameState;
@@ -13,7 +14,8 @@ enum class EEnemyState : uint8 {
 	IDLE UMETA(DisplayName = "Idle"),
 	RUNNING UMETA(DisplayName = "Running"),
 	LUNGING UMETA(DisplayName = "Lunging"),
-	ATTACKING UMETA(DisplayName = "Attacking")
+	ATTACKING UMETA(DisplayName = "Attacking"),
+	PATROLLING UMETA(DisplayName = "Patrolling")
 };
 
 UCLASS()
@@ -48,7 +50,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 	EEnemyState GetEnemyState() const;
 
+	UFUNCTION()
+	void SetEnemyState(EEnemyState NewState);
+
+	UFUNCTION()
+	void BeginPatrol(APatrolArea* NewPatrolArea);
+
 private:
+	//tick logic for the enemy while in a patrolling state
+	UFUNCTION()
+	void TickPatrol(float DeltaTime);
+
+	UFUNCTION()
+	void TravelToNewPatrolPoint();
 	
 	//reference to the game state
 	UPROPERTY()
@@ -157,4 +171,13 @@ private:
 
 	UPROPERTY()
 	EEnemyState EnemyState = EEnemyState::RUNNING;
+
+	UPROPERTY()
+	APatrolArea* PatrolArea = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category="Patrolling", meta=(AllowPrivateAccess="true"))
+	float PatrolDistance = 2000.0f;
+
+	UPROPERTY()
+	FVector PatrolPointLocation = FVector::Zero();
 };
