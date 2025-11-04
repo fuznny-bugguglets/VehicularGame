@@ -60,6 +60,9 @@ private:
 	//tick logic for the enemy while in a patrolling state
 	UFUNCTION()
 	void TickPatrol(float DeltaTime);
+
+	UFUNCTION()
+	void TravelToNewPatrolPoint();
 	
 	//reference to the game state
 	UPROPERTY()
@@ -172,6 +175,9 @@ private:
 	UPROPERTY()
 	APatrolArea* PatrolArea = nullptr;
 
+	UPROPERTY(EditDefaultsOnly, Category="Patrolling", meta=(AllowPrivateAccess="true"))
+	float PatrolDistance = 2000.0f;
+
 	UPROPERTY()
-	float ElapsedIdleTime = 0.0f;
+	FVector PatrolPointLocation = FVector::Zero();
 };

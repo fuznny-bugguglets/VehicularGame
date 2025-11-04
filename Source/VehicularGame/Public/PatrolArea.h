@@ -25,6 +25,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Called by an enemy when they need a new location to travel to
+	FVector GetRandomPatrolPoint() const;
+
 
 private:
 	//all the areas an enemy could go to while patrolling
