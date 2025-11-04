@@ -198,6 +198,9 @@ void AEnemyCharacter::Tick(float DeltaTime)
         ElapsedLungeCooldownTime = 0.0f;
     	break;
 
+    case EEnemyState::PATROLLING:
+        
+
     default:
         break;
 
@@ -550,3 +553,20 @@ EEnemyState AEnemyCharacter::GetEnemyState() const
 {
     return EnemyState;
 }
+
+void AEnemyCharacter::SetEnemyState(EEnemyState NewState)
+{
+    EnemyState = NewState;
+}
+
+void AEnemyCharacter::BeginPatrol(APatrolArea* NewPatrolArea)
+{
+    PatrolArea = NewPatrolArea;
+    SetEnemyState(EEnemyState::PATROLLING);
+}
+
+void AEnemyCharacter::TickPatrol(float DeltaTime)
+{
+    
+}
+
