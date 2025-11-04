@@ -548,7 +548,15 @@ void AEnemyCharacter::Landed(const FHitResult& Hit)
     Super::Landed(Hit);
 
     //when we land on the ground, pathfind to point
-    PathfindToPoint();
+    if (EnemyState == EEnemyState::PATROLLING)
+    {
+        TravelToNewPatrolPoint();
+    }
+    else
+    {
+        PathfindToPoint();
+    }
+    
 }
 
 EEnemyState AEnemyCharacter::GetEnemyState() const
@@ -605,6 +613,12 @@ void AEnemyCharacter::TravelToNewPatrolPoint()
     {
         //travel to that point
         AIController->MoveToLocation(OutLocation, 1.0f);
+    }
+    else
+    {
+        FString DebugMessage = "Enemy failed to pathfind to ";
+        DebugMessage.Append(GetActorNameOrLabel());
+        GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, DebugMessage);
     }
 }
 

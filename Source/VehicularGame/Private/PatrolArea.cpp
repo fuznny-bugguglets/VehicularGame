@@ -20,22 +20,39 @@ void APatrolArea::BeginPlay()
 	//check we have patrol points
 	checkf(PatrolPoints.Num() > 0, TEXT("There is a Patrol Area without any Patrol Points. Look for %s and fix it up"), *GetActorNameOrLabel())
 
+	//force the enemies to spawn
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	
 	//spawn enemies and set them to patrol
 	for (uint8 i = 0; i < SmallEnemiesToSpawn; i++)
 	{
-		GetWorld()->SpawnActor<AEnemyCharacter>(SmallEnemyClass, GetActorLocation(), GetActorRotation())->BeginPatrol(this);
+		if (AEnemyCharacter* Enemy = GetWorld()->SpawnActor<AEnemyCharacter>(SmallEnemyClass, GetActorLocation(), GetActorRotation(), SpawnParameters))
+		{
+			Enemy->BeginPatrol(this);
+		}
 	}
 	for (uint8 i = 0; i < MediumEnemiesToSpawn; i++)
 	{
-		GetWorld()->SpawnActor<AEnemyCharacter>(MediumEnemyClass, GetActorLocation(), GetActorRotation())->BeginPatrol(this);
+		if (AEnemyCharacter* Enemy = GetWorld()->SpawnActor<AEnemyCharacter>(MediumEnemyClass, GetActorLocation(), GetActorRotation(), SpawnParameters))
+		{
+			Enemy->BeginPatrol(this);
+		}
+		
 	}
 	for (uint8 i = 0; i < LargeEnemiesToSpawn; i++)
 	{
-		GetWorld()->SpawnActor<AEnemyCharacter>(LargeEnemyClass, GetActorLocation(), GetActorRotation())->BeginPatrol(this);
+		if (AEnemyCharacter* Enemy = GetWorld()->SpawnActor<AEnemyCharacter>(LargeEnemyClass, GetActorLocation(), GetActorRotation(), SpawnParameters))
+		{
+			Enemy->BeginPatrol(this);
+		}
 	}
 	for (uint8 i = 0; i < HugeEnemiesToSpawn; i++)
 	{
-		GetWorld()->SpawnActor<AEnemyCharacter>(HugeEnemyClass, GetActorLocation(), GetActorRotation())->BeginPatrol(this);
+		if (AEnemyCharacter* Enemy = GetWorld()->SpawnActor<AEnemyCharacter>(HugeEnemyClass, GetActorLocation(), GetActorRotation(), SpawnParameters))
+		{
+			Enemy->BeginPatrol(this);
+		}
 	}
 }
 
