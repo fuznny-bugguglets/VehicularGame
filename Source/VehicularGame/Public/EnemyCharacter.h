@@ -155,7 +155,7 @@ private:
 	float PlayerMinSpeed = 30.0f;
 
 	void UpdateSpeed(float DeltaTime);
-	void RotateToGround(float DeltaTime);
+	void RotateToGround(float DeltaTime) const;
 	void PathfindToPoint();
 	void HitByPlayer();
 
@@ -175,8 +175,13 @@ private:
 	UPROPERTY()
 	APatrolArea* PatrolArea = nullptr;
 
+	//how close the enemy must be to a patrol point until it is marked as "arrived"
 	UPROPERTY(EditDefaultsOnly, Category="Patrolling", meta=(AllowPrivateAccess="true"))
 	float PatrolDistance = 2000.0f;
+
+	//how close the enemy must be to the player to be angry
+	UPROPERTY(EditDefaultsOnly, Category="Patrolling", meta=(AllowPrivateAccess="true")) 
+	float AgroDistance = 15000.0f;
 
 	UPROPERTY()
 	FVector PatrolPointLocation = FVector::Zero();
