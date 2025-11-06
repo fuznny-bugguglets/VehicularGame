@@ -15,6 +15,15 @@ AStalker::AStalker()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	USceneComponent* TempSceneComponent = CreateDefaultSubobject<USceneComponent>("Scene Comp");
+	SetRootComponent(TempSceneComponent);
+	
+	StalkerMesh = CreateDefaultSubobject<USkeletalMeshComponent>("Stalker Mesh");
+	StalkerMesh->SetupAttachment(TempSceneComponent);
+
+	DamageBallMesh = CreateDefaultSubobject<UStaticMeshComponent>("Damage Ball Mesh");
+	DamageBallMesh->SetupAttachment(StalkerMesh);
+
 }
 
 // Called when the game starts or when spawned
@@ -26,21 +35,17 @@ void AStalker::BeginPlay()
 	Vehicle = Cast<AVehicle>(UGameplayStatics::GetActorOfClass(this, AVehicle::StaticClass()));
 	checkf(Vehicle, TEXT("Tried to get a reference to the player stalker, but couldn't find anything"));
 
-	//get the children in the spline blueprint actor
+	//get the spline
 	checkf(SplineActorReference, TEXT("No spline actor reference for %s"), *GetActorNameOrLabel());
-	TArray<AActor*> SplineActorChildren;
-	SplineActorReference->GetAllChildActors(SplineActorChildren);
-
-	//find the spline component
-	for (AActor* Child : SplineActorChildren)
-	{
-		if (USplineComponent* TempSplineComponent = Cast<USplineComponent>(Child))
-		{
-			SplineComponent = TempSplineComponent;
-		}
-	}
-	checkf(SplineActorReference, TEXT("Failed to find a spline component in %s, which is referenced in"),
+	SplineComponent = SplineActorReference->GetComponentByClass<USplineComponent>();
+	checkf(SplineComponent, TEXT("Failed to find a spline component in %s, which is referenced in"),
 		*SplineActorReference->GetActorNameOrLabel(), *GetActorNameOrLabel());
+
+	//ball
+	DamageBallMesh->SetRelativeScale3D(FVector(0.01f));
+	DamageBallMesh->OnComponentBeginOverlap.AddDynamic(this, &AStalker::OnBubbleOverlap);
+	DamageBallMesh->OnComponentEndOverlap.AddDynamic(this, &AStalker::OnBubbleEndOverlap);
+	
 	
 }
 
@@ -71,6 +76,10 @@ void AStalker::TickWalking(float DeltaTime)
 {
 	//increment along the spline
 	MovementAlpha += DeltaTime / TimeToFinishLoop;
+	if (MovementAlpha > 1.0f)
+	{
+		MovementAlpha -= 1.0f;
+	}
 	const float LerpPoint = FMath::Lerp(0.0f, SplineComponent->GetSplineLength(), MovementAlpha);
 
 	//get location and rotation at that point
@@ -106,12 +115,18 @@ void AStalker::TickBubbleGrowing(float DeltaTime)
 	//increment time
 	ElapsedTime += DeltaTime;
 
+	//set bubble size
+	const float BubbleScale = (ElapsedTime/AttackBubbleGrowSpeed) * AttackBubbleRadius;
+	DamageBallMesh->SetRelativeScale3D(FVector(BubbleScale));
+
 	//has it been enough time yet?
 	if (ElapsedTime >= AttackBubbleGrowSpeed)
 	{
 		//end growing
 		SetStalkerState(BUBBLE_GROWN);
 	}
+
+	TickOverlap(DeltaTime);
 }
 
 void AStalker::TickBubbleGrown(float DeltaTime)
@@ -122,9 +137,46 @@ void AStalker::TickBubbleGrown(float DeltaTime)
 	//has it been enough time yet?
 	if (ElapsedTime >= AttackBubbleHoldTime)
 	{
+		DamageBallMesh->SetRelativeScale3D(FVector(0.01f));
 		SetStalkerState(WALKING);
 	}
+
+	TickOverlap(DeltaTime);
 }
+
+void AStalker::TickOverlap(float DeltaTime)
+{
+	//is the player in the damage bubble?
+	if (bIsOverlapping)
+	{
+		//increment time in the bubble
+		ElapsedOverlapTime += DeltaTime;
+
+		//has the player spent too long in the bubble?
+		if (ElapsedOverlapTime >= TimeBetweenDamageEvents)
+		{
+			//damage them
+			ElapsedOverlapTime = 0.0f;
+			const TSubclassOf<UDamageType> DamageType;
+			UGameplayStatics::ApplyDamage(Vehicle, DamageGiven, nullptr, this, DamageType);
+			
+		}
+	}
+}
+
+
+void AStalker::OnBubbleOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	//it should only ever damage with vehicle
+	bIsOverlapping = true;
+}
+
+void AStalker::OnBubbleEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	bIsOverlapping = false;
+}
+
 
 void AStalker::SetStalkerState(EStalkerState NewStalkerState)
 {
