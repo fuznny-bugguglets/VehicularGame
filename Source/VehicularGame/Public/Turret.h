@@ -43,17 +43,19 @@ private:
 	int32 MaxAmmoCount = 10;
 
 	//the current amount of ammo the turret has
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	int32 AmmoCount = 0;
 
 	//the time in seconds it takes to reload
-	UPROPERTY(EditDefaultsOnly, Category = "Ammo", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(BlueprintReadOnly,EditDefaultsOnly, Category = "Ammo", meta = (AllowPrivateAccess = "true"))
 	float ReloadTime = 1.0f;
 
 	//whether this turret is currently reloading
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool bIsReloading = false;
 
 	//how long we have been reloading for
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float ElapsedReloadTime = 0.0f;
 
 	//seconds since we last fired a bullet
