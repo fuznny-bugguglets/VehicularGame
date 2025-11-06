@@ -14,9 +14,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Main3.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Main3.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/EnemyCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/EnemyCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/EnemyCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/EnemyCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Tutorial.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Tutorial.umap" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +55,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "bugFixes",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -204,7 +202,7 @@
       <workItem from="1762217639241" duration="8756000" />
       <workItem from="1762382241698" duration="9902000" />
       <workItem from="1762417699090" duration="6085000" />
-      <workItem from="1762427119473" duration="1456000" />
+      <workItem from="1762427119473" duration="2454000" />
     </task>
     <servers />
   </component>
