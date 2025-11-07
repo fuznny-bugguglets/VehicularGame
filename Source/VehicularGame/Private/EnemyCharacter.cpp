@@ -114,10 +114,8 @@ void AEnemyCharacter::Tick(float DeltaTime)
     }
 
     //declares for the switch statement
-    float DistanceToPlayer = 0.0f;
-    FVector NewLocation = FVector::Zero();
-    FVector TargetLocation = FVector::Zero();
-    AAIController* AIController = nullptr;
+    FVector NewLocation;
+    AAIController* AIController;
 
     switch (EnemyState)
     {
@@ -137,7 +135,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
         if (ElapsedLungeCooldownTime > LungeCooldown)
         {
             //check distance from player
-            DistanceToPlayer = FVector::DistSquared(GetActorLocation(), VehicleRef->GetActorLocation());
+            float DistanceToPlayer = FVector::DistSquared(GetActorLocation(), VehicleRef->GetActorLocation());
             //is it close enough to lunge?
             if (DistanceToPlayer < LungeDistance * LungeDistance)
             {
@@ -148,7 +146,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
                 ElapsedLungeTime = 0.0f;
 
                 //direction amount in front of the player
-                TargetLocation = VehicleRef->GetActorForwardVector() * VehicleRef->GetSpeed();
+                FVector TargetLocation = VehicleRef->GetActorForwardVector() * VehicleRef->GetSpeed();
                 TargetLocation *= FMath::RandRange(MinLungeForwardPredictionFactor, MaxLungeForwardPredictionFactor);
 
                 //add it to the player location
@@ -245,16 +243,14 @@ void AEnemyCharacter::Die()
     GetCharacterMovement()->DisableMovement();
 
     // Disable all collision on the capsule
-    UCapsuleComponent* CapsuleComp = GetCapsuleComponent();
-    if (CapsuleComp)
+    if (UCapsuleComponent* CapsuleComp = GetCapsuleComponent())
     {
         CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
         CapsuleComp->SetCollisionResponseToAllChannels(ECR_Ignore);
     }
 
     // Stop AI Controller
-    AAIController* AIController = Cast<AAIController>(GetController());
-    if (AIController)
+    if (AAIController* AIController = Cast<AAIController>(GetController()))
     {
         AIController->StopMovement();
     }
@@ -301,9 +297,9 @@ void AEnemyCharacter::UpdateSpeed(float DeltaTime)
         return;
     }
 
-    
 
-    AEnemyAIController* EnemyAIController = Cast<AEnemyAIController>(GetController());
+
+    const AEnemyAIController* EnemyAIController = Cast<AEnemyAIController>(GetController());
     if(EnemyAIController == nullptr)
     {
         LogError("failed to get the enemy ai controller from enemy character");
@@ -319,12 +315,12 @@ void AEnemyCharacter::UpdateSpeed(float DeltaTime)
     else
     {
         //set target speed based on float curve
-        float SpeedKMH = VehicleRef->GetSpeed() * 0.3666f;
-        float SpeedCurveOutput = MySpeedCurve->GetFloatValue(SpeedKMH);
+        const float SpeedKMH = VehicleRef->GetSpeed() * 0.3666f;
+        const float SpeedCurveOutput = MySpeedCurve->GetFloatValue(SpeedKMH);
         TargetSpeed = SpeedCurveOutput + SpeedKMH;
     }
 
-    float ClampResult = 0.0f;
+    float ClampResult;
     //is our average target speed greater than our current target speed?
     if(RollingAverageTargetSpeed > TargetSpeed)
     {
@@ -353,7 +349,7 @@ void AEnemyCharacter::UpdateSpeed(float DeltaTime)
     
 }
 
-void AEnemyCharacter::RotateToGround(float DeltaTime)
+void AEnemyCharacter::RotateToGround(float DeltaTime) const
 {
     //raycast down
     FHitResult HitResult;
@@ -582,6 +578,14 @@ void AEnemyCharacter::TickPatrol(float DeltaTime)
     if (FVector::DistSquared(GetActorLocation(), PatrolPointLocation) < PatrolDistance * PatrolDistance)
     {
         TravelToNewPatrolPoint();
+    }
+
+    //are we close enough to the player?
+    if (FVector::DistSquared(GetActorLocation(), VehicleRef->GetActorLocation()) < AgroDistance * AgroDistance)
+    {
+        //anger towards player
+        SetEnemyState(EEnemyState::RUNNING);
+        PathfindToPoint();
     }
 }
 
