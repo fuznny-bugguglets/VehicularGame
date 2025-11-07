@@ -26,13 +26,13 @@ public:
 	void OnButtonClicked();
 
 	UFUNCTION()
-	void SetUpgradeID(uint8 IncomingID);
-
-	UFUNCTION()
-	void SetText(const FText& InText);
+	void SetupFromID(uint8 IncomingID);
 
 	UFUNCTION()
 	void SetMechanicWidget(UMechanicWidget* IncomingPtr);
+
+	UFUNCTION()
+	void RefreshDisplay();
 
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))

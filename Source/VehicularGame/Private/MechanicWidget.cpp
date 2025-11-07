@@ -35,6 +35,7 @@ void UMechanicWidget::NativeConstruct()
 	{
 		//create the widget
 		UUpgradeButtonWidget* UpgradeButtonObj = CreateWidget<UUpgradeButtonWidget>(GetWorld(), UpgradeButtonClass);
+		UpgradeButtons.Add(UpgradeButtonObj);
 
 		//make sure it actually created
 		if (!UpgradeButtonObj)
@@ -43,13 +44,10 @@ void UMechanicWidget::NativeConstruct()
 		}
 
 		//set its ID
-		UpgradeButtonObj->SetUpgradeID(UUpgradeManager::GetIndexFromUpgrade(Upgrade));
+		UpgradeButtonObj->SetupFromID(UUpgradeManager::GetIndexFromUpgrade(Upgrade));
 
 		//give it a reference to us
 		UpgradeButtonObj->SetMechanicWidget(this);
-
-		//set its text
-		UpgradeButtonObj->SetText(Upgrade.Name);
 		
 		//figure out which tree it belongs to
 		UHorizontalBox* ThisUpgradeTree = GetUpgradeTree(Upgrade.Tree, Upgrade.Level);
@@ -200,33 +198,43 @@ void UMechanicWidget::DisplayUpgradeInformation(uint8 UpgradeID)
 	//set the name to display
 	NameText->SetText(Upgrade.Name);
 
-	//build a string with the costs
+	//string below the name
 	FString TotalCostString;
-	TotalCostString.Append("Cost:");
-	TotalCostString.Append("\n");
-
-	//assume we can afford it
-	bCanUnlockUpgrade = true;
-
-	//loop through each cost associated with the upgrade
-	for (auto [Tier, Type, Amount] : Upgrade.Cost)
+	
+	//is it unlocked?
+	if (GetGameInstance()->GetSubsystem<UUpgradeSubsystem>()->GetUnlockStatus(UpgradeID))
 	{
-		//get the name of the item
-		FText Name = UItemManager::GetItemFromTypeAndTier(Type, Tier).Name;
-
-		//add to the cost string
-		TotalCostString.Append(FString::FromInt(Amount));
-		TotalCostString.Append("x ");
-		TotalCostString.Append(Name.ToString());
+		TotalCostString.Append("Unlocked");
+	}
+	else
+	{
+		//build a string with the costs
+		TotalCostString.Append("Cost:");
 		TotalCostString.Append("\n");
 
-		//get the amount of this item the player has
-		int32 ItemCount = InventorySubsystem->GetItemCountFromCityStorage(UItemManager::GetItemFromTypeAndTier(Type, Tier));
+		//assume we can afford it
+		bCanUnlockUpgrade = true;
 
-		//does the player have less than the required amount?
-		if (ItemCount < Amount)
+		//loop through each cost associated with the upgrade
+		for (auto [Tier, Type, Amount] : Upgrade.Cost)
 		{
-			bCanUnlockUpgrade = false;
+			//get the name of the item
+			FText Name = UItemManager::GetItemFromTypeAndTier(Type, Tier).Name;
+
+			//add to the cost string
+			TotalCostString.Append(FString::FromInt(Amount));
+			TotalCostString.Append("x ");
+			TotalCostString.Append(Name.ToString());
+			TotalCostString.Append("\n");
+
+			//get the amount of this item the player has
+			int32 ItemCount = InventorySubsystem->GetItemCountFromCityStorage(UItemManager::GetItemFromTypeAndTier(Type, Tier));
+
+			//does the player have less than the required amount?
+			if (ItemCount < Amount)
+			{
+				bCanUnlockUpgrade = false;
+			}
 		}
 	}
 
@@ -312,8 +320,14 @@ void UMechanicWidget::OnUnlockButtonClicked()
 	//apply the upgrade
 	UpgradeSubsystem->ProcessUpgrade(Upgrade);
 
-	//hide the unlock button
-	UnlockButton->SetVisibility(ESlateVisibility::Hidden);
+	//refresh display
+	DisplayUpgradeInformation(SelectedUpgradeID);
+
+	//refresh upgrade buttons
+	for (auto UpgradeButton : UpgradeButtons)
+	{
+		UpgradeButton->RefreshDisplay();
+	}
 	
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, "unlocked!");
 }
