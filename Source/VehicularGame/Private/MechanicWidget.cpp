@@ -66,7 +66,7 @@ void UMechanicWidget::NativeConstruct()
 			ThisHBoxSlot->SetSize(FSlateChildSize(ESlateSizeRule::Fill));
 
 			//set padding
-			ThisHBoxSlot->SetPadding(20.0f);
+			ThisHBoxSlot->SetPadding(10.0f);
 		}
 	}
 	

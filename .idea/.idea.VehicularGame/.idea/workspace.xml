@@ -14,6 +14,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/Content/UI_Elements/City/Mechanic/BP_Mechanic.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/City/Mechanic/BP_Mechanic.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/City/Mechanic/WB_UpgradeButton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/City/Mechanic/WB_UpgradeButton.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/MechanicWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/MechanicWidget.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,7 +207,7 @@
       <workItem from="1762417699090" duration="6085000" />
       <workItem from="1762427119473" duration="3358000" />
       <workItem from="1762522428254" duration="1835000" />
-      <workItem from="1762825172765" duration="2694000" />
+      <workItem from="1762825172765" duration="3286000" />
     </task>
     <servers />
   </component>
