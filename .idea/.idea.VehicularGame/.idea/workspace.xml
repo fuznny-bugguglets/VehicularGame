@@ -13,7 +13,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/MechanicWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/MechanicWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/Ruin.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/Ruin.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -207,7 +208,7 @@
       <workItem from="1762427119473" duration="3358000" />
       <workItem from="1762522428254" duration="1835000" />
       <workItem from="1762825172765" duration="3757000" />
-      <workItem from="1762848516840" duration="5900000" />
+      <workItem from="1762848516840" duration="6618000" />
     </task>
     <servers />
   </component>
