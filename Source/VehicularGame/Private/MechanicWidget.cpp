@@ -16,7 +16,6 @@ void UMechanicWidget::NativeConstruct()
 
 	//setup bindings for the selection buttons
 	TurretTreeButton->OnClicked.AddDynamic(this, &UMechanicWidget::OnTurretTreeButtonClicked);
-	BumperTreeButton->OnClicked.AddDynamic(this, &UMechanicWidget::OnBumperTreeButtonClicked);
 	CrewTreeButton->OnClicked.AddDynamic(this, &UMechanicWidget::OnCrewTreeButtonClicked);
 	CarTreeButton->OnClicked.AddDynamic(this, &UMechanicWidget::OnCarTreeButtonClicked);
 
@@ -103,29 +102,6 @@ UHorizontalBox* UMechanicWidget::GetUpgradeTree(EUpgradeTree UpgradeTree, uint8 
 		}
 		
 		break;
-
-	case EUpgradeTree::Bumper:
-		//switch on the index
-		switch (Index)
-		{
-		case 1:
-			return BumperTreeLevel1;
-
-		case 2:
-			return BumperTreeLevel2;
-
-		case 3:
-			return BumperTreeLevel3;
-
-		case 4:
-			return BumperTreeLevel4;
-
-		case 5:
-			return BumperTreeLevel5;
-
-		default:
-			break;
-		}
 
 	case EUpgradeTree::Crew:
 		//switch on the index
@@ -274,11 +250,6 @@ void UMechanicWidget::DisplayUpgradeInformation(uint8 UpgradeID)
 void UMechanicWidget::OnTurretTreeButtonClicked()
 {
 	TreeSwitcher->SetActiveWidgetIndex(0);
-}
-
-void UMechanicWidget::OnBumperTreeButtonClicked()
-{
-	TreeSwitcher->SetActiveWidgetIndex(1);
 }
 
 void UMechanicWidget::OnCrewTreeButtonClicked()

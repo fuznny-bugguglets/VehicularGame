@@ -44,9 +44,6 @@ protected:
 	UButton* TurretTreeButton = nullptr;
 
 	UPROPERTY(meta = (BindWidget))
-	UButton* BumperTreeButton = nullptr;
-
-	UPROPERTY(meta = (BindWidget))
 	UButton* CrewTreeButton = nullptr;
 
 	UPROPERTY(meta = (BindWidget))
@@ -66,21 +63,6 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* TurretTreeLevel5;
-
-	UPROPERTY(meta = (BindWidget))
-	UHorizontalBox* BumperTreeLevel1;
-
-	UPROPERTY(meta = (BindWidget))
-	UHorizontalBox* BumperTreeLevel2;
-
-	UPROPERTY(meta = (BindWidget))
-	UHorizontalBox* BumperTreeLevel3;
-
-	UPROPERTY(meta = (BindWidget))
-	UHorizontalBox* BumperTreeLevel4;
-
-	UPROPERTY(meta = (BindWidget))
-	UHorizontalBox* BumperTreeLevel5;
 
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* CrewTreeLevel1;
@@ -126,9 +108,6 @@ protected:
 	
 	UFUNCTION()
 	void OnTurretTreeButtonClicked();
-
-	UFUNCTION()
-	void OnBumperTreeButtonClicked();
 
 	UFUNCTION()
 	void OnCrewTreeButtonClicked();
