@@ -291,8 +291,6 @@ void UMechanicWidget::OnUnlockButtonClicked()
 	{
 		UpgradeButton->RefreshDisplay();
 	}
-	
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, "unlocked!");
 }
 
 void UMechanicWidget::HideInformationPanel()
