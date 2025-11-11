@@ -48,4 +48,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	bool bCrewTutorialSeen;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool bMechanicTutorialSeen;
 };

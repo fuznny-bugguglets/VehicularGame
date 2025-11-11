@@ -16,4 +16,5 @@ UVehicularSaveGame::UVehicularSaveGame()
 	}
 	bRelicsTutorialSeen = false;
 	bCrewTutorialSeen = false;
+	bMechanicTutorialSeen = false;
 }
