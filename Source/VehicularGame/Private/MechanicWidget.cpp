@@ -207,28 +207,33 @@ void UMechanicWidget::DisplayUpgradeInformation(uint8 UpgradeID)
 	//get the upgrade subsystem
 	UUpgradeSubsystem* UpgradeSubsystem = GetGameInstance()->GetSubsystem<UUpgradeSubsystem>();
 	if (!UpgradeSubsystem) return;
-	
-	//has the player unlocked this already?
-	if (UpgradeSubsystem->GetUnlockStatus(UpgradeID))
-	{
-		//hide the unlock button
-		UnlockButton->SetVisibility(ESlateVisibility::Hidden);
-	}
-	else
-	{
-		//display the unlock button
-		UnlockButton->SetVisibility(ESlateVisibility::Visible);
-	}
 
-	
-	//can we afford it?
-	if (bCanUnlockUpgrade)
+	//is it enabled?
+	if (UpgradeSubsystem->GetUpgradeEnabledStatus(UpgradeID))
 	{
-		UnlockButton->SetBackgroundColor(FColor::Green);
+		//is it affordable?
+		if (bCanUnlockUpgrade)
+		{
+			//is it already unlocked?
+			if (UpgradeSubsystem->GetUnlockStatus(UpgradeID))
+			{
+				UnlockButton->SetVisibility(ESlateVisibility::Hidden);
+			}
+			else
+			{
+				UnlockButton->SetVisibility(ESlateVisibility::Visible);
+				UnlockButton->SetBackgroundColor(FColor::Green);
+			}
+		}
+		else
+		{
+			UnlockButton->SetVisibility(ESlateVisibility::Visible);
+			UnlockButton->SetBackgroundColor(FColor::Red);
+		}
 	}
 	else
 	{
-		UnlockButton->SetBackgroundColor(FColor::Red);
+		UnlockButton->SetVisibility(ESlateVisibility::Hidden);
 	}
 
 	
