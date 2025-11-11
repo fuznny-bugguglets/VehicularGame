@@ -24,6 +24,9 @@ public:
 	void DisplayUpgradeInformation(uint8 UpgradeID);
 	void HideInformationPanel();
 
+	bool CanAffordUpgrade(const uint8 Index) const;
+	bool CanAffordUpgrade(const FUpgrade& Upgrade) const;
+
 protected:
 	UPROPERTY(EditAnywhere, Category="Classes", meta=(AllowPrivateAccess="true"))
 	TSubclassOf<UUpgradeButtonWidget> UpgradeButtonClass;

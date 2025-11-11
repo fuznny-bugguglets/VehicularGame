@@ -45,13 +45,13 @@ protected:
 	FColor LockedColour = FColor::Purple;
 
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"))
-	FColor Unaffordable = FColor::Purple;
+	FColor UnaffordableColour = FColor::Purple;
 
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"))
-	FColor Affordable = FColor::Purple;
+	FColor AffordableColour = FColor::Purple;
 
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"))
-	FColor Purchased = FColor::Purple;
+	FColor PurchasedColour = FColor::Purple;
 
 	UPROPERTY()
 	uint8 UpgradeID = 255;

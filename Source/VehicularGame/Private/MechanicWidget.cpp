@@ -42,11 +42,11 @@ void UMechanicWidget::NativeConstruct()
 			return;
 		}
 
-		//set its ID
-		UpgradeButtonObj->SetupFromID(UUpgradeManager::GetIndexFromUpgrade(Upgrade));
-
 		//give it a reference to us
 		UpgradeButtonObj->SetMechanicWidget(this);
+		
+		//set its ID
+		UpgradeButtonObj->SetupFromID(UUpgradeManager::GetIndexFromUpgrade(Upgrade));
 		
 		//figure out which tree it belongs to
 		UHorizontalBox* ThisUpgradeTree = GetUpgradeTree(Upgrade.Tree, Upgrade.Level);
@@ -167,10 +167,6 @@ void UMechanicWidget::DisplayUpgradeInformation(uint8 UpgradeID)
 	//get the upgrade information
 	FUpgrade& Upgrade = UUpgradeManager::GetUpgradeFromIndex(UpgradeID);
 
-	//get the inventory subsystem
-	UInventorySubsystem* InventorySubsystem = GetGameInstance()->GetSubsystem<UInventorySubsystem>();
-	if (!InventorySubsystem) return;
-
 	//set the name to display
 	NameText->SetText(Upgrade.Name);
 
@@ -189,9 +185,9 @@ void UMechanicWidget::DisplayUpgradeInformation(uint8 UpgradeID)
 		TotalCostString.Append("\n");
 
 		//assume we can afford it
-		bCanUnlockUpgrade = true;
+		bCanUnlockUpgrade = CanAffordUpgrade(Upgrade);
 
-		//loop through each cost associated with the upgrade
+		//get the costs of the upgrade
 		for (auto [Tier, Type, Amount] : Upgrade.Cost)
 		{
 			//get the name of the item
@@ -202,15 +198,6 @@ void UMechanicWidget::DisplayUpgradeInformation(uint8 UpgradeID)
 			TotalCostString.Append("x ");
 			TotalCostString.Append(Name.ToString());
 			TotalCostString.Append("\n");
-
-			//get the amount of this item the player has
-			int32 ItemCount = InventorySubsystem->GetItemCountFromCityStorage(UItemManager::GetItemFromTypeAndTier(Type, Tier));
-
-			//does the player have less than the required amount?
-			if (ItemCount < Amount)
-			{
-				bCanUnlockUpgrade = false;
-			}
 		}
 	}
 
@@ -312,3 +299,33 @@ void UMechanicWidget::HideInformationPanel()
 	NameText->SetText(FText::GetEmpty());
 	CostText->SetText(FText::GetEmpty());
 }
+
+bool UMechanicWidget::CanAffordUpgrade(const uint8 Index) const
+{
+	return CanAffordUpgrade(UUpgradeManager::GetUpgradeFromIndex(Index));
+}
+
+bool UMechanicWidget::CanAffordUpgrade(const FUpgrade& Upgrade) const
+{
+	if (!GetGameInstance()) return false;
+	
+	//grab the inventory subsystem
+	UInventorySubsystem* InventorySubsystem = GetGameInstance()->GetSubsystem<UInventorySubsystem>();
+	if (!InventorySubsystem) return false;
+	
+	//loop through each cost associated with the upgrade
+	for (auto [Tier, Type, Amount] : Upgrade.Cost)
+	{
+		//get the amount of this item the player has
+		int32 ItemCount = InventorySubsystem->GetItemCountFromCityStorage(UItemManager::GetItemFromTypeAndTier(Type, Tier));
+
+		//does the player have less than the required amount?
+		if (ItemCount < Amount)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
