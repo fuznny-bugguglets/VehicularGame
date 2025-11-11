@@ -41,6 +41,18 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ButtonText = nullptr;
 
+	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"))
+	FColor LockedColour = FColor::Purple;
+
+	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"))
+	FColor Unaffordable = FColor::Purple;
+
+	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"))
+	FColor Affordable = FColor::Purple;
+
+	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"))
+	FColor Purchased = FColor::Purple;
+
 	UPROPERTY()
 	uint8 UpgradeID = 255;
 
@@ -52,5 +64,6 @@ protected:
 
 	UPROPERTY()
 	UMechanicWidget* MechanicWidget = nullptr;
+	
 	
 };
