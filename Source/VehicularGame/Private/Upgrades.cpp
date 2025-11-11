@@ -3,6 +3,9 @@
 
 #include "Upgrades.h"
 
+#include "InventorySubsystem.h"
+#include "Kismet/GameplayStatics.h"
+
 TArray<FUpgrade> UUpgradeManager::Upgrades;
 
 void UUpgradeManager::AddUpgrade(const FUpgrade& NewUpgrade)
@@ -33,3 +36,6 @@ void UUpgradeManager::ClearUpgrades()
 {
 	Upgrades.Empty();
 }
+
+
+

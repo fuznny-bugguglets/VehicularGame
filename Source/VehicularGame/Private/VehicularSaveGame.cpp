@@ -16,4 +16,8 @@ UVehicularSaveGame::UVehicularSaveGame()
 	}
 	bRelicsTutorialSeen = false;
 	bCrewTutorialSeen = false;
+	bMechanicTutorialSeen = false;
+	TurretUpgradesPurchased = 0;
+	CrewUpgradesPurchased = 0;
+	TruckUpgradesPurchased = 0;
 }

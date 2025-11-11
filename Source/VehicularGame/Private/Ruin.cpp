@@ -197,7 +197,7 @@ void ARuin::BeginPlay()
 				int32 thisRandNumber = selectedNumbers[thisRandIndex];
 				int32 probability = FMath::RandRange(0, 33);
 
-				if (probability <= 10)
+				if (probability <= 13)
 				{
 					Resources.Add(0 + (thisRandNumber * 3));
 				}

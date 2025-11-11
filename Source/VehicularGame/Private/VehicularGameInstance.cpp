@@ -111,6 +111,10 @@ void UVehicularGameInstance::SaveGameData()
 	SaveGameObject->Money = GetSubsystem<UInventorySubsystem>()->GetMoney();
 	//copy the upgrade unlocks into the save data
 	SaveGameObject->UpgradeUnlockStatusMap = GetSubsystem<UUpgradeSubsystem>()->GetUpgradeUnlockStatusMap();
+	//copy upgrades purchased into the save data
+	SaveGameObject->TurretUpgradesPurchased = GetSubsystem<UUpgradeSubsystem>()->GetTurretUpgradesPurchased();
+	SaveGameObject->CrewUpgradesPurchased = GetSubsystem<UUpgradeSubsystem>()->GetCrewUpgradesPurchased();
+	SaveGameObject->TruckUpgradesPurchased = GetSubsystem<UUpgradeSubsystem>()->GetTruckUpgradesPurchased();
 
 	//requests
 	SaveGameObject->RequestAchievementStatus = GetSubsystem<URequestsSubsystem>()->GetRequestAchievementStatusMap();

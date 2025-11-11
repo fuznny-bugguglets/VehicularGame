@@ -53,15 +53,33 @@ void UUpgradeButtonWidget::SetupFromID(uint8 IncomingID)
 
 void UUpgradeButtonWidget::RefreshDisplay()
 {
-	//is it already unlocked?
-	if (GetGameInstance()->GetSubsystem<UUpgradeSubsystem>()->GetUnlockStatus(UpgradeID))
+	//is it enabled?
+	if (GetUpgradeSubsystem()->GetUpgradeEnabledStatus(UpgradeID))
 	{
-		Button->SetBackgroundColor(FColor::Cyan);
+		//is it affordable?
+		if (MechanicWidget->CanAffordUpgrade(UpgradeID))
+		{
+			//is it already unlocked?
+			if (GetUpgradeSubsystem()->GetUnlockStatus(UpgradeID))
+			{
+				Button->SetBackgroundColor(PurchasedColour);
+			}
+			else
+			{
+				Button->SetBackgroundColor(AffordableColour);
+			}
+		}
+		else
+		{
+			Button->SetBackgroundColor(UnaffordableColour);
+		}
 	}
 	else
 	{
-		Button->SetBackgroundColor(FColor::Emerald);
+		Button->SetBackgroundColor(LockedColour);
 	}
+
+	
 }
 
 

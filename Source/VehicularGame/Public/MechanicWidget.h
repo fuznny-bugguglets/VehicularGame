@@ -24,6 +24,9 @@ public:
 	void DisplayUpgradeInformation(uint8 UpgradeID);
 	void HideInformationPanel();
 
+	bool CanAffordUpgrade(const uint8 Index) const;
+	bool CanAffordUpgrade(const FUpgrade& Upgrade) const;
+
 protected:
 	UPROPERTY(EditAnywhere, Category="Classes", meta=(AllowPrivateAccess="true"))
 	TSubclassOf<UUpgradeButtonWidget> UpgradeButtonClass;
@@ -42,9 +45,6 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* TurretTreeButton = nullptr;
-
-	UPROPERTY(meta = (BindWidget))
-	UButton* BumperTreeButton = nullptr;
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* CrewTreeButton = nullptr;
@@ -66,21 +66,6 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* TurretTreeLevel5;
-
-	UPROPERTY(meta = (BindWidget))
-	UHorizontalBox* BumperTreeLevel1;
-
-	UPROPERTY(meta = (BindWidget))
-	UHorizontalBox* BumperTreeLevel2;
-
-	UPROPERTY(meta = (BindWidget))
-	UHorizontalBox* BumperTreeLevel3;
-
-	UPROPERTY(meta = (BindWidget))
-	UHorizontalBox* BumperTreeLevel4;
-
-	UPROPERTY(meta = (BindWidget))
-	UHorizontalBox* BumperTreeLevel5;
 
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* CrewTreeLevel1;
@@ -126,9 +111,6 @@ protected:
 	
 	UFUNCTION()
 	void OnTurretTreeButtonClicked();
-
-	UFUNCTION()
-	void OnBumperTreeButtonClicked();
 
 	UFUNCTION()
 	void OnCrewTreeButtonClicked();
