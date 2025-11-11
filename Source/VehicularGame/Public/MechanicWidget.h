@@ -135,5 +135,9 @@ protected:
 
 	UFUNCTION()
 	void OnCarTreeButtonClicked();
+
+private:
+	UPROPERTY()
+	TArray<UUpgradeButtonWidget*> UpgradeButtons;
 	
 };

@@ -43,18 +43,31 @@ UUpgradeSubsystem* UUpgradeButtonWidget::GetUpgradeSubsystem()
 	return UpgradeSubsystem;
 }
 
-void UUpgradeButtonWidget::SetUpgradeID(uint8 IncomingID)
+void UUpgradeButtonWidget::SetupFromID(uint8 IncomingID)
 {
 	UpgradeID = IncomingID;
+	ButtonText->SetText(UUpgradeManager::GetUpgradeFromIndex(IncomingID).Name);
+
+	RefreshDisplay();
 }
+
+void UUpgradeButtonWidget::RefreshDisplay()
+{
+	//is it already unlocked?
+	if (GetGameInstance()->GetSubsystem<UUpgradeSubsystem>()->GetUnlockStatus(UpgradeID))
+	{
+		Button->SetBackgroundColor(FColor::Cyan);
+	}
+	else
+	{
+		Button->SetBackgroundColor(FColor::Emerald);
+	}
+}
+
 
 void UUpgradeButtonWidget::SetMechanicWidget(UMechanicWidget* IncomingPtr)
 {
 	MechanicWidget = IncomingPtr;
 }
 
-void UUpgradeButtonWidget::SetText(const FText& InText)
-{
-	ButtonText->SetText(InText);
-}
 
