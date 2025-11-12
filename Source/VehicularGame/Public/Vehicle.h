@@ -91,6 +91,9 @@ public:
 	FVector GetDoorLocation() const;
 
 	void ReturnScavenger(AScavengerPawn* Scavenger);
+
+	UFUNCTION(BlueprintCallable)
+	void NarrativeRelicPickedUp(int32 RelicIndex);
  
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Torque", meta = (AllowPrivateAccess = "true"))
@@ -172,6 +175,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category="Sound|Radio", meta = (AllowPrivateAccess = "true"))
 	TArray<USoundBase*> RadioClips;
+
+	UPROPERTY(EditDefaultsOnly, Category="Sound|Relics", meta = (AllowPrivateAccess = "true"))
+	TArray<USoundBase*> RelicClips;
 
 	//default input
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))

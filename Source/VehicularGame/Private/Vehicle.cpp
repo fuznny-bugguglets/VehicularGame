@@ -1207,6 +1207,15 @@ void AVehicle::ReturnScavenger(AScavengerPawn* Scavenger)
 	Scavenger->Destroy();
 }
 
+void AVehicle::NarrativeRelicPickedUp(int32 RelicIndex)
+{
+	//play a sound
+	UGameplayStatics::PlaySound2D(this, RelicClips[RelicIndex-1]);
+
+	//play the ui pop up
+	VehicularGameMode->NarrativeRelicPopUp(RelicClips[RelicIndex-1]->Duration);
+}
+
 void AVehicle::IncrementHealth()
 {
 	Health += 5;
