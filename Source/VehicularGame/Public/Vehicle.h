@@ -225,6 +225,12 @@ private:
 	//reference to the vehicle mesh
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* VehicleMesh;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* BumperMesh;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	int32 BumperHealth = 3;
 	
 	//reference to our turret
 	UPROPERTY()

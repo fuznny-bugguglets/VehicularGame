@@ -45,6 +45,7 @@ AVehicle::AVehicle()
 
 	//setup components and attachment
 	VehicleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Vehicle Mesh"));
+	BumperMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Bumper"));
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	TurretChildActorComponent = CreateDefaultSubobject<UChildActorComponent>(TEXT("Turret"));
@@ -57,7 +58,9 @@ AVehicle::AVehicle()
 	BackLeftWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Back Left Wheel Mesh"));
 	BackRightWheelMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Back Right Wheel Mesh"));
 	DoorLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Door Location"));
+	
 	VehicleMesh->SetupAttachment(RootComponent);
+	BumperMesh->SetupAttachment(VehicleMesh);
 	SpringArm->SetupAttachment(VehicleMesh);
 	Camera->SetupAttachment(SpringArm);
 	TurretChildActorComponent->SetupAttachment(VehicleMesh);
@@ -138,8 +141,7 @@ void AVehicle::BeginPlay()
 	//initialize the turret
 	Turret->InitializeVariables(Camera, this);
 
-	//set our health to our max health
-	Health = MaxHealth;
+	
 
 	ResetAllLoot();
 
@@ -155,7 +157,15 @@ void AVehicle::BeginPlay()
 
 	//wipe the player inventory
 	GetInventorySubsystem()->ClearPlayerInventory();
+
+	BumperHealth += GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::BumperHealth);
+	BumperHealth += GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::BumperImpactAbsorption);
+
+	MaxHealth += GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::VehicleMaxHP);
+	//set our health to our max health
+	Health = MaxHealth;
 	
+	MaxTorqueSpeed += GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::VehicleSpeed);
 	
 }
 
@@ -821,7 +831,12 @@ void AVehicle::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageTyp
 	TimeSinceLastHit = 0;
 
 	//take damage
-	Health -= Damage;
+	float ResistanceUpgrade = GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::VehicleResistance) + 1.0f;
+	float Resistance = 1.0f - (ResistanceUpgrade/10);
+	
+	float ActualDamage = Damage / Resistance;
+	
+	Health -= ActualDamage;
 
 	//should we die?
 	if(Health <= 0)

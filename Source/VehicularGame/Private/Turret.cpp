@@ -4,6 +4,7 @@
 #include "Turret.h"
 
 #include "InventorySubsystem.h"
+#include "Projectile.h"
 #include "VehicularGameState.h"
 #include "TurretRotationComponent.h"
 #include "Camera/CameraComponent.h"
@@ -11,6 +12,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "UpgradeSubsystem.h"
+#include "Vehicle.h"
 
 void ATurret::LogError(const FString& ErrorMessage)
 {
@@ -219,20 +221,41 @@ void ATurret::FireHeld()
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Instigator = ShooterPawn;
 
+		AActor* BulletActor = nullptr;
+		
 		//are we shooting left or right barrel
 		if (bFireFromLeftBarrel)
 		{
 			const FVector Location = BulletSpawnL->GetComponentLocation();
 			const FRotator Rotation = BulletSpawnL->GetComponentRotation();
-			GetWorld()->SpawnActor(BulletBlueprint, &Location, &Rotation, SpawnParams); 
+			BulletActor = GetWorld()->SpawnActor(BulletBlueprint, &Location, &Rotation, SpawnParams); 
 		}
 		else
 		{
 			const FVector Location = BulletSpawnR->GetComponentLocation();
 			const FRotator Rotation = BulletSpawnR->GetComponentRotation();
-			GetWorld()->SpawnActor(BulletBlueprint, &Location, &Rotation, SpawnParams); 
+			BulletActor = GetWorld()->SpawnActor(BulletBlueprint, &Location, &Rotation, SpawnParams); 
 		}
 
+		//grab the player
+		if (!BulletActor) return;
+		AProjectile* BulletRef = Cast<AProjectile>(BulletActor);
+		if (!BulletRef) return;
+		if (!ShooterPawn) return;
+		AVehicle* VehicleRef = Cast<AVehicle>(ShooterPawn);
+		if (!VehicleRef) return;
+
+		//is the player moving?
+		if (VehicleRef->GetSpeed() > 10.0f)
+		{
+			BulletRef->AddBonusDamage(GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretMovingBonusDamage));
+		}
+		else
+		{
+			BulletRef->AddBonusDamage(GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretStationaryBonusDamage));
+		}
+
+		
 		//reset time since last shot
 		TimeSinceLastShot = 0.0f;
 		
@@ -265,7 +288,7 @@ void ATurret::FireReleased()
 //returns a transform with a random amount of spread
 FRotator ATurret::GetRotationWithSpread(const FTransform& InputTransform, const float SpreadAngle) const
 {
-	//get the rotator from the spawn transform
+	//get the rotator from the spawn transform 
 	FRotator MyRotator = InputTransform.Rotator();
 
 	//get randomised directions

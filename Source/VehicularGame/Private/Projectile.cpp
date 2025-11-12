@@ -46,7 +46,7 @@ AProjectile::AProjectile()
 
 void AProjectile::AddBonusDamage(float BonusDamage)
 {
-	
+	Damage += BonusDamage;
 }
 
 
@@ -77,7 +77,10 @@ void AProjectile::BeginPlay()
     UInventorySubsystem* InventorySubsystem = GetGameInstance()->GetSubsystem<UInventorySubsystem>();
 
     Damage += GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretDamage);
+    Damage += GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretExplodingAmmo);
     Damage *= InventorySubsystem->GetPassiveMultiplier(EPassiveType::TurretDamage);
+
+    ProjectilePiercing = GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretPiercingAmmo);
 }
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
@@ -138,6 +141,14 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
     ProjectileMovement->StopMovementImmediately();
     ProjectileMovement->Velocity = FVector::ZeroVector;
     CollisionComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+    //spawn mini explosion for exploding ammo
+    if (GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretExplodingAmmo) > 0)
+    {
+        GetWorld()->SpawnActor<AActor>(BPMiniExplosion, GetActorLocation(), GetActorRotation());
+    }
+    
+    
 
     if (ProjectileMesh)
     {

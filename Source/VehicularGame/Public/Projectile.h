@@ -22,6 +22,7 @@ class VEHICULARGAME_API AProjectile : public AActor
     UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
     USphereComponent* CollisionComp;
 
+    UPROPERTY()
     UStaticMeshComponent* ProjectileMesh;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
@@ -51,6 +52,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Effects)
     UNiagaraSystem* TrailNiagaraSystemAsset;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Projectile")
+    TSubclassOf<AActor> BPMiniExplosion;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ClampMin = "0.0"))
     float ImpactForceMagnitude;

@@ -22,18 +22,18 @@ enum class EUpgradeType : uint8
 	TurretReloadSpeed UMETA(DisplayName = "Turret Reload Speed"), //the amount of time in seconds removed from default reload time
 	TurretFireRate UMETA(DisplayName = "Turret Fire Rate"), //the amount of time in seconds removed from the default fire rate
 	TurretProjectileSpeed UMETA(DisplayName = "Turret Projectile Speed"), //adds the amount of units per seconds it travels
-	TurretMovingBonusDamage UMETA(DisplayName = "Turret Moving Bonus Damage"), 
-	TurretStationaryBonusDamage UMETA(DisplayName = "Turret Stationary Bonus Damage"),
-	TurretPiercingAmmo UMETA(DisplayName = "Turret Piercing Ammo"),
-	TurretExplodingAmmo UMETA(DisplayName = "Turret Exploding Ammo"),
+	TurretMovingBonusDamage UMETA(DisplayName = "Turret Moving Bonus Damage"), //additional damage while player is moving
+	TurretStationaryBonusDamage UMETA(DisplayName = "Turret Stationary Bonus Damage"), //additional damage while player is still
+	TurretPiercingAmmo UMETA(DisplayName = "Turret Piercing Ammo"), //ammo that pierces through enemies
+	TurretExplodingAmmo UMETA(DisplayName = "Turret Exploding Ammo"), //ammo that explodes on impact
 
 	BumperDMG UMETA(DisplayName = "Bumper DMG"), //the amount of additional damage the bumper deals on top of default
-	BumperHealth UMETA(DisplayName = "Bumper Health"),
-	BumperImpactAbsorption UMETA(DisplayName = "Bumper Impact Absorption"),
+	BumperHealth UMETA(DisplayName = "Bumper Health"), //how many hits the bumper last
+	BumperImpactAbsorption UMETA(DisplayName = "Bumper Impact Absorption"), //just adds health for now because idk what else to do here
 
-	VehicleResistance UMETA(DisplayName = "Vehicle Resistance"),
-	VehicleMaxHP UMETA(DisplayName = "Vehicle Max HP"),
-	VehicleSpeed UMETA(DisplayName = "Vehicle Speed"),
+	VehicleResistance UMETA(DisplayName = "Vehicle Resistance"), //divides the amount of impact endured
+	VehicleMaxHP UMETA(DisplayName = "Vehicle Max HP"), //how much health the player has
+	VehicleSpeed UMETA(DisplayName = "Vehicle Speed"), //extra speed at which the player travels at
 
 	CrewScavengingSpeed UMETA(DisplayName = "Crew Scavenging Speed"),
 	CrewMovementSpeed UMETA(DisplayName = "Crew Movement Speed"),
@@ -74,7 +74,7 @@ struct FUpgrade : public FTableRowBase
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText Name;
+	FText Name; 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EUpgradeTree Tree;
