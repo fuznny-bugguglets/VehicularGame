@@ -537,6 +537,8 @@ void AVehicle::OnHandbreak(const FInputActionValue& Value)
 		//makes the handbrake off
 		bHandbrakeActive = false;
 
+		UGameplayStatics::PlaySound2D(this, HandbrakeDownSound);
+
 		//set the brake torque to 0 for all wheels
 		FrontLeftWheel->SetBrakeTorque(0);
 		FrontRightWheel->SetBrakeTorque(0);
@@ -560,6 +562,8 @@ void AVehicle::OnHandbreak(const FInputActionValue& Value)
 	{
 		//makes the handbrake on
 		bHandbrakeActive = true;
+
+		UGameplayStatics::PlaySound2D(this, HandbrakeUpSound);
 
 		//set the brake torque for all wheels
 		FrontLeftWheel->SetBrakeTorque(HandbrakeTorque);
@@ -1196,6 +1200,10 @@ void AVehicle::SpawnScavengers(const float DeltaTime)
 
 		ActiveScavengers.Add(MyScavy);
 		ScavengerCount--;
+
+		//play a sound of the scavenger exiting
+		int32 RandIndex = FMath::RandRange(0, TruckExit.Num() - 1);
+		UGameplayStatics::PlaySound2D(this, TruckExit[RandIndex]);
 	}
 }
 
@@ -1205,6 +1213,10 @@ void AVehicle::ReturnScavenger(AScavengerPawn* Scavenger)
 	ActiveScavengers.Remove(Scavenger);
 	ScavengerCount++;
 	Scavenger->Destroy();
+
+	//play a sound of the scavenger entering
+	int32 RandIndex = FMath::RandRange(0, TruckEnter.Num() - 1);
+	UGameplayStatics::PlaySound2D(this, TruckEnter[RandIndex]);
 }
 
 void AVehicle::NarrativeRelicPickedUp(int32 RelicIndex)

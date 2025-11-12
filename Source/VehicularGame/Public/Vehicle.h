@@ -179,6 +179,16 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category="Sound|Relics", meta = (AllowPrivateAccess = "true"))
 	TArray<USoundBase*> RelicClips;
 
+	UPROPERTY(EditDefaultsOnly, Category="Sound|TruckDoor", meta = (AllowPrivateAccess = "true"))
+	TArray<USoundBase*> TruckEnter;
+	UPROPERTY(EditDefaultsOnly, Category="Sound|TruckDoor", meta = (AllowPrivateAccess = "true"))
+	TArray<USoundBase*> TruckExit;
+
+	UPROPERTY(EditDefaultsOnly, Category="Sound|Handbrake", meta = (AllowPrivateAccess = "true"))
+	USoundBase* HandbrakeUpSound = nullptr;
+	UPROPERTY(EditDefaultsOnly, Category="Sound|Handbrake", meta = (AllowPrivateAccess = "true"))
+	USoundBase* HandbrakeDownSound = nullptr;
+
 	//default input
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	// ReSharper disable once UnrealHeaderToolError
