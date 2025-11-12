@@ -1107,6 +1107,21 @@ bool AVehicle::IsHandbrakeActive() const
 	return bHandbrakeActive;
 }
 
+bool AVehicle::IsBumperOn() const
+{
+	return BumperHealth > 0;
+}
+
+void AVehicle::DamageBumper()
+{
+	BumperHealth--;
+
+	if (BumperHealth <= 0)
+	{
+		BumperMesh->SetVisibility(false);
+	}
+}
+
 // ReSharper disable once CppMemberFunctionMayBeConst
 void AVehicle::IncrementLootCount(uint32 GivenResource)
 {

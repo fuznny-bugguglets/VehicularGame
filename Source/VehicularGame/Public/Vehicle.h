@@ -80,6 +80,9 @@ public:
 	void DecrementHealth();
 
 	bool IsHandbrakeActive() const;
+	bool IsBumperOn() const;
+
+	void DamageBumper();
 
 	EEngineState GetEngineState() const;
 
