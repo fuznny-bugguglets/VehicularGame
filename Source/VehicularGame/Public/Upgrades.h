@@ -35,11 +35,11 @@ enum class EUpgradeType : uint8
 	VehicleMaxHP UMETA(DisplayName = "Vehicle Max HP"), //how much health the player has
 	VehicleSpeed UMETA(DisplayName = "Vehicle Speed"), //extra speed at which the player travels at
 
-	CrewScavengingSpeed UMETA(DisplayName = "Crew Scavenging Speed"),
-	CrewMovementSpeed UMETA(DisplayName = "Crew Movement Speed"),
+	CrewScavengingSpeed UMETA(DisplayName = "Crew Scavenging Speed"), //how long it takes to get an item
+	CrewMovementSpeed UMETA(DisplayName = "Crew Movement Speed"), //how fast they move
 	CrewMaxCrew UMETA(DisplayName = "Crew Max Crew"),
 	CrewHP UMETA(DisplayName = "Crew HP"),
-	CrewHaulingCapacity UMETA(DisplayName = "Crew Hauling Capacity"),
+	CrewHaulingCapacity UMETA(DisplayName = "Crew Hauling Capacity"), //hold an extra item
 
 	MAX
 };

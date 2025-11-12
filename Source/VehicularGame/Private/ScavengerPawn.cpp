@@ -4,6 +4,7 @@
 #include "ScavengerPawn.h"
 #include "AIController.h"
 #include "InventorySubsystem.h"
+#include "UpgradeSubsystem.h"
 #include "Vehicle.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h" // For character movement
@@ -45,6 +46,11 @@ void AScavengerPawn::BeginPlay()
 
 	//by default, go to the ruin
 	CurrentBehaviour = EScavengerBehaviourState::TRAVELLING_TO_RUIN;
+
+	//apply upgrades
+	UUpgradeSubsystem* UpgradeSubsystem = GetGameInstance()->GetSubsystem<UUpgradeSubsystem>();
+	GetCharacterMovement()->MaxWalkSpeed += UpgradeSubsystem->GetUpgradeValue(EUpgradeType::CrewMovementSpeed);
+	PassiveScavengerExtractionSpeed -= UpgradeSubsystem->GetUpgradeValue(EUpgradeType::CrewScavengingSpeed);
 
 	//apply the crew passives
 	UInventorySubsystem* InventorySubsystem = GetGameInstance()->GetSubsystem<UInventorySubsystem>();
@@ -123,6 +129,13 @@ void AScavengerPawn::DoScavenge(float DeltaTime)
 		//take a resource
 		HeldResource = MyRuin->TakeOneResource();
 
+		//are we built different on god for real?
+		if (GetGameInstance()->GetSubsystem<UUpgradeSubsystem>()->GetUpgradeValue(EUpgradeType::CrewHaulingCapacity) > 0)
+		{
+			//take another resource, you greedy twat
+			SecondaryHeldResource = MyRuin->TakeOneResource();
+		}
+
 		//go back to the truck
 		GoToTruck();
 	}
@@ -149,6 +162,13 @@ void AScavengerPawn::DoTravelToTruck()
 		//give the resource to the truck
 		MyVehicle->IncrementLootCount(HeldResource);
 		HeldResource = 9999;
+
+		//do we have a second resource?
+		if (SecondaryHeldResource != 9999)
+		{
+			MyVehicle->IncrementLootCount(SecondaryHeldResource);
+		}
+		SecondaryHeldResource = 9999;
 
 
 		//is there a ruin?
