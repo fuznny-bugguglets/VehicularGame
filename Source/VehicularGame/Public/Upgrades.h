@@ -21,19 +21,25 @@ enum class EUpgradeType : uint8
 	TurretAmmo UMETA(DisplayName = "Turret Ammo"), //additional ammo capacity of the turret on top of default
 	TurretReloadSpeed UMETA(DisplayName = "Turret Reload Speed"), //the amount of time in seconds removed from default reload time
 	TurretFireRate UMETA(DisplayName = "Turret Fire Rate"), //the amount of time in seconds removed from the default fire rate
+	TurretProjectileSpeed UMETA(DisplayName = "Turret Projectile Speed"), //adds the amount of units per seconds it travels
+	TurretMovingBonusDamage UMETA(DisplayName = "Turret Moving Bonus Damage"), //additional damage while player is moving
+	TurretStationaryBonusDamage UMETA(DisplayName = "Turret Stationary Bonus Damage"), //additional damage while player is still
+	TurretPiercingAmmo UMETA(DisplayName = "Turret Piercing Ammo"), //ammo that pierces through enemies
+	TurretExplodingAmmo UMETA(DisplayName = "Turret Exploding Ammo"), //ammo that explodes on impact
 
 	BumperDMG UMETA(DisplayName = "Bumper DMG"), //the amount of additional damage the bumper deals on top of default
-	BumperHealth UMETA(DisplayName = "Bumper Health"),
-	BumperImpactAbsorption UMETA(DisplayName = "Bumper Impact Absorption"),
+	BumperHealth UMETA(DisplayName = "Bumper Health"), //how many hits the bumper last
+	BumperImpactAbsorption UMETA(DisplayName = "Bumper Impact Absorption"), //just adds health for now because idk what else to do here
 
-	VehicleResistance UMETA(DisplayName = "Vehicle Resistance"),
-	VehicleMaxHP UMETA(DisplayName = "Vehicle Max HP"),
+	VehicleResistance UMETA(DisplayName = "Vehicle Resistance"), //divides the amount of impact endured
+	VehicleMaxHP UMETA(DisplayName = "Vehicle Max HP"), //how much health the player has
+	VehicleSpeed UMETA(DisplayName = "Vehicle Speed"), //extra speed at which the player travels at
 
-	CrewScavengingSpeed UMETA(DisplayName = "Crew Scavenging Speed"),
-	CrewMovementSpeed UMETA(DisplayName = "Crew Movement Speed"),
+	CrewScavengingSpeed UMETA(DisplayName = "Crew Scavenging Speed"), //how long it takes to get an item
+	CrewMovementSpeed UMETA(DisplayName = "Crew Movement Speed"), //how fast they move
 	CrewMaxCrew UMETA(DisplayName = "Crew Max Crew"),
 	CrewHP UMETA(DisplayName = "Crew HP"),
-	CrewHaulingCapacity UMETA(DisplayName = "Crew Hauling Capacity"),
+	CrewHaulingCapacity UMETA(DisplayName = "Crew Hauling Capacity"), //hold an extra item
 
 	MAX
 };
@@ -68,7 +74,7 @@ struct FUpgrade : public FTableRowBase
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText Name;
+	FText Name; 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EUpgradeTree Tree;

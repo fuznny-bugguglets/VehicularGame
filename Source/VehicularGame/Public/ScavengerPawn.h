@@ -73,6 +73,7 @@ private:
 
 	//what resource i am holdingh
 	uint32 HeldResource = 9999;
+	uint32 SecondaryHeldResource = 9999;
 
 	//time i have been scavenging
 	float ElapsedScavengeTime = 0.0f;

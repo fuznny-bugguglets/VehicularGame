@@ -480,36 +480,41 @@ void AEnemyCharacter::HitByPlayer()
     //grab the upgrade system
     UUpgradeSubsystem* UpgradeSubsystem = GetGameInstance()->GetSubsystem<UUpgradeSubsystem>();
     if (!UpgradeSubsystem) return;
-    
 
-    //is the enemy in front of the vehicle?
-    if(UKismetMathLibrary::InverseTransformLocation(VehicleRef->GetActorTransform(), GetActorLocation()).X > 250.0f)
+    //is the bumper enabled?
+    if (VehicleRef->IsBumperOn())
     {
-        //grab the bumper damage
-        float BumperDamage = UpgradeSubsystem->GetUpgradeValue(EUpgradeType::BumperDMG);
+        //is the enemy in front of the vehicle?
+        if(UKismetMathLibrary::InverseTransformLocation(VehicleRef->GetActorTransform(), GetActorLocation()).X > 250.0f)
+        {
+            //grab the bumper damage
+            float BumperDamage = UpgradeSubsystem->GetUpgradeValue(EUpgradeType::BumperDMG);
 
-        //apply damage to ourselves
-        const TSubclassOf<UDamageType> DamageType;
-        UGameplayStatics::ApplyDamage(this, BumperDamage, VehicleRef->GetController(), VehicleRef, DamageType);
+            VehicleRef->DamageBumper();
 
-        //launch ourselves away from the vehicle with extra oomf
-        LaunchCharacter(PushVector * 2.5f, false, false);
+            //apply damage to ourselves
+            const TSubclassOf<UDamageType> DamageType;
+            UGameplayStatics::ApplyDamage(this, BumperDamage, VehicleRef->GetController(), VehicleRef, DamageType);
+
+            //launch ourselves away from the vehicle with extra oomf
+            LaunchCharacter(PushVector * 2.5f, false, false);
+            //finish the lunge
+            EnemyState = EEnemyState::ATTACKING;
+            return;
+        }
     }
 
     //deal damage to the player
-    else
-    {
-        const TSubclassOf<UDamageType> DamageType;
-        //deal damage to the player
-        UGameplayStatics::ApplyDamage(VehicleRef, DamageToPlayer, GetController(), this, DamageType);
+    const TSubclassOf<UDamageType> DamageType;
+    //deal damage to the player
+    UGameplayStatics::ApplyDamage(VehicleRef, DamageToPlayer, GetController(), this, DamageType);
 
-        //play attack damage sound
-        UGameplayStatics::PlaySound2D(this, AttackPlayerSound, 1, 1,
-            0, AttackPlayerConcurrency);
+    //play attack damage sound
+    UGameplayStatics::PlaySound2D(this, AttackPlayerSound, 1, 1,
+        0, AttackPlayerConcurrency);
         
-        //launch ourselves away from the vehicle
-        LaunchCharacter(PushVector, false, false);
-    }
+    //launch ourselves away from the vehicle
+    LaunchCharacter(PushVector, false, false);
 
     //finish the lunge
     EnemyState = EEnemyState::ATTACKING;

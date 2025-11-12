@@ -96,6 +96,7 @@ private:
 	UCameraComponent* VehicleCamera;
 
 	//reference to the shooting pawn
+	UPROPERTY()
 	APawn* ShooterPawn;
 
 	//meshes
