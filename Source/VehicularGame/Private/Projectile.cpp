@@ -37,16 +37,24 @@ AProjectile::AProjectile()
     ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
     ProjectileMovement->UpdatedComponent = CollisionComp;
     ProjectileMovement->InitialSpeed = 3000.f;
-    ProjectileMovement->MaxSpeed = 3000.f;
+    ProjectileMovement->MaxSpeed = ProjectileMovement->InitialSpeed;
     ProjectileMovement->bRotationFollowsVelocity = true;
     ProjectileMovement->bShouldBounce = false; // Disable default bounce behavior
 
     InitialLifeSpan = 10.0f;
 }
 
+void AProjectile::AddBonusDamage(float BonusDamage)
+{
+	
+}
+
+
 void AProjectile::BeginPlay()
 {
     Super::BeginPlay();
+
+    ProjectileMovement->InitialSpeed += GetGameInstance()->GetSubsystem<UUpgradeSubsystem>()->GetUpgradeValue(EUpgradeType::TurretProjectileSpeed);
 
     ProjectileMesh = FindComponentByClass<UStaticMeshComponent>();
     if (!ProjectileMesh)
@@ -72,17 +80,6 @@ void AProjectile::BeginPlay()
     Damage *= InventorySubsystem->GetPassiveMultiplier(EPassiveType::TurretDamage);
 }
 
-void AProjectile::InitializeProjectile(float InAdditionalDamage, int32 InPiercingCount, float InSpeedMultiplier)
-{
-    // Apply stats passed in from the weapon that fired this projectile.
-    Damage += InAdditionalDamage;
-    ProjectilePiercing = InPiercingCount;
-    
-    ProjectileMovement->InitialSpeed *= InSpeedMultiplier;
-    ProjectileMovement->MaxSpeed *= InSpeedMultiplier;
-    ProjectileMovement->Velocity = GetActorForwardVector() * ProjectileMovement->InitialSpeed;
-}
-
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
     if (bIsDying || !OtherActor || OtherActor == this || OtherActor == GetInstigator())
@@ -97,13 +94,13 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
     }
 
     //grab the crit chance
-    float CritChance = GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretCritChance);
+    float ThisCritChance = CritChance + GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretCritChance);
 
     //should this be a crit?
-    if (CritChance >= FMath::RandRange(0.01f, 100.0f))
+    if (ThisCritChance >= FMath::RandRange(0.01f, 100.0f))
     {
 	    //add the crit damage
-        Damage += GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretCritDamage);
+        Damage += CritDamage += GetUpgradeSubsystem()->GetUpgradeValue(EUpgradeType::TurretCritDamage);
     }
 
 

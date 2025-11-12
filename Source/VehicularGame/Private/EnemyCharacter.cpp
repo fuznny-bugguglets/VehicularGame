@@ -480,7 +480,8 @@ void AEnemyCharacter::HitByPlayer()
     //grab the upgrade system
     UUpgradeSubsystem* UpgradeSubsystem = GetGameInstance()->GetSubsystem<UUpgradeSubsystem>();
     if (!UpgradeSubsystem) return;
-    
+
+    //is the bumper enabled?
 
     //is the enemy in front of the vehicle?
     if(UKismetMathLibrary::InverseTransformLocation(VehicleRef->GetActorTransform(), GetActorLocation()).X > 250.0f)

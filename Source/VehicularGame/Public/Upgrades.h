@@ -21,6 +21,11 @@ enum class EUpgradeType : uint8
 	TurretAmmo UMETA(DisplayName = "Turret Ammo"), //additional ammo capacity of the turret on top of default
 	TurretReloadSpeed UMETA(DisplayName = "Turret Reload Speed"), //the amount of time in seconds removed from default reload time
 	TurretFireRate UMETA(DisplayName = "Turret Fire Rate"), //the amount of time in seconds removed from the default fire rate
+	TurretProjectileSpeed UMETA(DisplayName = "Turret Projectile Speed"), //adds the amount of units per seconds it travels
+	TurretMovingBonusDamage UMETA(DisplayName = "Turret Moving Bonus Damage"), 
+	TurretStationaryBonusDamage UMETA(DisplayName = "Turret Stationary Bonus Damage"),
+	TurretPiercingAmmo UMETA(DisplayName = "Turret Piercing Ammo"),
+	TurretExplodingAmmo UMETA(DisplayName = "Turret Exploding Ammo"),
 
 	BumperDMG UMETA(DisplayName = "Bumper DMG"), //the amount of additional damage the bumper deals on top of default
 	BumperHealth UMETA(DisplayName = "Bumper Health"),
@@ -28,6 +33,7 @@ enum class EUpgradeType : uint8
 
 	VehicleResistance UMETA(DisplayName = "Vehicle Resistance"),
 	VehicleMaxHP UMETA(DisplayName = "Vehicle Max HP"),
+	VehicleSpeed UMETA(DisplayName = "Vehicle Speed"),
 
 	CrewScavengingSpeed UMETA(DisplayName = "Crew Scavenging Speed"),
 	CrewMovementSpeed UMETA(DisplayName = "Crew Movement Speed"),

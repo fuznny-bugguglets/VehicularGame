@@ -33,16 +33,14 @@ class VEHICULARGAME_API AProjectile : public AActor
 public:
     AProjectile();
 
-    // This new function will set the projectile's stats after it has been spawned.
-    UFUNCTION(BlueprintCallable, Category = "Projectile")
-    void InitializeProjectile(float InAdditionalDamage, int32 InPiercingCount, float InSpeedMultiplier);
-
     // This is the event dispatcher that Blueprints can bind to.
     UPROPERTY(BlueprintAssignable, Category = "Projectile")
     FOnProjectileImpact OnProjectileImpact;
 
     UFUNCTION()
     void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+    void AddBonusDamage(float BonusDamage);
 
     // Getters
     USphereComponent* GetCollisionComp() const { return CollisionComp; }
@@ -59,6 +57,12 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ClampMin = "0.0"))
     float Damage;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ClampMin = "0.0"))
+    float CritDamage = 10;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ClampMin = "0.0"))
+    float CritChance = 5;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (ClampMin = "0.0"))
     float LingerDuration;
