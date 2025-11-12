@@ -18,6 +18,8 @@ class VEHICULARGAME_API AVehicularGameMode : public AGameModeBase
 
 public:
     AVehicularGameMode();
+
+    virtual void Tick(float DeltaSeconds) override;
     
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enemy Spawning")
     FTimerHandle SpawnWaveTimerHandle;
@@ -42,6 +44,8 @@ public:
 
     UFUNCTION(BlueprintCallable)
     void SetRadioStatus(bool bIsOn);
+    
+    void NarrativeRelicPopUp(float TimeToPlay);
 
     FVector CreateEnemies(AVehicularGameState* VehicularGameState = nullptr, AActor* PlayerPawn = nullptr);
 
@@ -93,6 +97,8 @@ private:
     bool bIsHandbrakeOn = false;
     UPROPERTY()
     ARuin* OverlappingRuin = nullptr;
+
+    float ElapsedTime = 0.0f;
 
     //tells the hud which element to display
     void DisplayRuinPrompt();

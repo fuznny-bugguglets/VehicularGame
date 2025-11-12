@@ -43,6 +43,25 @@ AVehicularGameMode::AVehicularGameMode()
 	SpawnBatchSize = 9;
 	BatchSpawnIntervalSeconds = 1.0f;
 	CurrentSpawnIndex = 0;
+	PrimaryActorTick.bCanEverTick = true;
+}
+
+void AVehicularGameMode::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	//is there a timer to tick?
+	if (ElapsedTime > 0.0f)
+	{
+		//tick it
+		ElapsedTime -= DeltaSeconds;
+
+		//are we done?
+		if (ElapsedTime <= 0.0f)
+		{
+			MainHUDInstance->DisableRadioAnimation();
+		}
+	}
 }
 
 void AVehicularGameMode::BeginPlay()
@@ -374,10 +393,16 @@ void AVehicularGameMode::SetRadioStatus(bool bIsOn)
 	
 	if (bIsOn)
 	{
-		MainHUDInstance->EnableRadioAnimation();	
+		MainHUDInstance->EnableRadio();	
 	}
 	else
 	{
-		MainHUDInstance->DisableRadioAnimation();	
+		MainHUDInstance->DisableRadio();	
 	}
+}
+
+void AVehicularGameMode::NarrativeRelicPopUp(float TimeToPlay)
+{
+	MainHUDInstance->EnableRadioAnimation();
+	ElapsedTime = TimeToPlay;
 }

@@ -29,6 +29,11 @@ public:
 	void DisableRadioAnimation();
 
 	UFUNCTION(BlueprintImplementableEvent)
+	void EnableRadio();
+	UFUNCTION(BlueprintImplementableEvent)
+	void DisableRadio();
+
+	UFUNCTION(BlueprintImplementableEvent)
 	void EnableExtractionAnimation();
 	UFUNCTION(BlueprintImplementableEvent)
 	void DisableExtractionAnimation();
