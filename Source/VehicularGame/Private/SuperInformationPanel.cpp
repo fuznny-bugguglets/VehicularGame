@@ -12,3 +12,8 @@ void USuperInformationPanel::Setup(UCityWidget* InCity)
 {
 	CityWidget = InCity;
 }
+
+UCityWidget* USuperInformationPanel::GetCityWidget() const
+{
+	return CityWidget;
+}

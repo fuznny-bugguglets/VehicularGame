@@ -20,6 +20,9 @@ public:
 	UFUNCTION()
 	void Setup(UCityWidget* InCity);
 
+	UFUNCTION(BlueprintCallable)
+	UCityWidget* GetCityWidget() const;
+
 protected:
 	UPROPERTY()
 	UCityWidget* CityWidget = nullptr;
