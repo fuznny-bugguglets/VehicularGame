@@ -30,7 +30,14 @@ void UCityStorageWidget::Setup(UCityWidget* InCity)
 
 		//get the amount we have of the item
 		const int32 Count = Element.Value;
-		FString SubtextString("x");
+		FString SubtextString;
+
+		SubtextString.Append("$");
+		const int32 Value = UItemManager::GetItemFromIndex(Element.Key).SellPrice;
+		SubtextString.Append(FString::FromInt(Value));
+		SubtextString.Append("\n");
+			
+		SubtextString.Append("x");
 		SubtextString.Append(FString::FromInt(Count));
 		FText Subtext = FText::FromString(SubtextString);
 		
@@ -80,7 +87,14 @@ void UCityStorageWidget::UpdateButton(USuperButtonWidget* Button)
 		//do we have any of the item?
 		if (Count > 0)
 		{
-			FString SubtextString("x");
+			FString SubtextString;
+
+			SubtextString.Append("$");
+			const int32 Value = UItemManager::GetItemFromIndex(ItemID).SellPrice;
+			SubtextString.Append(FString::FromInt(Value));
+			SubtextString.Append("\n");
+			
+			SubtextString.Append("x");
 			SubtextString.Append(FString::FromInt(Count));
 			FText Subtext = FText::FromString(SubtextString);
 			
@@ -112,7 +126,14 @@ void UCityStorageWidget::CreateItemBlock(uint8 ID)
 
 	//sets it to 1
 	const int32 Count = 1;
-	FString SubtextString("x");
+	FString SubtextString;
+
+	SubtextString.Append("$");
+	const int32 Value = UItemManager::GetItemFromIndex(ID).SellPrice;
+	SubtextString.Append(FString::FromInt(Value));
+	SubtextString.Append("\n");
+			
+	SubtextString.Append("x");
 	SubtextString.Append(FString::FromInt(Count));
 	FText Subtext = FText::FromString(SubtextString);
 

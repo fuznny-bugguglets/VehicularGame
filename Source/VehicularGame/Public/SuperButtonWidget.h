@@ -8,6 +8,7 @@
 #include "Components/TextBlock.h"
 #include "SuperButtonWidget.generated.h"
 
+class UCityWidget;
 /**
  * 
  */
