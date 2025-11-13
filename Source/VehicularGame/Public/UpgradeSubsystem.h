@@ -44,8 +44,11 @@ private:
 	TMap<uint8, bool> UpgradeUnlockStatusMap;
 
 	//the amount of upgrades purchased in a tree
+	UPROPERTY()
 	uint8 TurretUpgradesPurchased = 0;
+	UPROPERTY()
 	uint8 CrewUpgradesPurchased = 0;
+	UPROPERTY()
 	uint8 TruckUpgradesPurchased = 0;
 	
 };

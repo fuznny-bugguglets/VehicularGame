@@ -116,7 +116,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Stiffness", meta = (AllowPrivateAccess = "true"))
 	float NormalForwardStiffness = 30.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Stiffness", meta = (AllowPrivateAccess = "true"))
-	float NormalSidewaysStiffness = 40.0f;
+	float NormalSidewaysStiffness = 240.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Stiffness", meta = (AllowPrivateAccess = "true"))
 	float DriftSidewaysStiffness = 20.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Driving | Stiffness", meta = (AllowPrivateAccess = "true"))

@@ -211,24 +211,24 @@ void UMechanicWidget::DisplayUpgradeInformation(uint8 UpgradeID)
 	//is it enabled?
 	if (UpgradeSubsystem->GetUpgradeEnabledStatus(UpgradeID))
 	{
-		//is it affordable?
-		if (bCanUnlockUpgrade)
+		//is it yet to be unlocked?
+		if (!UpgradeSubsystem->GetUnlockStatus(UpgradeID))
 		{
-			//is it already unlocked?
-			if (UpgradeSubsystem->GetUnlockStatus(UpgradeID))
-			{
-				UnlockButton->SetVisibility(ESlateVisibility::Hidden);
-			}
-			else
+			//is it affordable?
+			if (bCanUnlockUpgrade)
 			{
 				UnlockButton->SetVisibility(ESlateVisibility::Visible);
 				UnlockButton->SetBackgroundColor(FColor::Green);
 			}
+			else
+			{
+				UnlockButton->SetVisibility(ESlateVisibility::Visible);
+				UnlockButton->SetBackgroundColor(FColor::Red);
+			}
 		}
 		else
 		{
-			UnlockButton->SetVisibility(ESlateVisibility::Visible);
-			UnlockButton->SetBackgroundColor(FColor::Red);
+			UnlockButton->SetVisibility(ESlateVisibility::Hidden);
 		}
 	}
 	else

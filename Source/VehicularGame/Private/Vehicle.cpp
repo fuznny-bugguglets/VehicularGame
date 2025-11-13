@@ -536,7 +536,7 @@ void AVehicle::OnHandbreak(const FInputActionValue& Value)
 	{
 		//makes the handbrake off
 		bHandbrakeActive = false;
-
+		
 		UGameplayStatics::PlaySound2D(this, HandbrakeDownSound);
 
 		//set the brake torque to 0 for all wheels
@@ -586,14 +586,14 @@ void AVehicle::OnHandbreak(const FInputActionValue& Value)
 	}
 
 	//update all the wheels
-	FrontLeftWheel->SidewaysFrictionCurve.UpdateArrays();
-	FrontRightWheel->SidewaysFrictionCurve.UpdateArrays();
-	BackLeftWheel->SidewaysFrictionCurve.UpdateArrays();
-	BackRightWheel->SidewaysFrictionCurve.UpdateArrays();
-	FrontLeftWheel->ForwardFrictionCurve.UpdateArrays();
-	FrontRightWheel->ForwardFrictionCurve.UpdateArrays();
-	BackLeftWheel->ForwardFrictionCurve.UpdateArrays();
-	BackRightWheel->ForwardFrictionCurve.UpdateArrays();
+	//FrontLeftWheel->SidewaysFrictionCurve.UpdateArrays();
+	//FrontRightWheel->SidewaysFrictionCurve.UpdateArrays();
+	//BackLeftWheel->SidewaysFrictionCurve.UpdateArrays();
+	//BackRightWheel->SidewaysFrictionCurve.UpdateArrays();
+	//FrontLeftWheel->ForwardFrictionCurve.UpdateArrays();
+	//FrontRightWheel->ForwardFrictionCurve.UpdateArrays();
+	//BackLeftWheel->ForwardFrictionCurve.UpdateArrays();
+	//BackRightWheel->ForwardFrictionCurve.UpdateArrays();
 
 	//tell the gamemode our handbrake updated
 	if(!VehicularGameMode)

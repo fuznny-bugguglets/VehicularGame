@@ -28,6 +28,9 @@ public:
 	uint8 GetID() const;
 	void SetID(uint8 InID);
 
+	UFUNCTION(BlueprintCallable)
+	UCityWidget* GetCityWidget() const;
+
 protected:
 	UPROPERTY()
 	UCityWidget* CityWidget = nullptr;

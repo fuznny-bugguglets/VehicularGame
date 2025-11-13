@@ -37,7 +37,7 @@ void UUpgradeSubsystem::ProcessUpgrade(const FUpgrade& Upgrade)
 		TruckUpgradesPurchased++;
 		break;
 		
-	default: 
+	default:
 		break;
 	}
 

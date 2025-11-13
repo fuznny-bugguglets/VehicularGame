@@ -41,19 +41,20 @@ public:
 	int32 Money;
 
 	//the amount of upgrades purchased in a tree
+	UPROPERTY()
 	uint8 TurretUpgradesPurchased;
+	UPROPERTY()
 	uint8 CrewUpgradesPurchased;
+	UPROPERTY()
 	uint8 TruckUpgradesPurchased;
 
 	UPROPERTY()
 	uint8 HiredCrew[6];
 
 	UPROPERTY(BlueprintReadWrite)
-	bool bRelicsTutorialSeen;
+	bool bCityTutorial1Complete;
 
 	UPROPERTY(BlueprintReadWrite)
-	bool bCrewTutorialSeen;
-
-	UPROPERTY(BlueprintReadWrite)
-	bool bMechanicTutorialSeen;
+	bool bCityTutorial2Complete;
+	
 };

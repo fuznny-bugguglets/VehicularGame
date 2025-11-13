@@ -56,22 +56,23 @@ void UUpgradeButtonWidget::RefreshDisplay()
 	//is it enabled?
 	if (GetUpgradeSubsystem()->GetUpgradeEnabledStatus(UpgradeID))
 	{
-		//is it affordable?
-		if (MechanicWidget->CanAffordUpgrade(UpgradeID))
+		//is it already yet to be unlocked??
+		if (!GetUpgradeSubsystem()->GetUnlockStatus(UpgradeID))
 		{
-			//is it already unlocked?
-			if (GetUpgradeSubsystem()->GetUnlockStatus(UpgradeID))
+			//is it affordable?
+			if (MechanicWidget->CanAffordUpgrade(UpgradeID))
 			{
-				Button->SetBackgroundColor(PurchasedColour);
+			
+				Button->SetBackgroundColor(AffordableColour);
 			}
 			else
 			{
-				Button->SetBackgroundColor(AffordableColour);
+				Button->SetBackgroundColor(UnaffordableColour);
 			}
 		}
 		else
 		{
-			Button->SetBackgroundColor(UnaffordableColour);
+			Button->SetBackgroundColor(PurchasedColour);
 		}
 	}
 	else

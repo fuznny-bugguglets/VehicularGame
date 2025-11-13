@@ -44,3 +44,8 @@ void USuperButtonWidget::SetID(uint8 InID)
 	ButtonID = InID;
 }
 
+UCityWidget* USuperButtonWidget::GetCityWidget() const
+{
+	return CityWidget;
+}
+

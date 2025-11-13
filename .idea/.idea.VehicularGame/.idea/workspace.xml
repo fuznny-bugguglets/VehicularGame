@@ -14,7 +14,17 @@
   <component name="ChangeListManager">
     <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_Vehicle.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_Vehicle.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/DataTables/Requests/Requests.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/DataTables/Requests/Requests.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/City/Mechanic/BP_Mechanic.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/City/Mechanic/BP_Mechanic.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/City/Mechanic/WB_UpgradeButton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/City/Mechanic/WB_UpgradeButton.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/City/Requests/WB_Requests.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/City/Requests/WB_Requests.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/City/WB_CityScreen.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/City/WB_CityScreen.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/CityWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/CityWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/Vehicle.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/Vehicle.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/VehicularSaveGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/VehicularSaveGame.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/Vehicle.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/Vehicle.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/VehicularSaveGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/VehicularSaveGame.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +68,7 @@
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;uiQualityOfLife&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;charlieDoesShit&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -214,6 +224,8 @@
       <workItem from="1762956488460" duration="442000" />
       <workItem from="1762996155336" duration="4144000" />
       <workItem from="1763020208832" duration="4063000" />
+      <workItem from="1763035290798" duration="6083000" />
+      <workItem from="1763044192750" duration="3872000" />
     </task>
     <servers />
   </component>
