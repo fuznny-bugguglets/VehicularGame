@@ -70,6 +70,7 @@ public:
 	float GetElapsedExtractionTime() const;
 
 	//returns the current speed of the player
+	UFUNCTION(BlueprintCallable)
 	float GetSpeed() const;
 
 	float GetHealth() const;
