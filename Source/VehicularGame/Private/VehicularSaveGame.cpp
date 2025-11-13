@@ -16,9 +16,6 @@ UVehicularSaveGame::UVehicularSaveGame()
 	{
 		HiredCrew[i] = 255;
 	}
-	bRelicsTutorialSeen = false;
-	bCrewTutorialSeen = false;
-	bMechanicTutorialSeen = false;
 	TurretUpgradesPurchased = 0;
 	CrewUpgradesPurchased = 0;
 	TruckUpgradesPurchased = 0;

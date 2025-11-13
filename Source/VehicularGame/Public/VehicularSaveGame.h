@@ -47,13 +47,5 @@ public:
 
 	UPROPERTY()
 	uint8 HiredCrew[6];
-
-	UPROPERTY(BlueprintReadWrite)
-	bool bRelicsTutorialSeen;
-
-	UPROPERTY(BlueprintReadWrite)
-	bool bCrewTutorialSeen;
-
-	UPROPERTY(BlueprintReadWrite)
-	bool bMechanicTutorialSeen;
+	
 };
