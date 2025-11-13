@@ -223,6 +223,8 @@ private:
 	//input for radio toggle
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputAction* RadioAction;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* FlipAction;
 	
 
 	//reference to the instance of the engine sound
@@ -387,6 +389,8 @@ private:
 	void OnOpenDoor(const struct FInputActionValue& Value);
 	UFUNCTION()
 	void OnRadio(const struct FInputActionValue& Value);
+	UFUNCTION()
+	void OnFlip(const struct FInputActionValue& Value);
 	UFUNCTION()
 	void PlayNewRadioClip();
 	//when the player is dealt damage
