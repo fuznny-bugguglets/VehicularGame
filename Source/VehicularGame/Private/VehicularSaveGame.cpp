@@ -19,4 +19,7 @@ UVehicularSaveGame::UVehicularSaveGame()
 	TurretUpgradesPurchased = 0;
 	CrewUpgradesPurchased = 0;
 	TruckUpgradesPurchased = 0;
+
+	bCityTutorial1Complete = false;
+	bCityTutorial2Complete = false;
 }

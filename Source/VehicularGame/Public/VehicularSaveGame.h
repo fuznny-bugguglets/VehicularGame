@@ -50,5 +50,11 @@ public:
 
 	UPROPERTY()
 	uint8 HiredCrew[6];
+
+	UPROPERTY(BlueprintReadWrite)
+	bool bCityTutorial1Complete;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool bCityTutorial2Complete;
 	
 };

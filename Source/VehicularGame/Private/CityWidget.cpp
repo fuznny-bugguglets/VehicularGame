@@ -18,6 +18,8 @@
 //setup its child widgets
 void UCityWidget::NativeConstruct()
 {
+	Super::NativeConstruct();
+	
 	//move everything from the player inventory into the city storage
 	GetInventorySubsystem()->MoveFromPlayerInventoryToCityStorage();
 
