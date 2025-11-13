@@ -15,9 +15,10 @@
     <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_Vehicle.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_Vehicle.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Input/VehicleInput.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Input/VehicleInput.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/Vehicle.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/Vehicle.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/Vehicle.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/Vehicle.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/DataTables/Crew/Crew.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/DataTables/Crew/Crew.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/HUD/HUD_Elements/StatusScreen/WB_Crewmates/WB_SS_Charlie.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/HUD/HUD_Elements/StatusScreen/WB_Crewmates/WB_SS_Charlie.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/InventorySubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/InventorySubsystem.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/InventorySubsystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/InventorySubsystem.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -219,7 +220,7 @@
       <workItem from="1763020208832" duration="4063000" />
       <workItem from="1763035290798" duration="6083000" />
       <workItem from="1763044192750" duration="3872000" />
-      <workItem from="1763050534276" duration="1253000" />
+      <workItem from="1763050534276" duration="2329000" />
     </task>
     <servers />
   </component>
