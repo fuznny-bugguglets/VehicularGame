@@ -30,7 +30,9 @@ public:
 	void RequestRedeemed(uint8 RequestID);
 
 	bool GetRequestAchievementStatus(uint8 RequestID);
+	bool GetRequestAchievementStatus(const FRequest& Request);
 	bool GetRequestRedeemedStatus(uint8 RequestID);
+	bool GetRequestRedeemedStatus(const FRequest& Request);
 
 	void LoadSaveData();
 	const TMap<uint8, bool>& GetRequestAchievementStatusMap() const;

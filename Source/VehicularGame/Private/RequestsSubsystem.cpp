@@ -63,6 +63,12 @@ bool URequestsSubsystem::GetRequestAchievementStatus(uint8 RequestID)
 	return RequestAchievementStatus[RequestID];
 }
 
+bool URequestsSubsystem::GetRequestAchievementStatus(const FRequest& Request)
+{
+	return GetRequestAchievementStatus(URequestsManager::GetIndexFromRequest(Request));
+}
+
+
 bool URequestsSubsystem::GetRequestRedeemedStatus(uint8 RequestID)
 {
 	//is it in the map?
@@ -74,6 +80,12 @@ bool URequestsSubsystem::GetRequestRedeemedStatus(uint8 RequestID)
 
 	return RequestRedeemedStatus[RequestID];
 }
+
+bool URequestsSubsystem::GetRequestRedeemedStatus(const FRequest& Request)
+{
+	return GetRequestRedeemedStatus(URequestsManager::GetIndexFromRequest(Request));
+}
+
 
 int32 URequestsSubsystem::GetEnemiesKilled() const
 {

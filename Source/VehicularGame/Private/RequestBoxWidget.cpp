@@ -3,6 +3,8 @@
 
 #include "RequestBoxWidget.h"
 
+#include "Requests.h"
+#include "RequestsSubsystem.h"
 #include "RequestsWidget.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
@@ -23,6 +25,12 @@ void URequestBoxWidget::SetMainText(const FText& Text)
 void URequestBoxWidget::SetRequestID(const uint8 InRequestID)
 {
 	RequestID = InRequestID;
+
+	//has the quest been completed?
+	if (GetGameInstance()->GetSubsystem<URequestsSubsystem>()->GetRequestAchievementStatus(InRequestID))
+	{
+		Button->SetBackgroundColor(FColor::Emerald);
+	}
 }
 
 void URequestBoxWidget::SetRequestsWidget(URequestsWidget* InRequestsWidget)
