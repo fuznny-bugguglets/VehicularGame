@@ -408,6 +408,11 @@ uint8 UInventorySubsystem::GetHiredCrewCount() const
 	return Count;
 }
 
+uint8 UInventorySubsystem::GetCrewAtIndex(uint8 Index) const
+{
+	return HiredCrew[Index];
+}
+
 float UInventorySubsystem::GetPassiveMultiplier(EPassiveType Passive) const
 {
 	float Multiplier = 1.0f;

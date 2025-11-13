@@ -298,6 +298,7 @@ void AVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		EnhancedInputComponent->BindAction(EngineShiftDownAction, ETriggerEvent::Triggered, this, &AVehicle::OnEngineShiftDown);
 		EnhancedInputComponent->BindAction(OpenDoorAction, ETriggerEvent::Triggered, this, &AVehicle::OnOpenDoor);
 		EnhancedInputComponent->BindAction(RadioAction, ETriggerEvent::Triggered, this, &AVehicle::OnRadio);
+		EnhancedInputComponent->BindAction(FlipAction, ETriggerEvent::Triggered, this, &AVehicle::OnFlip);
 	}
 	else
 	{
@@ -797,6 +798,35 @@ void AVehicle::OnRadio(const struct FInputActionValue& Value)
 			RadioInstance->SetVolumeMultiplier(0.0f);
 		}
 	}
+}
+
+void AVehicle::OnFlip(const struct FInputActionValue& Value)
+{
+	//approach no rotation
+
+	FRotator Rotator(0.0f);
+	
+	if (GetActorRotation().Pitch < 0.0f)
+	{
+		Rotator.Pitch = 100 * UGameplayStatics::GetWorldDeltaSeconds(this);
+	}
+	else
+	{
+		Rotator.Pitch = -100 * UGameplayStatics::GetWorldDeltaSeconds(this);
+	}
+
+	if (GetActorRotation().Roll < 0.0f)
+	{
+		Rotator.Roll = 100 * UGameplayStatics::GetWorldDeltaSeconds(this);
+	}
+	else
+	{
+		Rotator.Roll = -100 * UGameplayStatics::GetWorldDeltaSeconds(this);
+	}
+
+	AddActorWorldRotation(Rotator);
+	GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Yellow, "hi");
+	
 }
 
 void AVehicle::PlayNewRadioClip()

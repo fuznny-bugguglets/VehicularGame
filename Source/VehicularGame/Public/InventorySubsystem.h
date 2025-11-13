@@ -30,6 +30,9 @@ public:
 	const uint8* GetHiredCrew() const;
 	uint8 GetHiredCrewCount() const;
 
+	UFUNCTION(BlueprintCallable)
+	uint8 GetCrewAtIndex(uint8 Index) const;
+
 	float GetPassiveMultiplier(EPassiveType Passive) const;
 
 	const int32 GetMoney() const;
