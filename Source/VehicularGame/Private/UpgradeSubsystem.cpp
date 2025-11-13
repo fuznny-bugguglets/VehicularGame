@@ -69,7 +69,6 @@ bool UUpgradeSubsystem::GetUpgradeEnabledStatus(uint8 UpgradeID) const
 	switch (const FUpgrade& Upgrade = UUpgradeManager::GetUpgradeFromIndex(UpgradeID); Upgrade.Tree)
 	{
 	case EUpgradeTree::Turret:
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::FromInt(TurretUpgradesPurchased));
 		return HasEnoughUpgradesForLevel(Upgrade.Level, TurretUpgradesPurchased);
 
 	case EUpgradeTree::Crew:
