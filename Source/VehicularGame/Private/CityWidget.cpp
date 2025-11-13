@@ -71,6 +71,11 @@ void UCityWidget::NativeConstruct()
 	CrewButton->OnClicked.AddDynamic(this, &UCityWidget::OnCrewButton);
 	MechanicButton->OnClicked.AddDynamic(this, &UCityWidget::OnMechanicButton);
 	RequestsButton->OnClicked.AddDynamic(this, &UCityWidget::OnRequestsButton);
+
+	RelicsButton->SetBackgroundColor(FLinearColor::Green);
+	CrewButton->SetBackgroundColor(FLinearColor::Gray);
+	MechanicButton->SetBackgroundColor(FLinearColor::Gray);
+	RequestsButton->SetBackgroundColor(FLinearColor::Gray);
 }
 
 //returns child widgets
@@ -138,6 +143,13 @@ void UCityWidget::BuyItem(const uint8 ID)
 
 void UCityWidget::OnRelicsButton()
 {
+	RelicsButton->SetBackgroundColor(FLinearColor::Gray);
+	CrewButton->SetBackgroundColor(FLinearColor::Gray);
+	MechanicButton->SetBackgroundColor(FLinearColor::Gray);
+	RequestsButton->SetBackgroundColor(FLinearColor::Gray);
+
+	RelicsButton->SetBackgroundColor(FLinearColor::Green);
+	
 	//change window to show relics widget
 	SetWidgetSwitcher(0);
 
@@ -147,16 +159,37 @@ void UCityWidget::OnRelicsButton()
 
 void UCityWidget::OnCrewButton()
 {
+	RelicsButton->SetBackgroundColor(FLinearColor::Gray);
+	CrewButton->SetBackgroundColor(FLinearColor::Gray);
+	MechanicButton->SetBackgroundColor(FLinearColor::Gray);
+	RequestsButton->SetBackgroundColor(FLinearColor::Gray);
+
+	CrewButton->SetBackgroundColor(FLinearColor::Green);
+	
 	SetWidgetSwitcher(1);
 }
 
 void UCityWidget::OnMechanicButton()
 {
+	RelicsButton->SetBackgroundColor(FLinearColor::Gray);
+	CrewButton->SetBackgroundColor(FLinearColor::Gray);
+	MechanicButton->SetBackgroundColor(FLinearColor::Gray);
+	RequestsButton->SetBackgroundColor(FLinearColor::Gray);
+
+	MechanicButton->SetBackgroundColor(FLinearColor::Green);
+	
 	SetWidgetSwitcher(2);
 }
 
 void UCityWidget::OnRequestsButton()
 {
+	RelicsButton->SetBackgroundColor(FLinearColor::Gray);
+	CrewButton->SetBackgroundColor(FLinearColor::Gray);
+	MechanicButton->SetBackgroundColor(FLinearColor::Gray);
+	RequestsButton->SetBackgroundColor(FLinearColor::Gray);
+
+	RequestsButton->SetBackgroundColor(FLinearColor::Green);
+	
 	SetWidgetSwitcher(3);
 }
 

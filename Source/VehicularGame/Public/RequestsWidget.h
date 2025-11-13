@@ -57,4 +57,8 @@ protected:
 
 	UPROPERTY()
 	UCityWidget* CityWidget = nullptr;
+
+private:
+	UPROPERTY()
+	TMap<uint8, URequestBoxWidget*> RequestBoxes;
 };

@@ -23,10 +23,32 @@ void URequestsWidget::NativeConstruct()
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, "No Request Box Widget Set!");
 		return;
 	}
+	
+	URequestsSubsystem* RequestsSubsystem = GetGameInstance()->GetSubsystem<URequestsSubsystem>();
 
+	TArray<const FRequest*> UnachievedRequests;
 	for (const FRequest& Request : URequestsManager::GetRequests())
 	{
+		//has it been redeemed already?
+		if (RequestsSubsystem->GetRequestRedeemedStatus(Request))
+		{
+			//skip this request
+			continue;
+		}
+
+		//is it yet to be achieved?
+		if (!RequestsSubsystem->GetRequestAchievementStatus(Request))
+		{
+			//buffer it
+			UnachievedRequests.Add(&Request);
+			continue;
+		}
+
+		//otherwise make the box
+		//these boxes are for requests that have been achieved
+		
 		URequestBoxWidget* RequestBox = CreateWidget<URequestBoxWidget>(GetWorld(), RequestBoxWidgetClass);
+		RequestBoxes.Emplace(URequestsManager::GetIndexFromRequest(Request), RequestBox);
 
 		if (!RequestBox)
 		{
@@ -35,6 +57,24 @@ void URequestsWidget::NativeConstruct()
 
 		RequestBox->SetMainText(Request.Name);
 		RequestBox->SetRequestID(URequestsManager::GetIndexFromRequest(Request));
+		RequestBox->SetRequestsWidget(this);
+
+		RequestsScrollBox->AddChild(RequestBox);
+	}
+
+	//build the rest
+	for (const FRequest* Request : UnachievedRequests)
+	{
+		URequestBoxWidget* RequestBox = CreateWidget<URequestBoxWidget>(GetWorld(), RequestBoxWidgetClass);
+		RequestBoxes.Emplace(URequestsManager::GetIndexFromRequest(*Request), RequestBox);
+
+		if (!RequestBox)
+		{
+			return;
+		}
+
+		RequestBox->SetMainText(Request->Name);
+		RequestBox->SetRequestID(URequestsManager::GetIndexFromRequest(*Request));
 		RequestBox->SetRequestsWidget(this);
 
 		RequestsScrollBox->AddChild(RequestBox);
@@ -134,6 +174,10 @@ void URequestsWidget::OnRedeemButton()
 
 		//update money
 		CityWidget->UpdateMoney();
+
+		//update button
+		RequestBoxes[SelectedRequestID]->RemoveFromParent();
+		RequestBoxes.Remove(SelectedRequestID);
 	}
 }
 
