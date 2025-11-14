@@ -4,8 +4,8 @@ UVehicularSaveGame::UVehicularSaveGame()
 {
 	// Set default values for when a new save game is created.
 	CityStorage.Empty();
-	CityStorage.Emplace(6, 4);
-	CityStorage.Emplace(12, 4);
+	CityStorage.Emplace(6, 5);
+	CityStorage.Emplace(12, 5);
 	UpgradeUnlockStatusMap.Empty();
 	RequestAchievementStatus.Empty();
 	RequestRedeemedStatus.Empty();

@@ -1,6 +1,7 @@
 #include "VehicularGameMode.h"
 #include "VehicularGameState.h"
 #include "EnemyCharacter.h"
+#include "InventorySubsystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
 #include "GameFramework/Pawn.h"
@@ -91,6 +92,20 @@ void AVehicularGameMode::BeginPlay()
 	}
 
 	MainHUDInstance->AddToViewport();
+
+	const uint8* HiredCrew = GetGameInstance()->GetSubsystem<UInventorySubsystem>()->GetHiredCrew();
+	for (int32 i = 0; i < 6; i++)
+	{
+		//is the crew not active
+		if (HiredCrew[i] == 255 )
+		{
+			MainHUDInstance->SetCrewDead(i);
+		}
+		else
+		{
+			MainHUDInstance->SetCrewAlive(i);
+		}
+	}
 }
 
 void AVehicularGameMode::SpawnWave()
@@ -382,6 +397,29 @@ void AVehicularGameMode::ResumeEnemySpawning()
 {
 	GetWorldTimerManager().UnPauseTimer(SpawnWaveTimerHandle);
 }
+
+void AVehicularGameMode::SetCrewAlive(uint8 CrewNumber)
+{
+	if (!MainHUDInstance) return;
+	
+	MainHUDInstance->SetCrewAlive(CrewNumber);
+}
+
+void AVehicularGameMode::SetCrewScavenging(uint8 CrewNumber)
+{
+	if (!MainHUDInstance) return;
+	
+	MainHUDInstance->SetCrewScavenging(CrewNumber);
+}
+
+void AVehicularGameMode::SetCrewDead(uint8 CrewNumber)
+{
+	if (!MainHUDInstance) return;
+	
+	MainHUDInstance->SetCrewDead(CrewNumber);
+}
+
+
 
 void AVehicularGameMode::SetRadioStatus(bool bIsOn)
 {

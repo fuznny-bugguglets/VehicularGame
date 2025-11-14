@@ -1231,6 +1231,8 @@ void AVehicle::SpawnScavengers(const float DeltaTime)
 		ActiveScavengers.Add(MyScavy);
 		ScavengerCount--;
 
+		VehicularGameMode->SetCrewScavenging(ScavengerCount);
+
 		//play a sound of the scavenger exiting
 		int32 RandIndex = FMath::RandRange(0, TruckExit.Num() - 1);
 		UGameplayStatics::PlaySound2D(this, TruckExit[RandIndex]);
@@ -1241,7 +1243,9 @@ void AVehicle::SpawnScavengers(const float DeltaTime)
 void AVehicle::ReturnScavenger(AScavengerPawn* Scavenger)
 {
 	ActiveScavengers.Remove(Scavenger);
+	VehicularGameMode->SetCrewAlive(ScavengerCount);
 	ScavengerCount++;
+	
 	Scavenger->Destroy();
 
 	//play a sound of the scavenger entering

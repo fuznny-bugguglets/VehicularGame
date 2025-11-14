@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "NewHUDWidget.generated.h"
 
+class UScavengerStatusWidget;
 class AVehicularGameState;
 class UProgressBar;
 class AVehicle;
@@ -44,6 +45,15 @@ public:
 	void DisableHandbrake();
 
 	void UpdateExtractionProgress(int32 CurrentCount, int32 InitCount);
+
+	UFUNCTION()
+	void SetCrewAlive(uint8 CrewNumber);
+
+	UFUNCTION()
+	void SetCrewScavenging(uint8 CrewNumber);
+
+	UFUNCTION()
+	void SetCrewDead(uint8 CrewNumber);
 	
 protected:
 	UPROPERTY(EditAnywhere, Category="Speedo", meta=(AllowPrivateAccess="true"))
@@ -74,6 +84,24 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	UImage* I_Handbrake_Down = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UScavengerStatusWidget* Status_0 = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UScavengerStatusWidget* Status_1 = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UScavengerStatusWidget* Status_2 = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UScavengerStatusWidget* Status_3 = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UScavengerStatusWidget* Status_4 = nullptr;
+
+	UPROPERTY(meta = (BindWidget))
+	UScavengerStatusWidget* Status_5 = nullptr;
 	
 private:
 	UFUNCTION()

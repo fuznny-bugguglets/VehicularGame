@@ -42,6 +42,15 @@ public:
     void PauseEnemySpawning();
     void ResumeEnemySpawning();
 
+    UFUNCTION()
+    void SetCrewAlive(uint8 CrewNumber);
+
+    UFUNCTION()
+    void SetCrewScavenging(uint8 CrewNumber);
+
+    UFUNCTION()
+    void SetCrewDead(uint8 CrewNumber);
+
     UFUNCTION(BlueprintCallable)
     void SetRadioStatus(bool bIsOn);
     
