@@ -23,6 +23,9 @@ void UCityWidget::NativeConstruct()
 	//move everything from the player inventory into the city storage
 	GetInventorySubsystem()->MoveFromPlayerInventoryToCityStorage();
 
+	//randomise the shop
+	GetInventorySubsystem()->FillUpShop();
+
 	//save the game
 	UVehicularGameInstance* VGameInstance = Cast<UVehicularGameInstance>(GetGameInstance());
 	if (VGameInstance)

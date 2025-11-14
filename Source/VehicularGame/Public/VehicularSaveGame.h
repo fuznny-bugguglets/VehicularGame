@@ -11,7 +11,7 @@ class VEHICULARGAME_API UVehicularSaveGame : public USaveGame
 
 public:
 	UVehicularSaveGame();
-
+	
 	//city storage inventory
 	UPROPERTY()
 	TMap<uint8, uint32> CityStorage;
@@ -31,6 +31,9 @@ public:
 	//
 	UPROPERTY()
 	TMap<uint8, uint32> LifetimeItemsCollected;
+
+	UPROPERTY(BlueprintReadWrite)
+	TMap<uint8, bool> NarrativeRelicCollected;
 
 	//
 	UPROPERTY()

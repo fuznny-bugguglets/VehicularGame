@@ -57,6 +57,9 @@ public:
 
 	UFUNCTION()
 	void SetCrewDead(uint8 CrewNumber);
+
+	UFUNCTION()
+	void SetPassive(uint8 CrewNumber, EPassiveType Passive);
 	
 protected:
 	UPROPERTY(EditAnywhere, Category="Speedo", meta=(AllowPrivateAccess="true"))

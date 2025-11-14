@@ -94,6 +94,7 @@ void AStalker::TickWalking(float DeltaTime)
 	{
 		//start charging
 		SetStalkerState(CHARGING);
+		UGameplayStatics::PlaySound2D(this, StalkerSound);
 	}
 }
 

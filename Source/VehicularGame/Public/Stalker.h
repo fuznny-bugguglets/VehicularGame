@@ -43,6 +43,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess="true"))
 	UStaticMeshComponent* DamageBallMesh;
 
+	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess="true"))
+	USoundWave* StalkerSound = nullptr; 
+
 private:
 	UFUNCTION()
 	void TickWalking(float DeltaTime);

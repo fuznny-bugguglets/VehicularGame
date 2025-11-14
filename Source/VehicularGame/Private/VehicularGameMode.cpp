@@ -104,6 +104,12 @@ void AVehicularGameMode::BeginPlay()
 		else
 		{
 			MainHUDInstance->SetCrewAlive(i);
+
+			for (auto Passive : UCrewManager::GetCrewFromIndex(HiredCrew[i]).Passives)
+			{
+				MainHUDInstance->SetPassive(i, Passive.UpgradeType);
+			}
+			
 		}
 	}
 }

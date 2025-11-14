@@ -199,6 +199,32 @@ void UNewHUDWidget::SetCrewDead(uint8 CrewNumber)
 	}
 }
 
+void UNewHUDWidget::SetPassive(uint8 CrewNumber, EPassiveType Passive)
+{
+	switch (CrewNumber)
+	{
+	case 0:
+		Status_0->SetPassive(Passive);
+		break;
+	case 1:
+		Status_1->SetPassive(Passive);
+		break;
+	case 2:
+		Status_2->SetPassive(Passive);
+		break;
+	case 3:
+		Status_3->SetPassive(Passive);
+		break;
+	case 4:
+		Status_4->SetPassive(Passive);
+		break;
+	case 5:
+		Status_5->SetPassive(Passive);
+		break;
+	default:
+		break;
+	}
+}
 
 
 void UNewHUDWidget::EnableHandbrake()

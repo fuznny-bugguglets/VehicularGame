@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Crew.generated.h"
 
-UENUM()
+UENUM(BlueprintType)
 enum class EPassiveType : uint8
 {
 	CrewMoveSpeed, 

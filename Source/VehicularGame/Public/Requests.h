@@ -15,7 +15,8 @@ enum class ERequestType : uint8
 {
 	CollectRequest UMETA(DisplayName = "Collect Request"),
 	KillRequest UMETA(DisplayName = "KillRequest"),
-	POIDiscoveryRequest UMETA(DisplayName = "DisplayName")
+	POIDiscoveryRequest UMETA(DisplayName = "DisplayName"),
+	NarrativeRequest UMETA(DisplayName = "NarrativeRequest")
 };
 
 

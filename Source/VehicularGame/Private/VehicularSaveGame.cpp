@@ -10,6 +10,7 @@ UVehicularSaveGame::UVehicularSaveGame()
 	RequestAchievementStatus.Empty();
 	RequestRedeemedStatus.Empty();
 	LifetimeItemsCollected.Empty();
+	NarrativeRelicCollected.Empty();
 	LifetimeEnemyKills = 0;
 	Money = 0;
 	for (int32 i = 0; i < 6; i++)

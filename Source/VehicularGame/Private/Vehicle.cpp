@@ -21,6 +21,8 @@
 #include "ScavengerPawn.h"
 #include "Curves/CurveFloat.h"
 #include "UpgradeSubsystem.h"
+#include "VehicularGameInstance.h"
+#include "VehicularSaveGame.h"
 
 //handy shortcut to displaying things when shit goes wrong
 void AVehicle::LogError(const FString& ErrorMessage)
@@ -1171,7 +1173,22 @@ void AVehicle::IncrementLootCount(uint32 GivenResource)
 	}
 
 	//display item collected
-	VehicularGameMode->ItemCollected(UItemManager::GetItemFromIndex(GivenResource).Name);
+	const FItem& Item = UItemManager::GetItemFromIndex(GivenResource);
+	VehicularGameMode->ItemCollected(Item.Name);
+
+	//play sound
+	if (Item.Tier == EResourceTier::TIER1)
+	{
+		UGameplayStatics::PlaySound2D(this, ItemPickup1);
+	}
+	else if (Item.Tier == EResourceTier::TIER2)
+	{
+		UGameplayStatics::PlaySound2D(this, ItemPickup2);
+	}
+	else if (Item.Tier == EResourceTier::TIER3)
+	{
+		UGameplayStatics::PlaySound2D(this, ItemPickup3);
+	}
 
 	//add resource to player inventory
 	GetGameInstance()->GetSubsystem<UInventorySubsystem>()->AddItemToPlayerInventory(GivenResource);
@@ -1276,6 +1293,11 @@ void AVehicle::NarrativeRelicPickedUp(int32 RelicIndex)
 {
 	//play a sound
 	UGameplayStatics::PlaySound2D(this, RelicClips[RelicIndex-1]);
+
+	UVehicularGameInstance* VehicularGameInstance = Cast<UVehicularGameInstance>(GetGameInstance());
+	VehicularGameInstance->GetSaveGameObject()->NarrativeRelicCollected.Emplace(RelicIndex, true);
+
+	VehicularGameInstance->RelicCollected();
 
 	//play the ui pop up
 	VehicularGameMode->NarrativeRelicPopUp(RelicClips[RelicIndex-1]->Duration);

@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "ScavengerStatusWidget.generated.h"
 
+enum class EPassiveType : uint8;
 /**
  * 
  */
@@ -22,6 +23,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetCrewDead();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetPassive(EPassiveType Passive);
 
 private:
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess))
