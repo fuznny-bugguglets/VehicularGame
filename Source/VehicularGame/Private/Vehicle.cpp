@@ -728,6 +728,12 @@ void AVehicle::OnOpenDoor(const FInputActionValue& Value)
 		LogError("Door Closed");
 		for (int32 i = 0; i < ActiveScavengers.Num(); i++)
 		{
+			if (!ActiveScavengers[i])
+			{
+				ActiveScavengers.Remove(ActiveScavengers[i]);
+				continue;
+			}
+			
 			ActiveScavengers[i]->SetRuin(nullptr);
 			ActiveScavengers[i]->GoToTruck();
 		}
@@ -825,7 +831,6 @@ void AVehicle::OnFlip(const struct FInputActionValue& Value)
 	}
 
 	AddActorWorldRotation(Rotator);
-	GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Yellow, "hi");
 	
 }
 
@@ -1165,11 +1170,8 @@ void AVehicle::IncrementLootCount(uint32 GivenResource)
 		return;
 	}
 
-	//debugging
-	FString DebugMessage;
-	DebugMessage.Append("Acquired Item: ");
-	DebugMessage.Append(UItemManager::GetItemFromIndex(GivenResource).Name.ToString());
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, DebugMessage);
+	//display item collected
+	VehicularGameMode->ItemCollected(UItemManager::GetItemFromIndex(GivenResource).Name);
 
 	//add resource to player inventory
 	GetGameInstance()->GetSubsystem<UInventorySubsystem>()->AddItemToPlayerInventory(GivenResource);
@@ -1189,6 +1191,23 @@ void AVehicle::IncrementUncommonLootCount()
 void AVehicle::IncrementRareLootCount()
 {
 	SetRareLootCount(RareLootCount + 1);
+}
+
+void AVehicle::ScavengerDied(AScavengerPawn* DeadScav)
+{
+	const uint8* HiredCrew = InventorySubsystem->GetHiredCrew();
+	for (int32 i = 5; i > -1; i--)
+	{
+		if (HiredCrew[i] == 255)
+		{
+			continue;
+		}
+
+		InventorySubsystem->KillCrewInSlot(i);
+		VehicularGameMode->SetCrewDead(i);
+		ActiveScavengers.Remove(DeadScav);
+		return;
+	}
 }
 
 float AVehicle::GetElapsedExtractionTime() const
@@ -1231,6 +1250,8 @@ void AVehicle::SpawnScavengers(const float DeltaTime)
 		ActiveScavengers.Add(MyScavy);
 		ScavengerCount--;
 
+		VehicularGameMode->SetCrewScavenging(ScavengerCount);
+
 		//play a sound of the scavenger exiting
 		int32 RandIndex = FMath::RandRange(0, TruckExit.Num() - 1);
 		UGameplayStatics::PlaySound2D(this, TruckExit[RandIndex]);
@@ -1241,7 +1262,9 @@ void AVehicle::SpawnScavengers(const float DeltaTime)
 void AVehicle::ReturnScavenger(AScavengerPawn* Scavenger)
 {
 	ActiveScavengers.Remove(Scavenger);
+	VehicularGameMode->SetCrewAlive(ScavengerCount);
 	ScavengerCount++;
+	
 	Scavenger->Destroy();
 
 	//play a sound of the scavenger entering

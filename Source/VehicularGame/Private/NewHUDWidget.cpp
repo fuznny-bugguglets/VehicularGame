@@ -2,6 +2,8 @@
 
 
 #include "NewHUDWidget.h"
+
+#include "ScavengerStatusWidget.h"
 #include "Vehicle.h"
 #include "VehicularGameState.h"
 #include "Components/Image.h"
@@ -115,6 +117,89 @@ void UNewHUDWidget::UpdateExtractionProgress(int32 CurrentCount, int32 InitCount
 
 	PB_POI_Extraction->SetPercent(Progress);
 }
+
+void UNewHUDWidget::SetCrewAlive(uint8 CrewNumber)
+{
+	switch (CrewNumber)
+	{
+	case 0:
+		Status_0->SetCrewAlive();
+		break;
+	case 1:
+		Status_1->SetCrewAlive();
+		break;
+	case 2:
+		Status_2->SetCrewAlive();
+		break;
+	case 3:
+		Status_3->SetCrewAlive();
+		break;
+	case 4:
+		Status_4->SetCrewAlive();
+		break;
+	case 5:
+		Status_5->SetCrewAlive();
+		break;
+	default:
+		break;
+	}
+}
+
+void UNewHUDWidget::SetCrewScavenging(uint8 CrewNumber)
+{
+	switch (CrewNumber)
+	{
+	case 0:
+		Status_0->SetCrewScavenging();
+		break;
+	case 1:
+		Status_1->SetCrewScavenging();
+		break;
+	case 2:
+		Status_2->SetCrewScavenging();
+		break;
+	case 3:
+		Status_3->SetCrewScavenging();
+		break;
+	case 4:
+		Status_4->SetCrewScavenging();
+		break;
+	case 5:
+		Status_5->SetCrewScavenging();
+		break;
+	default:
+		break;
+	}
+}
+
+void UNewHUDWidget::SetCrewDead(uint8 CrewNumber)
+{
+	switch (CrewNumber)
+	{
+	case 0:
+		Status_0->SetCrewDead();
+		break;
+	case 1:
+		Status_1->SetCrewDead();
+		break;
+	case 2:
+		Status_2->SetCrewDead();
+		break;
+	case 3:
+		Status_3->SetCrewDead();
+		break;
+	case 4:
+		Status_4->SetCrewDead();
+		break;
+	case 5:
+		Status_5->SetCrewDead();
+		break;
+	default:
+		break;
+	}
+}
+
+
 
 void UNewHUDWidget::EnableHandbrake()
 {

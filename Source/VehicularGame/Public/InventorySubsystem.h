@@ -88,6 +88,8 @@ public:
 	void RemoveHiredCrew(uint8 CrewIndex);
 	void RemoveHiredCrew(FCrew& CrewRef);
 
+	void KillCrewInSlot(uint8 Slot);
+
 private:
 	UPROPERTY()
 	int32 Money = 0;

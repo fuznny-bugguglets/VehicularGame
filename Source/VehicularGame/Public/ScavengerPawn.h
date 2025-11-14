@@ -50,11 +50,17 @@ public:
 
 	void MoveTo(const FVector& TargetLocation);
 
+	UFUNCTION(BlueprintCallable)
+	void Die();
+
 private:
 
 	// how close (in cm) i need to be to a target before i am marked as arrived
 	UPROPERTY(EditDefaultsOnly, Category = "Pathfinding", meta = (AllowPrivateAccess = "true"))
 	float TargetTolerance = 100.0f;
+
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> DeadScavengerMesh = nullptr;
 
 	UPROPERTY()
 	AAIController* AIController = nullptr;

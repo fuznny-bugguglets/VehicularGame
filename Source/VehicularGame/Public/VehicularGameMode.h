@@ -42,12 +42,23 @@ public:
     void PauseEnemySpawning();
     void ResumeEnemySpawning();
 
+    UFUNCTION()
+    void SetCrewAlive(uint8 CrewNumber);
+
+    UFUNCTION()
+    void SetCrewScavenging(uint8 CrewNumber);
+
+    UFUNCTION()
+    void SetCrewDead(uint8 CrewNumber);
+
     UFUNCTION(BlueprintCallable)
     void SetRadioStatus(bool bIsOn);
     
     void NarrativeRelicPopUp(float TimeToPlay);
 
     FVector CreateEnemies(AVehicularGameState* VehicularGameState = nullptr, AActor* PlayerPawn = nullptr);
+    
+    void ItemCollected(const FText& ItemName);
 
 protected:
     virtual void BeginPlay() override;

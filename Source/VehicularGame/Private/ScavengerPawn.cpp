@@ -264,3 +264,14 @@ void AScavengerPawn::GoToTruck()
 
 	AIController->MoveToLocation(MyVehicle->GetDoorLocation());
 }
+
+void AScavengerPawn::Die()
+{
+	if (!MyVehicle) return;
+
+	MyVehicle->ScavengerDied(this);
+
+	GetWorld()->SpawnActor<AActor>(DeadScavengerMesh, GetActorLocation(), GetActorRotation());
+
+	Destroy();
+}
