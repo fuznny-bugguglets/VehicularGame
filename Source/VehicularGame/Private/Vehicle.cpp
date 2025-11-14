@@ -728,6 +728,12 @@ void AVehicle::OnOpenDoor(const FInputActionValue& Value)
 		LogError("Door Closed");
 		for (int32 i = 0; i < ActiveScavengers.Num(); i++)
 		{
+			if (!ActiveScavengers[i])
+			{
+				ActiveScavengers.Remove(ActiveScavengers[i]);
+				continue;
+			}
+			
 			ActiveScavengers[i]->SetRuin(nullptr);
 			ActiveScavengers[i]->GoToTruck();
 		}
@@ -1185,6 +1191,23 @@ void AVehicle::IncrementUncommonLootCount()
 void AVehicle::IncrementRareLootCount()
 {
 	SetRareLootCount(RareLootCount + 1);
+}
+
+void AVehicle::ScavengerDied(AScavengerPawn* DeadScav)
+{
+	const uint8* HiredCrew = InventorySubsystem->GetHiredCrew();
+	for (int32 i = 5; i > -1; i--)
+	{
+		if (HiredCrew[i] == 255)
+		{
+			continue;
+		}
+
+		InventorySubsystem->KillCrewInSlot(i);
+		VehicularGameMode->SetCrewDead(i);
+		ActiveScavengers.Remove(DeadScav);
+		return;
+	}
 }
 
 float AVehicle::GetElapsedExtractionTime() const

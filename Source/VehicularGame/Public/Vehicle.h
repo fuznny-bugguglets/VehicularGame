@@ -66,6 +66,8 @@ public:
 	void IncrementUncommonLootCount();
 	void IncrementRareLootCount();
 
+	void ScavengerDied(AScavengerPawn* DeadScav);
+
 	UFUNCTION(BlueprintCallable)
 	float GetElapsedExtractionTime() const;
 

@@ -319,6 +319,11 @@ void UInventorySubsystem::RemoveHiredCrew(FCrew& CrewRef)
 	RemoveHiredCrew(UCrewManager::GetIndexFromCrew(CrewRef));
 }
 
+void UInventorySubsystem::KillCrewInSlot(uint8 Slot)
+{
+	HiredCrew[Slot] = 255;
+}
+
 void UInventorySubsystem::AddItemToPlayerInventory(uint8 ItemIndex)
 {
 	//does the item already exist?
