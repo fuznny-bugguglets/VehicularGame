@@ -347,8 +347,6 @@ void ATurret::ReloadTick(float DeltaTime)
 
 		//give back ammo
 		AmmoCount = MaxAmmoCount;
-
-		LogError("RELOADED!!!!!!!!!!!!");
 	}
 }
 

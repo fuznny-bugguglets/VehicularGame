@@ -825,7 +825,6 @@ void AVehicle::OnFlip(const struct FInputActionValue& Value)
 	}
 
 	AddActorWorldRotation(Rotator);
-	GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Yellow, "hi");
 	
 }
 
@@ -1165,11 +1164,8 @@ void AVehicle::IncrementLootCount(uint32 GivenResource)
 		return;
 	}
 
-	//debugging
-	FString DebugMessage;
-	DebugMessage.Append("Acquired Item: ");
-	DebugMessage.Append(UItemManager::GetItemFromIndex(GivenResource).Name.ToString());
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, DebugMessage);
+	//display item collected
+	VehicularGameMode->ItemCollected(UItemManager::GetItemFromIndex(GivenResource).Name);
 
 	//add resource to player inventory
 	GetGameInstance()->GetSubsystem<UInventorySubsystem>()->AddItemToPlayerInventory(GivenResource);

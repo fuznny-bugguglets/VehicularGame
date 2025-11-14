@@ -39,6 +39,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void DisableExtractionAnimation();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void ItemCollected(const FText& ItemName);
+
 	UFUNCTION(BlueprintCallable)
 	void EnableHandbrake();
 	UFUNCTION(BlueprintCallable)

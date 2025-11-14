@@ -387,6 +387,13 @@ FVector AVehicularGameMode::CreateEnemies(AVehicularGameState* VehicularGameStat
 	return FVector::Zero();
 }
 
+void AVehicularGameMode::ItemCollected(const FText& ItemName)
+{
+	if (!MainHUDInstance) return;
+
+	MainHUDInstance->ItemCollected(ItemName);
+}
+
 
 void AVehicularGameMode::PauseEnemySpawning()
 {

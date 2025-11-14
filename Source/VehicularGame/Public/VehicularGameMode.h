@@ -57,6 +57,8 @@ public:
     void NarrativeRelicPopUp(float TimeToPlay);
 
     FVector CreateEnemies(AVehicularGameState* VehicularGameState = nullptr, AActor* PlayerPawn = nullptr);
+    
+    void ItemCollected(const FText& ItemName);
 
 protected:
     virtual void BeginPlay() override;
