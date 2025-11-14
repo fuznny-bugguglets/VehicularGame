@@ -84,6 +84,11 @@ void UVehicularGameInstance::LoadGameData()
 		//create the save data object
 		SaveGameObject = Cast<UVehicularSaveGame>(UGameplayStatics::CreateSaveGameObject(SaveGameClass));
 
+		//load in the items
+		GetSubsystem<UInventorySubsystem>()->LoadSaveData();
+		GetSubsystem<UUpgradeSubsystem>()->LoadSaveData();
+		GetSubsystem<URequestsSubsystem>()->LoadSaveData();
+
 		//save the slot
 		UGameplayStatics::SaveGameToSlot(SaveGameObject, SaveSlotName, 0);
 
@@ -146,6 +151,11 @@ UVehicularSaveGame* UVehicularGameInstance::GetSaveGameObject() const
 	return SaveGameObject;
 }
 
+void UVehicularGameInstance::RelicCollected()
+{
+	bRelicDeposited = true;
+}
+
 
 void UVehicularGameInstance::LogError(const FString& ErrorMessage)
 {
@@ -160,4 +170,16 @@ void UVehicularGameInstance::LogError(const FString& ErrorMessage)
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *ErrorMessage);
 	}
 }
+
+bool UVehicularGameInstance::GetRelicDeposited() const
+{
+	return bRelicDeposited;
+}
+
+void UVehicularGameInstance::ResetRelicDeposited()
+{
+	bRelicDeposited = false;;
+}
+
+
 

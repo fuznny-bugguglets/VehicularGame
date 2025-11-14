@@ -35,7 +35,16 @@ public:
 
 	//returns the save game object
 	UFUNCTION(BlueprintCallable)
-	UVehicularSaveGame* GetSaveGameObject() const; 
+	UVehicularSaveGame* GetSaveGameObject() const;
+
+	UFUNCTION(BlueprintCallable)
+	void RelicCollected();
+	
+	UFUNCTION(BlueprintCallable)
+	bool GetRelicDeposited() const;
+
+	UFUNCTION(BlueprintCallable)
+	void ResetRelicDeposited();
 
 protected:
 	// The name of the file slot to save to.
@@ -81,4 +90,7 @@ private:
 
 	UPROPERTY()
 	URequestsManager* RequestManager = nullptr;
+
+	UPROPERTY()
+	bool bRelicDeposited = false;
 };

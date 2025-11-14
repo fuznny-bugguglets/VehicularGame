@@ -37,11 +37,15 @@ public:
 
 	const int32 GetMoney() const;
 	void SetMoney(int32 NewMoney);
+	UFUNCTION(BlueprintCallable)
 	void AddMoney(int32 NewMoney);
 	void RemoveMoney(int32 NewMoney);
 
 	//moves all items from the player inventory into city storage
 	void MoveFromPlayerInventoryToCityStorage();
+
+	//fill up the shop with some random shit
+	void FillUpShop();
 
 	//removes all items from the player inventory
 	void ClearPlayerInventory();

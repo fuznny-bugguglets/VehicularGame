@@ -192,6 +192,13 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category="Sound|Handbrake", meta = (AllowPrivateAccess = "true"))
 	USoundBase* HandbrakeDownSound = nullptr;
 
+	UPROPERTY(EditDefaultsOnly, Category="Sound|ItemPickup", meta = (AllowPrivateAccess = "true"))
+	USoundBase* ItemPickup1;
+	UPROPERTY(EditDefaultsOnly, Category="Sound|ItemPickup", meta = (AllowPrivateAccess = "true"))
+	USoundBase* ItemPickup2;
+	UPROPERTY(EditDefaultsOnly, Category="Sound|ItemPickup", meta = (AllowPrivateAccess = "true"))
+	USoundBase* ItemPickup3;
+
 	//default input
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	// ReSharper disable once UnrealHeaderToolError

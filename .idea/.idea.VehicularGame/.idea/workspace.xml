@@ -14,14 +14,33 @@
   <component name="ChangeListManager">
     <list default="true" id="ed616107-f2d3-4e5b-9ee0-2bb3cb1cc542" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VehicularGame/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Scavengers/ScavyBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Scavengers/ScavyBase.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Main3.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Main3.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_Vehicle.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_Vehicle.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/DataTables/Items/Items.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/DataTables/Items/Items.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Enemies/Classes/BP_Stalker.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Enemies/Classes/BP_Stalker.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/MonsterCloset/Monster_Closet_Area.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/MonsterCloset/Monster_Closet_Area.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/RelicPickUps/BP_RelicPickup_Base.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/RelicPickUps/BP_RelicPickup_Base.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/City/Crew/WB_HiredCrewButton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/City/Crew/WB_HiredCrewButton.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/City/Relics/WB_RelicInformationPanel.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/City/Relics/WB_RelicInformationPanel.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/City/Relics/WB_Tutorial_Relics.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/City/Relics/WB_Tutorial_Relics.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/City/WB_CityScreen.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/City/WB_CityScreen.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI_Elements/HUD/HUD_Elements/StatusScreen/WB_Crewmates/WB_SS_Base.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Elements/HUD/HUD_Elements/StatusScreen/WB_Crewmates/WB_SS_Base.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/CityWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/CityWidget.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/InventorySubsystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/InventorySubsystem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/ScavengerPawn.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/ScavengerPawn.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/NewHUDWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/NewHUDWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/Stalker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/Stalker.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/Vehicle.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/Vehicle.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/VehicularGameInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/VehicularGameInstance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/VehicularGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/VehicularGameMode.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Private/VehicularSaveGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Private/VehicularSaveGame.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/Crew.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/Crew.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/InventorySubsystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/InventorySubsystem.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/ScavengerPawn.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/ScavengerPawn.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/NewHUDWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/NewHUDWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/Requests.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/Requests.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/ScavengerStatusWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/ScavengerStatusWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/Stalker.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/Stalker.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/Vehicle.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/Vehicle.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/VehicularGameInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/VehicularGameInstance.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/VehicularGame/Public/VehicularSaveGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/VehicularGame/Public/VehicularSaveGame.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,23 +79,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;C/C++ Project.VehicularGame.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;fixHUD&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Inspections-C/C++&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "C/C++ Project.VehicularGame.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "charlieCharlieCharlie",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "Inspections-C/C++",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="C/C++ Project.VehicularGame">
     <configuration name="UE5" type="CppProject" factoryName="C++ Project">
       <option name="DEFAULT_PROJECT_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UE5.vcxproj" />
@@ -226,6 +245,7 @@
       <workItem from="1763044192750" duration="3872000" />
       <workItem from="1763050534276" duration="2329000" />
       <workItem from="1763080575015" duration="6909000" />
+      <workItem from="1763099180359" duration="8688000" />
     </task>
     <servers />
   </component>

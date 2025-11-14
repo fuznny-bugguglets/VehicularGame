@@ -19,8 +19,6 @@ UInventorySubsystem::UInventorySubsystem()
 	CityStorage.Empty();
 	
 	Shop.Empty();
-	AddItemToShop(8);
-	AddItemToShop(11);
 
 	HirableCrew.Empty();
 	AddCrewForHire(0);
@@ -32,6 +30,36 @@ UInventorySubsystem::UInventorySubsystem()
 	AddCrewForHire(6);
 
 }
+
+void UInventorySubsystem::FillUpShop()
+{
+	Shop.Empty();
+	
+	TArray<int32> PossibleItems;
+	for (int32 i = 0; i < 15; i++)
+	{
+		PossibleItems.Emplace(i);
+	}
+
+	for (int32 i = 0; i < 7; i++)
+	{
+		int32 RandomIndex = FMath::RandRange(0, PossibleItems.Num() - 1);
+		int32 RandomItem = PossibleItems[RandomIndex];
+		PossibleItems.Remove(RandomItem);
+
+		AddItemToShop(RandomItem);
+	}
+
+	HirableCrew.Empty();
+	AddCrewForHire(0);
+	AddCrewForHire(1);
+	AddCrewForHire(2);
+	AddCrewForHire(3);
+	AddCrewForHire(4);
+	AddCrewForHire(5);
+	AddCrewForHire(6);
+}
+
 
 void UInventorySubsystem::LoadSaveData()
 {
